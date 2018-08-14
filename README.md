@@ -63,25 +63,25 @@ unit myscrapper {
   another variable = 5 ;
   
   
-  page {
+  page mypage {
   
-    expect {
-      $url contains "www.amazon.fr" ;
-      $url ! contains myvariable ; /* ! means NOT */  
-      }
+    expect $url contains "www.amazon.fr" ;
+    expect $url ! contains myvariable ;         /* ! means NOT */  
+      
   
-    reject {
-      $page >= 30 ; /* no more that 30 pages ... */
-      $item >  20 ; /* no more that 20 emitted items */
-      }
+    reject $page >= 30 ;        /* no more that 30 pages ... */
+    reject $item >  20 ;        /* no more that 20 emitted items */
+      
       
     content = x"//div[@class='sellingItem']" ; /** this is an xpath locator generting an element.
-    price = content.x".//span[@class='red']"; /* dotted notaion will start from the previous locator object */
-    text = content ; /* default is to get content as text */  
-    image = content.x"//[img]".href ; /* Should allow to access any attribute of existing objects */
     
-    emit price, text, image ;  /* will find all potential values matching the definition, and emit them */
+    element myelement {
+        price = content.x".//span[@class='red']"; /* dotted notaion will start from the previous locator object */
+        text = content ; /* default is to get content as text */  
+        image = content.x"//[img]".href ; /* Should allow to access any attribute of existing objects */
+        }
 
+    emit myelement ;  /* will find all potential values matching the definition, and emit them */
 }
 
 

@@ -5,17 +5,23 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.compiler.SSCompiler;
+
 /**
- *
+ * 
  * @author xavier
  */
-public class NewMain {
+public class RunCompiler {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        
+        new SSCompiler("unit testunit { nothing }").printTreeString();
+        
+        
     }
     
 }
