@@ -53,6 +53,9 @@ public class SSCompilerTest {
         // Should fail ...
         nok("unit { 23 }");
         nok("unit u { unit t {} }");
+        nok("unit u { unit t { }");
+        nok("unit u { unit t } }");
+        nok("unit u { unit  {} }");
 
     }
 
@@ -60,27 +63,30 @@ public class SSCompilerTest {
      * Test compiling provided string for correctness.
      *
      * @param s
-     * @return null if ok, else the error message.
      */
     protected void ok(String s) {
-        System.out.printf("\nOk -> %s \n", s);
-        SSErrorListener errorListener = new SSCompiler(s).errorListener;
-        if (errorListener.isSyntaxError()) {
-            fail(errorListener.getFirstErrorMessage());
-        }        
+        System.out.printf("\n----------\nOK -> %s", s);
+        SSCompiler c = new SSCompiler(s);
+        c.printTreeString();
+        if (c.hasSyntaxError()) {
+            fail(c.errorListener.getFirstErrorMessage());
+        }
     }
-    
+
     /**
      * Test compiling provided string for correctness.
      *
      * @param s
-     * @return null if ok, else the error message.
      */
     protected void nok(String s) {
-        System.out.printf("\nNok -> %s \n", s);
-        SSErrorListener errorListener = new SSCompiler(s).errorListener;
-        if (! errorListener.isSyntaxError()) {
-            fail("This should have been detected as incorrect ??!!");
-        }        
+        System.out.printf("\n----------\nNOK -> %s", s);
+        SSCompiler c = new SSCompiler(s);        
+        if (!c.hasSyntaxError()) {
+            c.printTreeString();
+            fail("**This should have been detected as incorrect ??!!**");
+        } else {
+            System.out.printf("\nExpected error : %s", c.errorListener.getFirstErrorMessage());
+            c.printTreeString();
+        }
     }
 }
