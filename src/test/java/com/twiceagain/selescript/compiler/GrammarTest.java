@@ -13,12 +13,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Test grammar syntax.
  * @author xavier
  */
-public class SSCompilerTest {
+public class GrammarTest {
 
-    public SSCompilerTest() {
+    public GrammarTest() {
     }
 
     @BeforeClass
@@ -27,6 +27,7 @@ public class SSCompilerTest {
 
     @AfterClass
     public static void tearDownClass() {
+        System.out.println("\n---------\n");
     }
 
     @Before
@@ -40,23 +41,29 @@ public class SSCompilerTest {
     @Test
     public void testUnit() {
 
-        // Should work
+      
         ok("unit u { } ");
-        ok("unit u { 23 } ");
-        ok("unit u { 23;5 } ");
-        ok("unit u { ;; }; ");
-
-        ok("unit u { page p {} }; ");
-        ok("unit u { page p {page q {}} }; ");
-        ok("unit u { page p {22 ; page q {25 }} }; ");
-
-        // Should fail ...
-        nok("unit { 23 }");
-        nok("unit u { unit t {} }");
-        nok("unit u { unit t { }");
-        nok("unit u { unit t } }");
-        nok("unit u { unit  {} }");
-
+        nok("unit u { } ; ");        // final ; refused
+        nok("unit u { } kjh ");      // final text refused
+        nok("unit u { ; } ");       // empty statement rejected
+        nok("unit  { } ");
+        nok(" u { } ");
+        
+        
+        ok("unit u { } ");
+        
+        
+    }
+    
+    @Test
+    public void testComments() {
+        ok("unit u { } ");
+        nok("unit u { /* khjkhk kjhk j /* } ");
+        ok("unit u { /* khjkhk kjhk j  */ } ");
+        ok("unit /* hh */ u { } ");
+        ok("/* ////***/unit u {}");
+        
+        
     }
 
     /**

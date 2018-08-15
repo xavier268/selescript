@@ -1,39 +1,62 @@
 
 grammar Selescript;
 
+// General considerations :
+// Semi colon (;) are mandatory after each assigment or action.
+// They are not expected after a closing parenthesis (})
+
 // Top level element
 unit 
-    :  'unit' ID '{' statement ( ';' statement )* '}'
+    :   'unit' ID '{' ( bloc )* '}' EOF
     ;
 
-// A statement is a logical part of the program.
-statement
-    :  EXPECT expression 
-    |  REJECT expression
-    |  PAGE ID '{' statement ( ';' statement ) * '}'
-    |  ID '{' statement ( ';' statement )* '}'
-    |  CLIC ID
-    |  expression
-    |  // empty statements are ok !
+bloc 
+    :   ( assign ';' ) +                        # bassign
+    |   'when' '{' (  expression ';' ) * '}'    # bwhen
+    |   'do' locator '{' ( bloc ) * '}'         # bdo
+    |   (action ';') +                          # baction
     ;
 
-// An expression has a value ...
+action 
+    : 'clic' expression
+    | 'emit' expression ( ',' expression ) *
+    | 'log' expression
+    ;
+
+assign
+    :  (BIID | ID ) '='  expression
+    ;
+
+// Expression have an object value, of various types.
+// Conditions are expressions, 
+// They evaluate to true if not null, not zero, not empty string, not empty list.
 expression
-    : (ID|BIID) '=' expression
+    : '(' expression ')'
     | '!' expression
-    | expression '+' expression
+    | expression '==' expression
     | expression '<' expression
     | expression '>' expression
-    | expression '==' expression
+    | expression '<=' expression
+    | expression '>=' expression
+    | expression '!=' expression
+    | expression 'and' expression
+    | expression 'or' expression
+    | expression '+' expression
+    | expression '-' expression
+    | expression '*' expression
+    | expression '%' expression
     | atom
     ;
 
 
+
+locator : ID | BIID | XPATH ;
+
 atom 
-    : NUMBER
-    | STRING
-    | XPATH
-    | ID
+    : NUMBER        # anumber
+    | STRING        # astring
+    | XPATH         # axpath
+    | ID            # aid
     ;
 
 
@@ -68,3 +91,4 @@ WS :  [ \t\r\n\u000C]+ -> skip ;
 
 // Note the greedy ? ...
 COMMENT : '/*' .*?  '*/' -> skip ;
+

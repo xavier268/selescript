@@ -7,6 +7,7 @@ package com.twiceagain.selescript.compiler;
 
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
+import auto.SelescriptVisitor;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.antlr.v4.runtime.CharStream;
@@ -15,8 +16,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 
 /**
  * This will generate java code from a selecript scrapper definition.
@@ -57,6 +58,9 @@ public class SSCompiler {
         // Create  Lexer 
         Lexer lex = new SelescriptLexer(in);
 
+        lex.removeErrorListeners();
+        lex.addErrorListener(errorListener);
+
         // Generate TokenStream
         TokenStream ts = new CommonTokenStream(lex);
 
@@ -65,24 +69,14 @@ public class SSCompiler {
 
         // Add listener ... or walk later ...
         // parser.addParseListener(new MyListener());
-        
         // Remove previous error listener, and add mine.
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
-        
+
         // Parse the grammar, returning the full tree.
         tree = parser.unit();
 
-        
-
-        // Get default walker.
-        ParseTreeWalker ptw =  new ParseTreeWalker();
-        // MyListener list = new MyListener();
-        // ptw.walk(list, tree);
-
     }
-
-    
 
     /**
      * Get a printable version of the tree, mainly for debugging.
@@ -97,11 +91,48 @@ public class SSCompiler {
      * Prints the tree as a string to stin (for debugging).
      */
     public void printTreeString() {
-        System.out.printf("\n%s\n", getTreeString());
+        System.out.printf("\n%s", getTreeString());
     }
-    
+
     public boolean hasSyntaxError() {
         return errorListener.isSyntaxError();
+    }
+
+    /**
+     * Wal the tree with the provided listener.
+     *
+     * @param listenr
+     */
+     void compile(ParseTreeListener listenr) {
+        new ParseTreeWalker().walk(listenr, tree);
+    }
+
+    /**
+     * Apply all the relavant listeners and/or visitors in the correct order to
+     * generate the final result (java code).
+     *
+     * @return The generated code.
+     */
+    public String compile() {
+
+        SSListener listr1 = new SSListener();
+        compile(listr1);
+
+        return listr1.getCode();
+
+    }
+
+    /**
+     * Use visitor to translate the code into java.
+     * @param v
+     * @return 
+     */
+     String visit(SSVisitor v) {
+        return v.visit(tree).toString();
+    }
+    
+    public String visit() {        
+        return visit(new SSVisitor());
     }
 
 }
