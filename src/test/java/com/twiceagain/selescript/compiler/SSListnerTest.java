@@ -74,4 +74,42 @@ public class SSListnerTest {
                 + "\n===================\n",
                 result);
     }
+    
+    @Test
+    public void testBasicGoID() {
+
+        SSCompiler cp = new SSCompiler("go TOTO {  }");
+        cp.printTreeString();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        String result = cp.compile();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        System.out.printf(
+                "\n=========================="
+                + "\n%s"
+                + "\n===================\n",
+                result);
+    }
+    
+    @Test
+    public void testBasicGoBiid() {
+
+        SSCompiler cp = new SSCompiler("go $TATA {  }");
+        cp.printTreeString();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        String result = cp.compile();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        System.out.printf(
+                "\n=========================="
+                + "\n%s"
+                + "\n===================\n",
+                result);
+    }
 }
