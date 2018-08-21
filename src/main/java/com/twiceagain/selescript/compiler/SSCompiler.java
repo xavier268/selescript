@@ -7,7 +7,6 @@ package com.twiceagain.selescript.compiler;
 
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
-import auto.SelescriptVisitor;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.antlr.v4.runtime.CharStream;
@@ -122,17 +121,6 @@ public class SSCompiler {
 
     }
 
-    /**
-     * Use visitor to translate the code into java.
-     * @param v
-     * @return 
-     */
-     String visit(SSVisitor v) {
-        return v.visit(tree).toString();
-    }
     
-    public String visit() {        
-        return visit(new SSVisitor());
-    }
 
 }

@@ -11,46 +11,67 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  * Test listenr walk.
+ *
  * @author xavier
  */
-@Ignore
 public class SSListnerTest {
-    
+
     public SSListnerTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
 
     @Test
-    public void testBasicWalkNumber() {
-        
-        SSCompiler cp = new SSCompiler("unit u { a = 23 + 5 ; } ");
-        if(cp.hasSyntaxError()) {
+    public void testBasicEmptyGoStatement() {
+
+        SSCompiler cp = new SSCompiler("go{}");
+        cp.printTreeString();
+        if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
-        };         
-        cp.compile();
-        if(cp.hasSyntaxError()) {
+        }
+        String result = cp.compile();
+        if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
-        }; 
+        }
+        System.out.printf(
+                "\n=========================="
+                + "\n%s"
+                + "\n===================\n",
+                result);
     }
-   
-    
+@Test
+    public void testBasicGo() {
+
+        SSCompiler cp = new SSCompiler("go \"/html\" {  }");
+        cp.printTreeString();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        String result = cp.compile();
+        if (cp.hasSyntaxError()) {
+            fail(cp.errorListener.getFirstErrorMessage());
+        }
+        System.out.printf(
+                "\n=========================="
+                + "\n%s"
+                + "\n===================\n",
+                result);
+    }
 }
