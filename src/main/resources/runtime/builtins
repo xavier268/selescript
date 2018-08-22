@@ -1,36 +1,38 @@
 
-    /**
-     * *********************************
-     * Default built-in functions * * They will be incorporated as-is * in the
-     * generated scrapper file.*
+    /*
+     * ************************************************************************
+     * Default built-in functions.   They will be incorporated as-is in the
+     * generated scrapper file.
      *
      * Note that the list of recognized builtins is defined in the resources 
      * file "builtins.list", in a whitespace or nl separated format.
-     **********************************
-     */
-// Note that the list of recognized builtins is defined in the resources 
-// file "builtins.list"
+     *************************************************************************/
+    
 
 
-    public String BUILTIN_title_get() {
-        return wd.getTitle();
+    public String BUILTIN_title_get(WebDriver wd) {
+        String t =  wd.getTitle();
+        if (t == null) {
+            return "";
+            }
+        return t;
     }
 
-    public void BUILTIN_title_set(String inputString) {
+    public void BUILTIN_title_set(WebDriver wd, String inputString) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String BUILTIN_url_get() {
+    public String BUILTIN_url_get(WebDriver wd) {
         return wd.getCurrentUrl();
     }
 
-    public void BUILTIN_url_set(String inputString) {
+    public void BUILTIN_url_set(WebDriver wd, String inputString) {
         wd.get(inputString);
     }
 
     /* basic emit implementation - override as needed */
     public void BUILTIN_emit(Map<String, String> m) {
-        System.out.printf("%n%s%n",m.toString());
+        System.out.printf("%nEmitting : %s%n",m.toString());
     }
 
     /**

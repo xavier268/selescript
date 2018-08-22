@@ -49,13 +49,25 @@ public class ConfigTest {
      * Ensure resources are available.
      */
     @Test
-    public void tesResourcesAvailability() {       
+    public void testResourcesAvailability() {       
         
         assertNotNull(Config.getHeaders());
         assertNotNull(Config.getBuiltinsMethods());
         assertFalse(Config.getBuiltinsList().isEmpty());
         
         System.out.printf("%nThe recognized builtins tokens are : %s%n",Config.getBuiltinsList());
+    }
+    
+    @Test
+    public void testPathConfig() {
+        System.out.printf("%nCurrent defaut target path : %s%n",
+                Config.getTargetDir());
+       
+    }
+    
+    @Test
+    public void testCopyFiles() {
+        Config.copyRuntimeFiles();
     }
     
 }

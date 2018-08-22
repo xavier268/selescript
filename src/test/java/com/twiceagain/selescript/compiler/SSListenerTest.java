@@ -144,14 +144,15 @@ public class SSListenerTest {
         SSCompiler cp = new SSCompiler(
                 "go { "
                 + "$url = \"http://www.google.com\"; "
-                + "\"testing\"; "
-                + "emit $url,$title ; "
-                + "}");
+                        +" go { "
+                + "\".//div[@id='sfdiv']\"; "
+                + "emit \".//input[@name='btnK']\"   ; "
+                + "}}");
         cp.printTreeString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileAndSave();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }

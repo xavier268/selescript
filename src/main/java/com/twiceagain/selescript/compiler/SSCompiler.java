@@ -105,6 +105,7 @@ public class SSCompiler {
      void compile(ParseTreeListener listenr) {
         new ParseTreeWalker().walk(listenr, tree);
     }
+     
 
     /**
      * Apply all the relavant listeners and/or visitors in the correct order to
@@ -119,6 +120,13 @@ public class SSCompiler {
 
         return listr1.getCode();
 
+    }
+    
+    public String compileAndSave() {
+        SSListener listr1 = new SSListener();
+        compile(listr1);
+        listr1.saveCode();
+        return listr1.getCode();
     }
 
     

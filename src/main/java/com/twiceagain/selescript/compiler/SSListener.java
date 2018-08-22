@@ -16,6 +16,11 @@ import auto.SelescriptParser.UnitContext;
 import com.twiceagain.selescript.compiler.exceptions.SSException;
 import com.twiceagain.selescript.compiler.exceptions.SSUndefinedBuiltinException;
 import com.twiceagain.selescript.compiler.exceptions.SSUndefinedIDException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +49,24 @@ public class SSListener extends SelescriptBaseListener {
 
     public String getCode() {
         return code.toString();
+    }
+
+    /**
+     * Save code to file. Using correct package name/folder.
+     */
+    public void saveCode() {
+
+        new File(Config.getTargetDir() + "/com/twiceagain/scrapper").mkdirs();
+        
+        Config.copyRuntimeFiles();
+        
+        Path p = Paths.get(Config.getTargetDir(), "com/twiceagain/scrapper", "AutoScrapper.java");
+        try {
+            Files.write(p, code.toString().getBytes("UTF-8"));
+        } catch (IOException ex) {
+            throw new SSException(ex);
+        }
+
     }
 
     public SSListener() {
@@ -173,7 +196,7 @@ public class SSListener extends SelescriptBaseListener {
             }
             code.append("BUILTIN_")
                     .append(ctx.BIID().getText().substring(1))
-                    .append("_set(");
+                    .append("_set(wd,");
             appendLocatorGetter(code, ctx.locator())
                     .append(");")
                     .append(System.lineSeparator());
@@ -298,7 +321,7 @@ public class SSListener extends SelescriptBaseListener {
             }
             code.append("BUILTIN_")
                     .append(lctx.getText().substring(1))
-                    .append("_get()");
+                    .append("_get(wd)");
             return code;
         }
         throw new SSException("Internal SSListener eror : locator is neither STRING, ID nor BIID ?");
@@ -325,75 +348,6 @@ public class SSListener extends SelescriptBaseListener {
                     return !x.startsWith("$");
                 })
                 .collect(Collectors.joining(","));
-    }
-
-    /**
-     * Add the default method bodies for the builtin functions. Overrride any or
-     * all of these as needed.
-     *
-     * @param code
-     * @return
-     */
-    protected StringBuilder addDefaultMethodsBodies(StringBuilder code) {
-        code
-                .append("/*************************************************")
-                .append(System.lineSeparator())
-                .append("*  All methods below can be overridden as needed *")
-                .append(System.lineSeparator())
-                .append("**************************************************/")
-                .append(System.lineSeparator());
-
-        definedIds.stream()
-                .filter((String m) -> (m.startsWith("$")))
-                .map((String m) -> m.substring(1))
-                .forEachOrdered((m) -> {
-                    code
-                            .append("public String BUILTIN_")
-                            .append(m)
-                            .append("_get(){")
-                            .append(System.lineSeparator())
-                            .append("throw new UnsupportedOperationException(\"Not supported yet.\");")
-                            .append(System.lineSeparator())
-                            .append("}")
-                            .append(System.lineSeparator())
-                            .append("public void BUILTIN_")
-                            .append(m)
-                            .append("_set(String inputString){")
-                            .append(System.lineSeparator())
-                            .append("throw new UnsupportedOperationException(\"Not supported yet.\");")
-                            .append(System.lineSeparator())
-                            .append("}")
-                            .append(System.lineSeparator());
-                });
-
-        // emit code
-        code
-                .append("/* basic emit implementation - override as needed */")
-                .append(System.lineSeparator())
-                .append("public void BUILTIN_emit(Map<String,String> m) {")
-                .append(System.lineSeparator())
-                .append("System.out.println(m.toString());")
-                .append(System.lineSeparator())
-                .append("}")
-                .append(System.lineSeparator())
-                .append(System.lineSeparator());
-
-        // default main function
-        code
-                .append("/* default main */")
-                .append(System.lineSeparator())
-                .append("public static void main(String[] args) {")
-                .append(System.lineSeparator())
-                .append("WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());")
-                .append(System.lineSeparator())
-                .append("new AutoScrapper().scrap(wd);")
-                .append(System.lineSeparator())
-                .append("wd.close();")
-                .append(System.lineSeparator())
-                .append("}")
-                .append(System.lineSeparator())
-                .append(System.lineSeparator());
-        return code;
     }
 
 }
