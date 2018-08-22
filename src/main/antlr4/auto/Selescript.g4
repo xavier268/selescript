@@ -13,11 +13,13 @@ unit
 statement 
     :   'go'    '{' statement * '}'         # go0   // infinite loop
     |   'go'    locator '{' statement * '}' # go    // loop for locators
+    |   ( ID | BIID ) '=' locator ';'       # assign
     |   'emit'  locator (',' locator) * ';' # emit
-    |   'click' locator (',' locator) * ';' ';' # click // only the first found
-    |   locator ';'     # exist     // test for existence or jump to next
-    |   '!' locator ';' # nexist    // check for non existence
-    |   '~' locator ';' # change    // change for state changed
+    |   locator ';'                         # exist     // test for existence or jump to next
+    |   '!' locator ';'                     # nexist    // check for non existence
+    |   '~' locator ';'                     # change    // change for state changed
+    |   'click' locator (',' locator) * ';' # click // only the first found
+    |   'key'   locator (',' locator) * ';' # key // enter input data
     ;
 
 

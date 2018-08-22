@@ -1,0 +1,8 @@
+The list of builtins will be constructed using only those tokens 
+(space or new-line separated) in this file that start with a dollar sign.
+
+All the rest is considered a comment and silently ignored.
+
+$url                Get the current url, or set it (ie, go to the selected page)
+
+$title   READONLY   Get the title of the page. Setting it is an error.
