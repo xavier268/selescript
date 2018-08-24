@@ -94,7 +94,8 @@ public class SSListener extends SelescriptBaseListener {
                 .append(System.lineSeparator())
                 .append("*******************************************************/")
                 .append(System.lineSeparator())
-                .append(Config.getHeaders())
+                .append(Config.getPackageDeclaration())
+                .append(Config.getImportsDeclarations())
                 .append(System.lineSeparator());
 
     }

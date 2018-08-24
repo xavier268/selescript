@@ -17,22 +17,22 @@ import static org.junit.Assert.*;
  * @author xavier
  */
 public class ConfigTest {
-    
+
     public ConfigTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -42,32 +42,48 @@ public class ConfigTest {
      */
     @Test
     public void testGetVersion() {
-        assertNotNull(Config.getVersion());      
+        assertNotNull(Config.getVersion());
     }
 
     /**
      * Ensure resources are available.
      */
     @Test
-    public void testResourcesAvailability() {       
-        
-        assertNotNull(Config.getHeaders());
+    public void testResourcesAvailability() {
+
         assertNotNull(Config.getBuiltinsMethods());
         assertFalse(Config.getBuiltinsList().isEmpty());
-        
-        System.out.printf("%nThe recognized builtins tokens are : %s%n",Config.getBuiltinsList());
+
+        System.out.printf("%nThe recognized builtins tokens are : %s%n", Config.getBuiltinsList());
     }
-    
+
+    @Test(expected = NullPointerException.class)
+    public void testGettingNonExistentResourceFile() {
+        Config.getResourceAsString("invalidName");
+    }
+
+    @Test
+    public void testHeader() {
+        System.out.printf("%s", Config.getPackageDeclaration());
+        System.out.printf("%s", Config.getImportsDeclarations());
+    }
+
     @Test
     public void testPathConfig() {
         System.out.printf("%nCurrent defaut target path : %s%n",
                 Config.getTargetDir());
-       
+System.out.printf("%nCurrent defaut target java class path : %s%n",
+                Config.getTargetJavaClassDirectory().toString());
+
+System.out.printf("%nCurrent defaut target java class file name : %s%n",
+                Config.getTargetJavaClassPath().toString());
+
+
     }
-    
+
     @Test
     public void testCopyFiles() {
         Config.copyRuntimeFiles();
     }
-    
+
 }

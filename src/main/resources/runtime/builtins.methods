@@ -1,8 +1,10 @@
 
     /*
      * ************************************************************************
-     * Default built-in functions.   They will be incorporated as-is in the
-     * generated scrapper file.
+     * Default built-in methods from the resource file runtime/builtins.methods  
+     *
+     * They will be incorporated as-is in the
+     * generated scrapper file, within the generated class.
      *
      * Note that the list of recognized builtins is defined in the resources 
      * file "builtins.list", in a whitespace or nl separated format.

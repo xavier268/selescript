@@ -9,20 +9,18 @@ import com.twiceagain.selescript.compiler.exceptions.SSException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Configuration information.
@@ -31,26 +29,77 @@ import java.util.logging.Logger;
  */
 public class Config {
 
+    /**
+     * Target directory where the generated scrapper project will be put
+     */
     protected static File TARGETDIR = new File("./target/scrapper-dist/");
+    /**
+     * Package for target generated scrapper.
+     */
+    protected static final List<String> TARGETPACKAGE = Arrays.asList("com", "twiceagain", "scrapper");
+    /**
+     * The name of the generated java class.
+     */
+    protected static final String JAVACLASSNAME = "AutoScrapper";
+    /**
+     * List of required imports.
+     */
+    protected static final List<String> TARGETIMPORTS = Arrays.asList(
+            "java.util.*",
+            "org.openqa.selenium",
+            "org.openqa.selenium.remote.*");
+    /**
+     * File systems separator used.
+     */
+    public static final String FILESEPARATOR = FileSystems.getDefault().getSeparator();
+    /**
+     * New line separator used
+     */
+    public static final String NL = System.lineSeparator();
 
     public static String getVersion() {
-        return "1.1";
+        return "1.2";
     }
 
-    public static String getHeaders() {
-        return new Scanner(Config.class.getClassLoader().getResourceAsStream("runtime/headers"), "UTF-8")
+    public static String getPackageDeclaration() {
+        return "package " + String.join(".", TARGETPACKAGE) + NL;
+    }
+
+    public static String getImportsDeclarations() {
+        StringBuilder sb = new StringBuilder();
+        TARGETIMPORTS.forEach((s) -> {
+            sb.append("import ")
+                    .append(s)
+                    .append(" ;")
+                    .append(NL);
+        });
+        return sb.toString();
+    }
+
+    /**
+     * Reads a UTF-8 text resource file into memory as a String.
+     *
+     * @param sourceName : relative to the ressource directory.
+     * @return
+     */
+    public static String getResourceAsString(String sourceName) {
+        return new Scanner(Config.class.getClassLoader().getResourceAsStream(sourceName), "UTF-8")
                 .useDelimiter("\\A")
                 .next();
     }
 
     public static String getBuiltinsMethods() {
-        return new Scanner(Config.class.getClassLoader().getResourceAsStream("runtime/builtins"), "UTF-8")
-                .useDelimiter("\\A")
-                .next();
+        return getResourceAsString("runtime/builtins");
     }
 
+    /**
+     * Reads a whitespace or nl separated list of tokens, keeping only those
+     * prefixed with $.
+     *
+     * @return
+     */
     public static Collection<String> getBuiltinsList() {
-        Set<String> rr = new HashSet<>();
+        SortedSet<String> rr = new TreeSet<>();
         new Scanner(Config.class.getClassLoader().getResourceAsStream("runtime/builtins.list"), "UTF-8")
                 .tokens()
                 .filter((String x) -> {
@@ -60,8 +109,6 @@ public class Config {
         return rr;
 
     }
-
-    
 
     /**
      * Retrieve the target directory.
@@ -76,14 +123,47 @@ public class Config {
         }
     }
 
+    public static final String getTargetJavaClassName() {
+        return JAVACLASSNAME;
+    }
+
+    /**
+     * The path to the directory where the generated java class will be.
+     *
+     * @return
+     */
+    public static Path getTargetJavaClassDirectory() {
+        return Paths.get(getTargetDir(), "src", "main", "java", String.join(FILESEPARATOR, TARGETPACKAGE));
+    }
+
+    /**
+     * The path to the default generated java class file.
+     *
+     * @return
+     */
+    public static Path getTargetJavaClassPath() {
+        return getTargetJavaClassPath(getTargetJavaClassName());
+    }
+
+    /**
+     * The path to any class name of the default package.
+     *
+     * @param className
+     * @return
+     */
+    public static Path getTargetJavaClassPath(String className) {
+        return Paths.get(getTargetJavaClassDirectory().toString(), className + ".java");
+
+    }
+
     /**
      * Copy the file from the ressources to the target directory.
      *
-     * @param source
-     * @param target
+     * @param source - relative to the root of the resources directory.
+     * @param target - relative to the TARGETDIRECTORY
      */
     protected static void copyFromResource(String source, String target) {
-        
+
         new File(getTargetDir()).mkdirs();
 
         BufferedInputStream is = null;
@@ -92,7 +172,7 @@ public class Config {
         try {
             is = new BufferedInputStream(Config.class
                     .getClassLoader()
-                    .getResourceAsStream("runtime/" + source));
+                    .getResourceAsStream(source));
 
             if (is == null) {
                 throw new SSException("Could not open requestde resources : " + source);
@@ -129,8 +209,33 @@ public class Config {
 
     public static void copyRuntimeFiles() {
 
-        copyFromResource("pom.xml", "pom.xml");
-        copyFromResource("run.sh", "run.sh");
+        copyFromResource("runtime/pom.xml", "pom.xml");
+        copyFromResource("runtime/run.sh", "run.sh");
 
+    }
+
+    /**
+     * Save code to a java class in the default package location.
+     *
+     * @param code - the String reprensenting the entire code to be saved.
+     * @param className - the className
+     */
+    public  static  void saveCode (String code, String className) {
+
+        getTargetJavaClassDirectory().toFile().mkdirs();
+
+        Config.copyRuntimeFiles();
+
+        Path p = getTargetJavaClassPath(className);
+        try {
+            Files.write(p, code.toString().getBytes("UTF-8"));
+        } catch (IOException ex) {
+            throw new SSException(ex);
+        }
+
+    }
+
+    public  static void saveCode(String code) {
+        saveCode(code, getTargetJavaClassName());
     }
 }
