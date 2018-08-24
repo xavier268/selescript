@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.compiler.exceptions;
+package com.twiceagain.selescript.exceptions;
 
 /**
  * Base class for all generated exceptions.

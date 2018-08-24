@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.compiler;
+package com.twiceagain.selescript;
 
-import com.twiceagain.selescript.compiler.exceptions.SSException;
+import com.twiceagain.selescript.exceptions.SSException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,7 +24,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Configuration information.
+ * Configuration information and various tools.
  *
  * @author xavier
  */
@@ -57,9 +57,17 @@ public class Config {
      * New line separator used
      */
     public static final String NL = System.lineSeparator();
+    
+    /**
+     * Unique ID generation.
+     */
+    private transient static long UID = 0L;
 
     public static String getVersion() {
         return "1.2";
+    }
+    public static String getSeleniumVersion() {
+        return "3.14.0";
     }
     
     /**
@@ -73,6 +81,7 @@ public class Config {
                 " (c) 2018 - Xavier Gandillot",                
                 " Generated on " + new Date().toString(),
                 " by selescript version : " + getVersion(),
+                " target selenium version : " + getSeleniumVersion(),
                 "",
                 " See https://github.com/xavier268/selescript for details",
                 "===================================================="
@@ -109,7 +118,7 @@ public class Config {
     }
 
     public static String getBuiltinsMethods() {
-        return getResourceAsString("runtime/builtins.methods");
+        return getResourceAsString("rt/builtins.methods");
     }
 
     /**
@@ -120,7 +129,7 @@ public class Config {
      */
     public static Collection<String> getBuiltinsList() {
         SortedSet<String> rr = new TreeSet<>();
-        new Scanner(Config.class.getClassLoader().getResourceAsStream("runtime/builtins.list"), "UTF-8")
+        new Scanner(Config.class.getClassLoader().getResourceAsStream("rt/builtins.list"), "UTF-8")
                 .tokens()
                 .filter((String x) -> {
                     return x.startsWith("$");
@@ -227,10 +236,10 @@ public class Config {
 
     }
 
-    public static void copyRuntimeFiles() {
+    public static void copyAllRuntimeFiles() {
 
-        copyFromResource("runtime/pom.xml", "pom.xml");
-        copyFromResource("runtime/run.sh", "run.sh");
+        copyFromResource("rt/pom", "pom.xml");
+        copyFromResource("rt/run.sh", "run.sh");
 
     }
 
@@ -244,7 +253,7 @@ public class Config {
 
         getTargetJavaClassDirectory().toFile().mkdirs();
 
-        Config.copyRuntimeFiles();
+        Config.copyAllRuntimeFiles();
 
         Path p = getTargetJavaClassPath(className);
         try {
@@ -261,6 +270,15 @@ public class Config {
     
     public  static void saveCode(StringBuilder code) {
         saveCode(code.toString());
+    }
+    
+    /**
+     * Generates a unique, valid java identifier.
+     * @return 
+     */
+    public static String getUniqueId() {        
+        UID ++;
+        return String.format("uid_%d", UID);
     }
     
     

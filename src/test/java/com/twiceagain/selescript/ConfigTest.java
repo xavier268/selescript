@@ -3,8 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.compiler;
+package com.twiceagain.selescript;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,7 +87,17 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
 
     @Test
     public void testCopyFiles() {
-        Config.copyRuntimeFiles();
+        Config.copyAllRuntimeFiles();
     }
-
+    
+    @Test
+    public void uidTest1() {
+        List<String> ss = new ArrayList<>(12);
+        for(int i=0;i<10; i++) {
+            ss.add(Config.getUniqueId());
+        }
+        System.out.printf("%nUnique ids test : %s%n", ss.toString());
+        assertEquals(10, ss.size());
+    }
+    
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.compiler;
+package com.twiceagain.selescript;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,13 +11,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  * Test grammar syntax.
  * @author xavier
  */
-@Ignore
+
 public class GrammarTest {
 
     public GrammarTest() {

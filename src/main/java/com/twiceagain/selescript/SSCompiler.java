@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.compiler;
+package com.twiceagain.selescript;
 
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
@@ -67,7 +67,7 @@ public class SSCompiler {
         // Generate parser
         parser = new SelescriptParser(ts);
 
-        // Add listener ... or walk later ...
+        // Add listener ... or compile later ...
         // parser.addParseListener(new MyListener());
         // Remove previous error listener, and add mine.
         parser.removeErrorListeners();
@@ -106,14 +106,14 @@ public class SSCompiler {
     }
 
     /**
-     * Walk the tree with the provided listener, doiing the actual "compilation"
+     * Walk the tree with the provided listener, doing the actual "compilation"
      * from selecript to java source.
      *
      * @param listener
      * @return The generated code.
      */
     public String compileToString(SSListener listener) {
-        new ParseTreeWalker().walk(listener, tree);
+        listener.compile(tree);
         return listener.getCode();
     }
 
@@ -125,7 +125,7 @@ public class SSCompiler {
      */
     public void compileToFile(SSListener listener) {
 
-        new ParseTreeWalker().walk(listener, tree);
+        listener.compile(tree);
         listener.saveCode();
     }
 

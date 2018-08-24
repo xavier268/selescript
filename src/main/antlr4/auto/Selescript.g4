@@ -11,19 +11,31 @@ unit
     ;
 
 statement 
-    :   'go'    '{' statement * '}'         # go0   // infinite loop
-    |   'go'    locator '{' statement * '}' # go    // loop for locators
-    |   ( ID | BIID ) '=' locator ';'       # assign
-    |   'emit'  locator (',' locator) * ';' # emit
-    |   locator ';'                         # exist     // test for existence or jump to next
-    |   '!' locator ';'                     # nexist    // check for non existence
-    |   '~' locator ';'                     # change    // change for state changed
-    |   'click' locator (',' locator) * ';' # click // only the first found
-    |   'key'   locator (',' locator) * ';' # key // enter input data
+    :   'go'    '{' statement * '}'             # go0   // infinite loop
+    |   'go'    stringval '{' statement * '}'   # go    // loop for locators
+    |   ( ID | BIID ) '=' stringval ';'         # assign
+    |   'emit' emitparam ? ( ',' emitparam ) ';'# emit
+    |   stringval ';'                           # check // break/continue on null value
     ;
 
+emitparam
+    :   ( ID ':' ) ? stringval 
+    ;
 
-locator :  STRING | BIID | ID ;
+stringval 
+    :   NUMBER                                  # number
+    |   STRING                                  # string
+    |   BIID                                    # biid
+    |   ID                                      # id
+    |   '@' stringval                           # at    // derefence based on current search context
+    |   '!' stringval                           # not   // Not null means true
+    |   stringval '==' stringval                # eq    // Not null means true
+    |   stringval '+' stringval                 # concat
+    ;
+    
+
+
+
 
 
 
