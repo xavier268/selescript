@@ -16,11 +16,6 @@ import auto.SelescriptParser.UnitContext;
 import com.twiceagain.selescript.compiler.exceptions.SSException;
 import com.twiceagain.selescript.compiler.exceptions.SSUndefinedBuiltinException;
 import com.twiceagain.selescript.compiler.exceptions.SSUndefinedIDException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,18 +50,7 @@ public class SSListener extends SelescriptBaseListener {
      * Save code to file. Using correct package name/folder.
      */
     public void saveCode() {
-
-        new File(Config.getTargetDir() + "/com/twiceagain/scrapper").mkdirs();
-        
-        Config.copyRuntimeFiles();
-        
-        Path p = Paths.get(Config.getTargetDir(), "com/twiceagain/scrapper", "AutoScrapper.java");
-        try {
-            Files.write(p, code.toString().getBytes("UTF-8"));
-        } catch (IOException ex) {
-            throw new SSException(ex);
-        }
-
+        Config.saveCode(code);
     }
 
     public SSListener() {
@@ -76,53 +60,36 @@ public class SSListener extends SelescriptBaseListener {
 
         // Load code headers.
         code
-                .append("/****************************************************** ")
-                .append(System.lineSeparator())
-                .append("* Auto generated package - do not edit directly")
-                .append(System.lineSeparator())
-                .append("* Built ")
-                .append(new Date().toString())
-                .append(System.lineSeparator())
-                .append("* Selescript version ")
-                .append(Config.getVersion())
-                .append(System.lineSeparator())
-                .append("* For details, see https://github.com/xavier268/selescript")
-                .append(System.lineSeparator())
-                .append("*")
-                .append(System.lineSeparator())
-                .append("* (c) 2018 Xavier Gandillot")
-                .append(System.lineSeparator())
-                .append("*******************************************************/")
-                .append(System.lineSeparator())
+                .append(Config.getFileHeader())
                 .append(Config.getPackageDeclaration())
                 .append(Config.getImportsDeclarations())
-                .append(System.lineSeparator());
+                .append(Config.NL);
 
     }
 
     @Override
     public void enterUnit(UnitContext ctx) {
         code
-                .append("public class AutoScrapper")
+                .append("public class ").append(Config.getTargetJavaClassName())
                 .append(" { ")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append(Config.getBuiltinsMethods())
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("protected final Map<String,String> symtab = new HashMap();")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("protected Map<String,String> toemit = new HashMap();")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("public void scrap(WebDriver wd) { ")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("SearchContext we").append(level).append("=wd;")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("/* Temporary variables */")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("List<WebElement> lwe;")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append("String s; ")
-                .append(System.lineSeparator())
-                .append(System.lineSeparator());
+                .append(Config.NL)
+                .append(Config.NL);
 
     }
 
@@ -130,11 +97,11 @@ public class SSListener extends SelescriptBaseListener {
     public void exitUnit(UnitContext ctx) {
 
         code
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append(" } // scrap method")
-                .append(System.lineSeparator())
+                .append(Config.NL)
                 .append(" } // AutoScrapper class")
-                .append(System.lineSeparator());
+                .append(Config.NL);
     }
 
     @Override
@@ -142,7 +109,7 @@ public class SSListener extends SelescriptBaseListener {
 
         code
                 .append("do { ")
-                .append(System.lineSeparator());
+                .append(Config.NL);
 
     }
 
@@ -150,7 +117,7 @@ public class SSListener extends SelescriptBaseListener {
     public void exitGo0(Go0Context ctx) {
         code
                 .append("} while(true) ; // infinite loop")
-                .append(System.lineSeparator());
+                .append(Config.NL);
     }
 
     @Override
@@ -161,14 +128,14 @@ public class SSListener extends SelescriptBaseListener {
                 .append(":we").append(level - 1).append(".findElements(By.xpath(");
         appendLocatorGetter(code, ctx.locator())
                 .append("))) {")
-                .append(System.lineSeparator());
+                .append(Config.NL);
     }
 
     @Override
     public void exitGo(GoContext ctx) {
         code
                 .append("} // loop for ")
-                .append(System.lineSeparator());
+                .append(Config.NL);
         level--;
     }
 
@@ -182,7 +149,7 @@ public class SSListener extends SelescriptBaseListener {
                     .append("\",");
             appendLocatorGetter(code, ctx.locator())
                     .append(");")
-                    .append(System.lineSeparator());
+                    .append(Config.NL);
             return;
         }
 
@@ -192,7 +159,7 @@ public class SSListener extends SelescriptBaseListener {
                         "Error trying to use  "
                         + ctx.getText()
                         + " as a built-in variable, but it is not"
-                        + System.lineSeparator()
+                        + Config.NL
                         + "Recognized built-in are : " + listBuiltIns());
             }
             code.append("BUILTIN_")
@@ -200,7 +167,7 @@ public class SSListener extends SelescriptBaseListener {
                     .append("_set(wd,");
             appendLocatorGetter(code, ctx.locator())
                     .append(");")
-                    .append(System.lineSeparator());
+                    .append(Config.NL);
             return;
         }
 
@@ -212,31 +179,31 @@ public class SSListener extends SelescriptBaseListener {
     public void enterEmit(EmitContext ctx) {
 
         code.append("toemit.clear();")
-                .append(System.lineSeparator());
+                .append(Config.NL);
         for (Integer i = 0; i < ctx.locator().size(); i++) {
             retrieveListWElemntsByLocator(code, ctx.locator(i))
-                    .append(System.lineSeparator())
+                    .append(Config.NL)
                     .append("s=\"\";if(!lwe.isEmpty()){s=lwe.get(0).getText();}")
-                    .append(System.lineSeparator());
+                    .append(Config.NL);
             if (ctx.locator(i).STRING() != null) {
                 code.append("toemit.put(\"field")
                         .append(i)
                         .append("\",s);")
-                        .append(System.lineSeparator());
+                        .append(Config.NL);
                 continue;
             }
             if (ctx.locator(i).ID() != null) {
                 code.append("toemit.put(\"id_")
                         .append(ctx.locator(i).getText())
                         .append("\",s);")
-                        .append(System.lineSeparator());
+                        .append(Config.NL);
                 continue;
             }
             if (ctx.locator(i).BIID() != null) {
                 code.append("toemit.put(\"biid_")
                         .append(ctx.locator(i).getText().substring(1))
                         .append("\",s);")
-                        .append(System.lineSeparator());
+                        .append(Config.NL);
                 continue;
             }
             throw new SSException("Unexpected locator type ?");
@@ -244,7 +211,7 @@ public class SSListener extends SelescriptBaseListener {
 
         code
                 .append("BUILTIN_emit(toemit);")
-                .append(System.lineSeparator());
+                .append(Config.NL);
 
     }
 
@@ -256,7 +223,7 @@ public class SSListener extends SelescriptBaseListener {
                 .append(".findElements(By.xpath(");
         appendLocatorGetter(code, ctx.locator())
                 .append(")).isEmpty()) { continue; }")
-                .append(System.lineSeparator());
+                .append(Config.NL);
 
     }
 
@@ -302,7 +269,7 @@ public class SSListener extends SelescriptBaseListener {
                         "Error trying to use ID "
                         + lctx.getText()
                         + " before it has been assigned a value."
-                        + System.lineSeparator()
+                        + Config.NL
                         + "Known IDs are : "
                         + listIds());
             }
@@ -317,7 +284,7 @@ public class SSListener extends SelescriptBaseListener {
                         "Error trying to use  "
                         + lctx.getText()
                         + " as a built-in variable, but it is not"
-                        + System.lineSeparator()
+                        + Config.NL
                         + "Recognized built-in are : " + listBuiltIns());
             }
             code.append("BUILTIN_")

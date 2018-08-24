@@ -13,6 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 
+
 /**
  * Test listenr walk.
  *
@@ -48,7 +49,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -68,7 +69,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -88,7 +89,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -108,7 +109,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -128,7 +129,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compile();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -152,7 +153,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileAndSave();
+        String result = cp.compileToString();
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -161,6 +162,9 @@ public class SSListenerTest {
                 + "\n%s"
                 + "\n===================\n",
                 result);
+        
+        System.out.println("And now, the same, saving to file ...");
+        cp.compileToFile();
     }
 
 }

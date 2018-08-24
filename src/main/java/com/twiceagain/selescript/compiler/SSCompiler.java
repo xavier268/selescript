@@ -19,7 +19,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
- * This will generate java code from a selecript scrapper definition.
+ * This will generate ("compileToString") java code from a selecript scrapper definition
+ file or String.
  *
  * @author xavier
  */
@@ -31,7 +32,7 @@ public class SSCompiler {
 
     /**
      *
-     * @param s Code to compile.
+     * @param s Code to compileToString.
      */
     public SSCompiler(String s) {
         this(CharStreams.fromString(s));
@@ -48,7 +49,7 @@ public class SSCompiler {
 
     /**
      *
-     * @param in : where the code to compile is read from ...
+     * @param in : where the code to compileToString is read from ...
      */
     public SSCompiler(CharStream in) {
         // define input
@@ -82,38 +83,44 @@ public class SSCompiler {
      *
      * @return
      */
+    @Deprecated
     public String getTreeString() {
         return tree.toStringTree(parser);
     }
 
     /**
-     * Prints the tree as a string to stin (for debugging).
+     * Prints the tree as a string to stdin (for debugging).
      */
+    @Deprecated
     public void printTreeString() {
         System.out.printf("\n%s", getTreeString());
     }
 
+    /**
+     * Check if a syntax error was detected during compilation.
+     *
+     * @return
+     */
     public boolean hasSyntaxError() {
         return errorListener.isSyntaxError();
     }
 
     /**
-     * Wal the tree with the provided listener.
+     * Walk the tree with the provided listener, doiing the actual "compilation"
+     * from selecript to java source.
      *
      * @param listenr
      */
-     void compile(ParseTreeListener listenr) {
+    protected void compile(ParseTreeListener listenr) {
         new ParseTreeWalker().walk(listenr, tree);
     }
-     
 
     /**
-     * Apply all the relavant listeners and/or visitors in the correct order to
-     * generate the final result (java code).
+     * Do the actual "compilation" from selecript to java source.
      *
      * @return The generated code.
      */
-    public String compile() {
+    public String compileToString() {
 
         SSListener listr1 = new SSListener();
         compile(listr1);
@@ -121,14 +128,15 @@ public class SSCompiler {
         return listr1.getCode();
 
     }
-    
-    public String compileAndSave() {
+
+    /**
+     * Do the actual "compilation" from selecript to java source, saving the
+     * generated code to file.
+     */
+    public void compileToFile() {
         SSListener listr1 = new SSListener();
         compile(listr1);
-        listr1.saveCode();
-        return listr1.getCode();
+        listr1.saveCode();        
     }
-
-    
 
 }
