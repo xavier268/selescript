@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript.compiler;
 
+import com.twiceagain.selescript.compiler.implementation.SSListener_Old;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -69,7 +70,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -89,7 +90,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -109,7 +110,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -129,7 +130,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -153,7 +154,7 @@ public class SSListenerTest {
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
-        String result = cp.compileToString();
+        String result = cp.compileToString(new SSListener_Old());
         if (cp.hasSyntaxError()) {
             fail(cp.errorListener.getFirstErrorMessage());
         }
@@ -164,7 +165,7 @@ public class SSListenerTest {
                 result);
         
         System.out.println("And now, the same, saving to file ...");
-        cp.compileToFile();
+        cp.compileToFile(new SSListener_Old());
     }
 
 }

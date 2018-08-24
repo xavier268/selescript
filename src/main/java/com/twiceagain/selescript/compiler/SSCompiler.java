@@ -15,12 +15,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
- * This will generate ("compileToString") java code from a selecript scrapper definition
- file or String.
+ * This will generate ("compileToString") java code from a selecript scrapper
+ * definition file or String. It is the main class to compile and generate
+ * automatic java source code from selecrit code.
  *
  * @author xavier
  */
@@ -109,34 +109,24 @@ public class SSCompiler {
      * Walk the tree with the provided listener, doiing the actual "compilation"
      * from selecript to java source.
      *
-     * @param listenr
-     */
-    protected void compile(ParseTreeListener listenr) {
-        new ParseTreeWalker().walk(listenr, tree);
-    }
-
-    /**
-     * Do the actual "compilation" from selecript to java source.
-     *
+     * @param listener
      * @return The generated code.
      */
-    public String compileToString() {
-
-        SSListener listr1 = new SSListener();
-        compile(listr1);
-
-        return listr1.getCode();
-
+    public String compileToString(SSListener listener) {
+        new ParseTreeWalker().walk(listener, tree);
+        return listener.getCode();
     }
 
     /**
      * Do the actual "compilation" from selecript to java source, saving the
      * generated code to file.
+     *
+     * @param listener
      */
-    public void compileToFile() {
-        SSListener listr1 = new SSListener();
-        compile(listr1);
-        listr1.saveCode();        
+    public void compileToFile(SSListener listener) {
+
+        new ParseTreeWalker().walk(listener, tree);
+        listener.saveCode();
     }
 
 }
