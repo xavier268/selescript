@@ -61,6 +61,7 @@ public class Config {
      * New line separator used
      */
     public static final String NL = System.lineSeparator();
+    public static final String AP = "\"";
 
     /**
      * Unique ID generation.

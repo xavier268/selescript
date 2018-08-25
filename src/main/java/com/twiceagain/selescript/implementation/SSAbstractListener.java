@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -46,7 +47,7 @@ public class SSAbstractListener implements SSListener {
     /**
      * Locally cached builtin list.
      */
-    protected Set<String> definedBuiltins ;
+    protected Set<String> definedBuiltins;
     /**
      * The annotated tree to store the code as we compile the tree.
      */
@@ -68,7 +69,7 @@ public class SSAbstractListener implements SSListener {
     private static final Logger LOG = LoggerFactory.getLogger(SSAbstractListener.class);
 
     protected Config config = new Config();
-    
+
     /**
      * String for the source script to be compiled.
      *
@@ -127,7 +128,7 @@ public class SSAbstractListener implements SSListener {
      * Compile with default configuration.
      */
     @Override
-    public void compile() {  
+    public void compile() {
         if (prop.get(rootNode) == null) {
             definedBuiltins = new HashSet<>(config.getBuiltinsList());
             new ParseTreeWalker().walk(this, rootNode);
@@ -185,7 +186,7 @@ public class SSAbstractListener implements SSListener {
         }
         return prop.get(rootNode);
     }
-    
+
     @Override
     public void saveCode() {
         config.saveCode(getCode());
@@ -232,9 +233,49 @@ public class SSAbstractListener implements SSListener {
     @Override
     public String getTreeString() {
         return rootNode.toStringTree(parser);
-    
+
     }
 
+    @Override
+    public void dump() {
+        new ParseTreeWalker().walk(new ParseTreeListener() {
+            @Override
+            public void visitTerminal(TerminalNode node) {
+            }
+
+            @Override
+            public void visitErrorNode(ErrorNode node) {
+            }
+
+            @Override
+            public void enterEveryRule(ParserRuleContext ctx) {
+            }
+
+            @Override
+            public void exitEveryRule(ParserRuleContext ctx) {
+                System.out.printf("%nDUMP %s : %s %n===>%s<===%n", ctx.getText(), ctx.toStringTree(parser), prop.get(ctx));
+
+            }
+        }, rootNode);
+    }
     
+    /**
+     * Remove first and last charactere
+     * @param s
+     * @return 
+     */
+    protected  String trim2(String s) {
+        if(s==null || s.length() <2) return s;
+        return s.substring(1, s.length()-1);
+    }
+    /**
+     * Remove first char, if possible.
+     * @param s
+     * @return 
+     */
+    protected   String trim1(String s) {
+        if(s==null || s.isEmpty()) return s;
+        return s.substring(1);
+    }
 
 }

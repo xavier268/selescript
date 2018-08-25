@@ -15,22 +15,36 @@ import org.junit.Test;
  * @author xavier
  */
 public class CompleteSourceCompilerTest {
-    
-    Config config = new Config("testClass").setTargetPackage("com","test");
-    
+
+    Config config = new Config("testClass").setTargetPackage("com", "test");
+
+    @Test
+    public void trimTest() {
+        SSListenerImplementation ll = new SSListenerImplementation("");
+        String s = "abcdef";
+        assertEquals("bcdef", ll.trim1(s));
+        assertEquals("bcde", ll.trim2(s));
+
+    }
+
     @Test
     public void testCompilerInfrastructure() {
-        String source = "!1+ 2;!(3+4);(!5)+6;";
+        String source
+                = "!1+ 2;"
+                + "! \"titi\";"
+                + "(!5)+6; "
+                + "( ! \"tata\" ) + \"titi\";"
+                + "\"tttt\" + \"tata\";";
         System.out.printf("%nTest-compiling : %s%n", source);
         SSListener ls = new SSListenerImplementation(source);
         ls.compile(config);
         ls.dump();
-        
+
         String s = ls.getCode();
-        if(ls.hasSyntaxError()) {
+        if (ls.hasSyntaxError()) {
             fail(ls.getErrorMessage());
         }
         ls.saveCode();
-        System.out.printf("%n%s%n",s);
+        // System.out.printf("%n%s%n", s);
     }
 }

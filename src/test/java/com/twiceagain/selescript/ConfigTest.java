@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.implementation.SSAbstractListener;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -99,5 +100,7 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
         System.out.printf("%nUnique ids test : %s%n", ss.toString());
         assertEquals(10, ss.size());
     }
+    
+    
     
 }

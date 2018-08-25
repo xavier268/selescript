@@ -24,16 +24,15 @@ emitparam
 
 stringval 
     
-    :   stringval '==' stringval                # eq    // Not null means true
+    :   constantstring                          # sstring
+    |   stringval '==' stringval                # eq    // Not null means true
     |   '(' stringval ')'                       # par
     |   '@' stringval                           # at    // derefence based on current search context
     |   '!' stringval                           # not   // Not null means true
     |   stringval '+'  stringval                # concat
-    |   constantstring                          # sstring
     |   BIID                                    # biid
     |   ID                                      # id
     ;
-    
 
 constantstring
     :  '(' constantstring ')'                   # cspar
@@ -80,4 +79,3 @@ WS :  [ \t\r\n\u000C]+ -> skip ;
 
 // Note the greedy ? ...
 COMMENT : '/*' .*?  '*/' -> skip ;
-

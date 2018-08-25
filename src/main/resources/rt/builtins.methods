@@ -40,6 +40,7 @@ protected String not(String s) {
 return (s == null) ? "" : null ;
 }
 
+
 /***** end of file : builtins.methods ***********/
     
 
