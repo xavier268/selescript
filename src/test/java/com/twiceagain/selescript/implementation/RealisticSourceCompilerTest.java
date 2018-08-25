@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.implementation;
 
 import com.twiceagain.selescript.SSCompiler;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
@@ -18,11 +18,16 @@ public class RealisticSourceCompilerTest {
     
     @Test
     public void testCompilerInfrastructure() {
-        SSCompiler cp = new SSCompiler(" 2 ; ");
-        // String s = "See file !";cp.compileToFile(new SSListenerImplementation());
+        String source = "!1+ 2;!(3+4);(!5)+6;";
+        System.out.printf("%nTest-compiling : %s%n", source);
+        SSCompiler cp = new SSCompiler(source);
+        cp.printTreeString();
+        
         String s = cp.compileToString(new SSListenerImplementation());
-        // cp.compileToFile(new SSListenerImplementation());
-        assertFalse(cp.hasSyntaxError());
+        if(cp.hasSyntaxError()) {
+            fail(cp.getErrorMessage());
+        };
+        cp.compileToFile(new SSListenerImplementation());
         System.out.printf("%n%s%n",s);
     }
 }

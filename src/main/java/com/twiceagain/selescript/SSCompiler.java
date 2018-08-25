@@ -15,7 +15,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
  * This will generate ("compileToString") java code from a selecript scrapper
@@ -83,7 +82,7 @@ public class SSCompiler {
      *
      * @return
      */
-    @Deprecated
+  
     public String getTreeString() {
         return tree.toStringTree(parser);
     }
@@ -91,7 +90,7 @@ public class SSCompiler {
     /**
      * Prints the tree as a string to stdin (for debugging).
      */
-    @Deprecated
+  
     public void printTreeString() {
         System.out.printf("\n%s", getTreeString());
     }
@@ -103,6 +102,17 @@ public class SSCompiler {
      */
     public boolean hasSyntaxError() {
         return errorListener.isSyntaxError();
+    }
+
+    public String getErrorMessage() {
+        if (!hasSyntaxError()) {
+            return "no error";
+        } else {
+            return errorListener.getFirstErrorLine()
+                    + ":"
+                    + errorListener.getFirstErrorCharPostionInLine()
+                    + " -- " + errorListener.getFirstErrorMessage();
+        }
     }
 
     /**

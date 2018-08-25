@@ -23,14 +23,16 @@ emitparam
     ;
 
 stringval 
-    :   NUMBER                                  # number
+    
+    :   stringval '==' stringval                # eq    // Not null means true
+    |   '(' stringval ')'                       # par
+    |   '@' stringval                           # at    // derefence based on current search context
+    |   '!' stringval                           # not   // Not null means true
+    |   stringval '+'  stringval                # concat
+    |   NUMBER                                  # number
     |   STRING                                  # string
     |   BIID                                    # biid
     |   ID                                      # id
-    |   '@' stringval                           # at    // derefence based on current search context
-    |   '!' stringval                           # not   // Not null means true
-    |   stringval '==' stringval                # eq    // Not null means true
-    |   stringval '+' stringval                 # concat
     ;
     
 
@@ -47,7 +49,7 @@ stringval
 STRING : '"' .*? '"' ; 
 
 // Numbers are signed integer 
-NUMBER  : [+-]?[0-9]+ ;
+NUMBER  : [-]?[0-9]+ ;
 
 // Acceptable ID starts with a letter
 ID : [a-zA-Z][a-zA-Z0-9]* ;

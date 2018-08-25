@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 
 /**
  * Test grammar syntax.
+ *
  * @author xavier
  */
-
 public class GrammarTest {
 
     public GrammarTest() {
@@ -40,20 +40,28 @@ public class GrammarTest {
     }
 
     @Test
-    public void testUnit() {      
+    public void testUnit() {
         ok("go { } ");
-        
-        
-        
+
     }
-    
+
     @Test
     public void testComments() {
         ok("go  { } ");
         nok("go { /* khjkhk kjhk j /* } ");
         ok("go  { /* khjkhk kjhk j  */ } ");
         ok("go /* hh */  { } ");
-        ok("/* ////***/go  {}");        
+        ok("/* ////***/go  {}");
+    }
+
+    @Test
+    public void testStringval() {
+        ok(" 2 + 3 ;");
+        ok(" 5 + ! 6 ;");
+        ok(" 1 + 5 + ! 6 ;");
+        ok(" 3 + ! 5 + 6 ; ");
+        ok("1 + 2 + 3 + 4 ;");
+        nok("1 + 2 + 3 + 4 ");
     }
 
     /**
@@ -77,7 +85,7 @@ public class GrammarTest {
      */
     protected void nok(String s) {
         System.out.printf("\n----------\nNOK -> %s", s);
-        SSCompiler c = new SSCompiler(s);        
+        SSCompiler c = new SSCompiler(s);
         if (!c.hasSyntaxError()) {
             c.printTreeString();
             fail("**This should have been detected as incorrect ??!!**");
