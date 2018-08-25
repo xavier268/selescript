@@ -1,7 +1,10 @@
 #!/bin/bash
 
-echo "launching the selenium grid stack"
-bash -c selgrid.start.sh
+echo "Launching the selenium grid stack"
+bash <selgrid.start.sh
 
-echo "Running the generated scrapper"
-mvn clean exec:java -e 
+echo "Launching the generated scrapper"
+mvn clean package exec:java -e
+
+echo "Destroying the selenium stack"
+bash <selgrid.stop.sh
