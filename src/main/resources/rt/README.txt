@@ -1,0 +1,6 @@
+
+TO DO .. explain what is in the generated directory and how to use it ...
+Explain how 
+* install maven ...
+* compile/run with maven
+* to make the scripts executable.

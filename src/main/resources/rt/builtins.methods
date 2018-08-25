@@ -1,45 +1,71 @@
-/****** start of file : builtin.methods *********/
+    /**
+     ***** start of file : builtin.methods ********
+     */
+    // $url
+    // $millis
+/   / $title
 
-// $url
-// $millis
-// $title
+    /*------------------------------------------------------------
+    * A dedicated concatenation that behaves well with null values.
+    * null + null = null
+    * null + a = a
+    * a + null = a
+    * a + b = ab
+    **/
+    protected String plus(String s1, String s2) {
+        if (s1 == null) {
+            return s2;
+        }
+        if (s2 == null) {
+            return s1;
+        }
+        return s1 + s2;
+    }
 
-/*------------------------------------------------------------
-* A dedicated concatenation that behaves well with null values.
-* null + null = null
-* null + a = a
-* a + null = a
-* a + b = ab
-**/
-protected String plus(String s1,String s2) {
-if(s1==null) return s2;
-if(s2==null) return s1;
-return s1 + s2;
-}
+    /*--------------------------------------------------
+    * A dedicated equal that behave well with null values.
+    * null eq null = ""
+    * null eq a = null
+    * a eq null = null
+    * a eq b = a.equals(b)
+    **/
+    protected String aq(String s1, String s2) {
+        if (s1 == null && s2 == null) {
+            return "";    // true   
+        }
+        if (s1 == null || s2 == null) {
+            return null; // false
+        }
+        if (s1.equals(s2)) {
+            return "";            // true
+        }
+        return null;                             // false
+    }
 
-/*--------------------------------------------------
-* A dedicated equal that behave well with null values.
-* null eq null = ""
-* null eq a = null
-* a eq null = null
-* a eq b = a.equals(b)
-**/
-protected String aq(String s1, String s2) {
-if(s1==null && s2 == null) return "";    // true   
-if(s1==null || s2 == null) return null ; // false
-if(s1.equals(s2) ) return "";            // true
-return null;                             // false
-}
+    /*---------------------------------------------------
+    * A dedicated not that behaves well will null values
+    * ! null = ""
+    * ! a = null
+    **/
+    protected String not(String s) {
+        return (s == null) ? "" : null;
+    }
 
-/*---------------------------------------------------
-* A dedicated not that behaves well will null values
-* ! null = ""
-* ! a = null
-**/
-protected String not(String s) {
-return (s == null) ? "" : null ;
-}
+    /*=================================================
+    * A default main method to make the scarpper self-starting
+    **/
+    public void main(String[] args)  {
 
+        WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
+        scrap(wd);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            LOG.info(ex.getMessage());
+        }
+        
+
+    }
 
 /***** end of file : builtins.methods ***********/
     

@@ -34,7 +34,11 @@ public class CompleteSourceCompilerTest {
                 + "! \"titi\";"
                 + "(!5)+6; "
                 + "( ! \"tata\" ) + \"titi\";"
-                + "\"tttt\" + \"tata\";";
+                + "\"tttt\" + \"tata\";"
+                + "toto = 1+3;"
+                + "titi = toto + 5;"
+                + "titi;" ;
+        
         System.out.printf("%nTest-compiling : %s%n", source);
         SSListener ls = new SSListenerImplementation(source);
         ls.compile(config);
