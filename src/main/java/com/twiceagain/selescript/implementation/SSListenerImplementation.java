@@ -162,7 +162,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
         // Handle special case here null constant is returned
         // No need to test - we KNOW is is always null.
         if(prop.get(ctx.stringval())==null) {
-            prop.put(ctx,"continue;");
+            prop.put(ctx,"continue;"+AP);
             return;
         }
         String s = "if((" + prop.get(ctx.stringval()) + ")==null) continue;" + NL;
