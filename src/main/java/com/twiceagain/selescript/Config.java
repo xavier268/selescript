@@ -177,9 +177,9 @@ public class Config {
      */
     public String getTargetDir() {
         try {
-            return new File("target/"+getTargetJavaClassName()+"-dist").getCanonicalPath();
+            return new File("target/" + getTargetJavaClassName() + "-dist").getCanonicalPath();
         } catch (IOException ex) {
-            throw new SSException("Invalid default path : " + "target/"+getTargetJavaClassName()+"-dist");
+            throw new SSException("Invalid default path : " + "target/" + getTargetJavaClassName() + "-dist");
         }
     }
 
@@ -322,7 +322,11 @@ public class Config {
                 "                </execution>",
                 "            </executions>",
                 "            <configuration>",
-                "                <executable>/usr/bin/mvn</executable>",
+                "                <executable>java</executable>",
+                "                <argument>-classpath</argument>",
+                "                <classpath/>",
+                "                <argument></argument>",
+                "                <mainClass>${mainClass}</mainClass>",
                 "            </configuration>",
                 "        </plugin>",
                 "    </plugins>",

@@ -78,7 +78,18 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
         // Add builtin methods
         sb.append(config.getBuiltinsMethods())
                 .append(NL);
-
+        
+        // create a newInstance() static method to construct easily
+        sb.append("public static final ")
+                .append(config.getTargetJavaClassName())
+                .append(" newInstance() {")
+                .append(NL)
+                .append("return new ")
+                .append(config.getTargetJavaClassName())
+                .append("();}")
+                .append(NL)
+                .append(NL);
+        
         // Create the scrap method
         sb.append("/* This is the main method for scrapping */").append(NL);
         sb.append("public void scrap(WebDriver wd){ ").append(NL);
