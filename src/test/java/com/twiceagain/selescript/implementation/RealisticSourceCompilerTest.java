@@ -5,7 +5,8 @@
  */
 package com.twiceagain.selescript.implementation;
 
-import com.twiceagain.selescript.SSCompiler;
+import com.twiceagain.selescript.Config;
+import com.twiceagain.selescript.SSListener;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -15,19 +16,20 @@ import org.junit.Test;
  */
 public class RealisticSourceCompilerTest {
     
+    Config config = new Config("testClass").setTargetPackage("com","test");
     
     @Test
     public void testCompilerInfrastructure() {
         String source = "!1+ 2;!(3+4);(!5)+6;";
         System.out.printf("%nTest-compiling : %s%n", source);
-        SSCompiler cp = new SSCompiler(source);
-        cp.printTreeString();
+        SSListener ls = new SSListenerImplementation(source);
+        ls.compile(config);
         
-        String s = cp.compileToString(new SSListenerImplementation());
-        if(cp.hasSyntaxError()) {
-            fail(cp.getErrorMessage());
-        };
-        cp.compileToFile(new SSListenerImplementation());
+        String s = ls.getCode();
+        if(ls.hasSyntaxError()) {
+            fail(ls.getErrorMessage());
+        }
+        ls.saveCode();
         System.out.printf("%n%s%n",s);
     }
 }

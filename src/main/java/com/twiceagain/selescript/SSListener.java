@@ -5,39 +5,36 @@
  */
 package com.twiceagain.selescript;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
- * Defines what the SSCompiler can use. Interface is grammar indepedant.
+ * The SSListener is the base object that can compile a source script to java.
  *
  * @author xavier
  */
 public interface SSListener extends ParseTreeListener {
 
-    /**
-     * Return the compiled code as a String.
-     *
-     * @return
-     */
-    public String getCode();
-
-    /**
-     * Save the compiled code to file.
-     */
-    default public void saveCode() {
-        Config.saveCode(getCode());
-    }
-    
-    /**
-     * Make the listener compile the tree. Listener is first reset, the the tree is walked.
-     * @param tree 
-     */
-     public void compile(final ParseTree tree);
-     
      /**
-      * Reset the listener.
-      */
-     public void reset();
+     * Compile the script with default configuration. 
+     */
+    public void compile();
+    /**
+     * Compile the script with provided configuration.
+     * @param config
+     */
+    public void compile(Config config); 
+    
+    public String getCode() ;
+    
+    public void saveCode() ;
 
+    public boolean hasSyntaxError();
+    
+    public String getErrorMessage();
+    
+    public String getTreeString();
+    
+    default public void printTreeString() {
+        System.out.printf("%n%s%n", getTreeString());
+    }
 }

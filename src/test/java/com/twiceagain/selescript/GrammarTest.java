@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.implementation.SSListenerImplementation;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,6 +19,8 @@ import static org.junit.Assert.*;
  * @author xavier
  */
 public class GrammarTest {
+
+    public Config config = new Config("javaTest").setTargetPackage("com", "test");
 
     public GrammarTest() {
     }
@@ -97,10 +100,10 @@ public class GrammarTest {
      */
     protected void ok(String s) {
         System.out.printf("\n----------\nOK -> %s", s);
-        SSCompiler c = new SSCompiler(s);
+        SSListener c = new SSListenerImplementation(s);
         c.printTreeString();
         if (c.hasSyntaxError()) {
-            fail(c.errorListener.getFirstErrorMessage());
+            fail(c.getErrorMessage());
         }
     }
 
@@ -111,12 +114,12 @@ public class GrammarTest {
      */
     protected void nok(String s) {
         System.out.printf("\n----------\nNOK -> %s", s);
-        SSCompiler c = new SSCompiler(s);
+        SSListener c = new SSListenerImplementation(s);
         if (!c.hasSyntaxError()) {
             c.printTreeString();
             fail("**This should have been detected as incorrect ??!!**");
         } else {
-            System.out.printf("\nExpected error : %s", c.errorListener.getFirstErrorMessage());
+            System.out.printf("\nExpected error : %s", c.getErrorMessage());
             c.printTreeString();
         }
     }

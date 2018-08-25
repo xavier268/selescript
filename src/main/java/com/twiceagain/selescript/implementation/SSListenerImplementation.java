@@ -8,9 +8,11 @@ package com.twiceagain.selescript.implementation;
 import auto.SelescriptListener;
 import auto.SelescriptParser;
 import auto.SelescriptParser.*;
-import com.twiceagain.selescript.Config;
 import static com.twiceagain.selescript.Config.NL;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
+import org.antlr.v4.runtime.CharStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,20 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     
     
     private  final static Logger LOG = LoggerFactory.getLogger(SSListenerImplementation.class);
+
+    public SSListenerImplementation(CharStream in) {
+        super(in);
+    }
+
+    public SSListenerImplementation(String s) {
+        super(s);
+    }
+
+    public SSListenerImplementation(Path path) throws IOException {
+        super(path);
+    }
+    
+    
     
     @Override
     public void enterUnit(SelescriptParser.UnitContext ctx) {
@@ -31,19 +47,19 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(Config.getFileHeader())
-                .append(Config.getPackageDeclaration())
-                .append(Config.getImportsDeclarations())
+                .append(config.getFileHeader())
+                .append(config.getPackageDeclaration())
+                .append(config.getImportsDeclarations())
                 .append(NL).append(NL);
         // Define class
-        sb.append("public class ").append(Config.getTargetJavaClassName())
+        sb.append("public class ").append(config.getTargetJavaClassName())
                 .append(" {").append(NL);
         // define useful constants
         sb.append("public final static String VERSION = \"")
-                .append(Config.getVersion()).append("\";")
+                .append(config.getVersion()).append("\";")
                 .append(NL)
                 .append("public final static String SELENIUMVERSION = \"")
-                .append(Config.getSeleniumVersion()).append("\";")
+                .append(config.getSeleniumVersion()).append("\";")
                 .append(NL)
                 .append("public final static String BUILDDATE = \"")
                 .append(new Date()).append("\";")
@@ -56,13 +72,13 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
         sb.append("protected Map<String,String> symtab = new HashMap<String,String>();")
                 .append(NL);
         sb.append("private final static Logger LOG = LoggerFactory.getLogger(")
-                .append(Config.getTargetJavaClassName())
+                .append(config.getTargetJavaClassName())
                 .append(".class);")
                 .append(NL)
                 .append(NL);
 
         // Add builtin methods
-        sb.append(Config.getBuiltinsMethods())
+        sb.append(config.getBuiltinsMethods())
                 .append(NL);
 
         // Create the scrap method

@@ -6,9 +6,7 @@
 package com.twiceagain.selescript;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,6 +19,8 @@ import static org.junit.Assert.*;
  * @author xavier
  */
 public class ConfigTest {
+    
+    public Config config = new Config("testJavaClass").setTargetPackage("com","test");
 
     public ConfigTest() {
     }
@@ -46,7 +46,7 @@ public class ConfigTest {
      */
     @Test
     public void testGetVersion() {
-        assertNotNull(Config.getVersion());
+        assertNotNull(config.getVersion());
     }
 
     /**
@@ -55,46 +55,46 @@ public class ConfigTest {
     @Test
     public void testResourcesAvailability() {
 
-        assertNotNull(Config.getBuiltinsMethods());
-        assertFalse(Config.getBuiltinsList().isEmpty());
+        assertNotNull(config.getBuiltinsMethods());
+        assertFalse(config.getBuiltinsList().isEmpty());
 
-        System.out.printf("%nThe recognized builtins tokens are : %s%n", Config.getBuiltinsList());
+        System.out.printf("%nThe recognized builtins tokens are : %s%n", config.getBuiltinsList());
     }
 
     @Test(expected = NullPointerException.class)
     public void testGettingNonExistentResourceFile() {
-        Config.getResourceAsString("invalidName");
+        config.getResourceAsString("invalidName");
     }
 
     @Test
     public void testHeader() {
-        System.out.printf("%s", Config.getPackageDeclaration());
-        System.out.printf("%s", Config.getImportsDeclarations());
+        System.out.printf("%s", config.getPackageDeclaration());
+        System.out.printf("%s", config.getImportsDeclarations());
     }
 
     @Test
     public void testPathConfig() {
         System.out.printf("%nCurrent defaut target path : %s%n",
-                Config.getTargetDir());
+                config.getTargetDir());
 System.out.printf("%nCurrent defaut target java class path : %s%n",
-                Config.getTargetJavaClassDirectory().toString());
+                config.getTargetJavaClassDirectory().toString());
 
 System.out.printf("%nCurrent defaut target java class file name : %s%n",
-                Config.getTargetJavaClassPath().toString());
+                config.getTargetJavaClassPath().toString());
 
 
     }
 
     @Test
     public void testCopyFiles() {
-        Config.copyAllRuntimeFiles();
+        config.copyAllRuntimeFiles();
     }
     
     @Test
     public void uidTest1() {
         List<String> ss = new ArrayList<>(12);
         for(int i=0;i<10; i++) {
-            ss.add(Config.getUniqueId());
+            ss.add(config.getUniqueId());
         }
         System.out.printf("%nUnique ids test : %s%n", ss.toString());
         assertEquals(10, ss.size());
