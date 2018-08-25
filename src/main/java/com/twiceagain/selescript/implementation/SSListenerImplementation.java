@@ -67,7 +67,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
                 .append(NL)
                 .append(NL);
         // Define class field variables
-        sb.append("protected Map<String,String> symtab = new HashMap<String,String>();")
+        sb.append("protected Map<String,String> symtab = new HashMap<>();")
                 .append(NL);
         sb.append("private final static Logger LOG = LoggerFactory.getLogger(")
                 .append(config.getTargetJavaClassName())
@@ -159,12 +159,8 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
 
     @Override
     public void exitCheck(SelescriptParser.CheckContext ctx) {
-        // Handle special case here null constant is returned
-        // No need to test - we KNOW is is always null.
-        if(prop.get(ctx.stringval())==null) {
-            prop.put(ctx,"continue;"+NL);
-            return;
-        }
+        // It was tempting to just continue when we know input is null, 
+        // but the compiler will refuse to compile unreacheable code ...
         String s = "if((" + prop.get(ctx.stringval()) + ")==null) continue;" + NL;
         prop.put(ctx, s);
     }

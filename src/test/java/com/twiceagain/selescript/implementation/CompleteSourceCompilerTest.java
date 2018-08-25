@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class CompleteSourceCompilerTest {
 
-    Config config = new Config("testClass").setTargetPackage("com", "test");
+    Config config = new Config("testclass").setTargetPackage("com", "test");
 
     @Test
     public void trimTest() {

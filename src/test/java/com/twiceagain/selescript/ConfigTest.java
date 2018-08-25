@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class ConfigTest {
     
-    public Config config = new Config("testJavaClass").setTargetPackage("com","test");
+    public Config config = new Config("testclass").setTargetPackage("com","test");
 
     public ConfigTest() {
     }
@@ -95,7 +95,7 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
     public void uidTest1() {
         List<String> ss = new ArrayList<>(12);
         for(int i=0;i<10; i++) {
-            ss.add(config.getUniqueId());
+            ss.add(config.createUniqueId());
         }
         System.out.printf("%nUnique ids test : %s%n", ss.toString());
         assertEquals(10, ss.size());

@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class GrammarTest {
 
-    public Config config = new Config("javaTest").setTargetPackage("com", "test");
+    public Config config = new Config("testclass").setTargetPackage("com", "test");
 
     public GrammarTest() {
     }
