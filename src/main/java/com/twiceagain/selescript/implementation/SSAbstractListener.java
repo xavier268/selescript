@@ -9,7 +9,6 @@ import com.twiceagain.selescript.Config;
 import com.twiceagain.selescript.SSListener;
 import com.twiceagain.selescript.exceptions.SSException;
 import com.twiceagain.selescript.exceptions.SSUndefinedBuiltinException;
-import com.twiceagain.selescript.exceptions.SSUndefinedIDException;
 import java.util.HashSet;
 import java.util.Set;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -18,13 +17,15 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Various utilities used by the listener implementation.
  *
  * @author xavier
  */
-public  abstract class SSAbstractListener implements SSListener {
+public abstract class SSAbstractListener implements SSListener {
 
     /**
      * The set of IDs that have been defined so far.
@@ -44,6 +45,8 @@ public  abstract class SSAbstractListener implements SSListener {
      */
     protected ParseTree rootNode;
 
+    private static final Logger LOG = LoggerFactory.getLogger(SSAbstractListener.class);
+
     public SSAbstractListener() {
         reset();
     }
@@ -53,6 +56,7 @@ public  abstract class SSAbstractListener implements SSListener {
      */
     @Override
     public final void reset() {
+        LOG.info("Reinitializing the listener");
         prop = new ParseTreeProperty<>();
         rootNode = null;
         definedIds = new HashSet<>();
@@ -63,18 +67,20 @@ public  abstract class SSAbstractListener implements SSListener {
      * Check if Id is already known.Throw exception if not..
      *
      * @param id
-     * @return true or throws
+     * @return true or false. Do not throw.
      */
     protected boolean isValidId(String id) {
         if (definedIds.contains(id)) {
             return true;
+        } else {
+            LOG.warn(
+                    "Unrecognized id : "
+                    + id
+                    + " . Recognized ids are : "
+                    + definedIds.toString()
+            );
+            return false;
         }
-        throw new SSUndefinedIDException(
-                "Unrecognized id : "
-                + id
-                + " . Recognized ids are : "
-                + definedIds.toString()
-        );
     }
 
     /**
@@ -134,7 +140,5 @@ public  abstract class SSAbstractListener implements SSListener {
     @Override
     public void exitEveryRule(ParserRuleContext ctx) {
     }
-
-
 
 }

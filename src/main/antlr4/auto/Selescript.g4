@@ -11,7 +11,7 @@ unit
     ;
 
 statement 
-    :   'go'    '{' statement * '}'             # go0   // infinite loop
+    :   'go'    '{' statement * '}'             # go0   // one-time loop
     |   'go'    stringval '{' statement * '}'   # go    // loop for locators
     |   ( ID | BIID ) '=' stringval ';'         # assign
     |   'emit' emitparam ? ( ',' emitparam ) ';'# emit
@@ -29,13 +29,31 @@ stringval
     |   '@' stringval                           # at    // derefence based on current search context
     |   '!' stringval                           # not   // Not null means true
     |   stringval '+'  stringval                # concat
-    |   NUMBER                                  # number
-    |   STRING                                  # string
+    |   constantstring                          # sstring
     |   BIID                                    # biid
     |   ID                                      # id
     ;
     
 
+constantstring
+    :  '(' constantstring ')'                   # cspar
+    |  '!' constantstring                       # csnot
+    |  constantstring '+' constantstring        # csplus
+    |  constantnumber                           # csc
+    |  STRING                                   # csstring
+    ; 
+
+
+constantnumber
+
+    :  '(' constantnumber ')'                    # cpar
+    |  constantnumber '*' constantnumber         # ctimes
+    |  constantnumber '/' constantnumber         # cdiv
+    |  constantnumber '+' constantnumber         # cplus
+    |  constantnumber '-' constantnumber         # cminus
+    |  '-' constantnumber                        # uminus
+    |  NUMBER                                    # cnumber
+    ;
 
 
 
@@ -48,8 +66,8 @@ stringval
 // Note the greedy ? ...
 STRING : '"' .*? '"' ; 
 
-// Numbers are signed integer 
-NUMBER  : [-]?[0-9]+ ;
+// Numbers are not signed integer ( but unary minus exists )
+NUMBER  : [0-9]+ ;
 
 // Acceptable ID starts with a letter
 ID : [a-zA-Z][a-zA-Z0-9]* ;

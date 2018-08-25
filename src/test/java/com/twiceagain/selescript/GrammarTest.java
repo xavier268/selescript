@@ -42,6 +42,8 @@ public class GrammarTest {
     @Test
     public void testUnit() {
         ok("go { } ");
+        ok("");
+        nok(";");
 
     }
 
@@ -56,12 +58,36 @@ public class GrammarTest {
 
     @Test
     public void testStringval() {
-        ok(" 2 + 3 ;");
-        ok(" 5 + ! 6 ;");
-        ok(" 1 + 5 + ! 6 ;");
-        ok(" 3 + ! 5 + 6 ; ");
-        ok("1 + 2 + 3 + 4 ;");
-        nok("1 + 2 + 3 + 4 ");
+        ok(" TOTO + 2 + 3 ;");
+        ok(" TOTO + 5 + ! 6 ;");
+        ok(" TOTO + 1 + 5 + ! 6 ;");
+        ok(" 3 + ! 5 + TOTO + 6 ; ");
+        ok("1 + 2 + TOTO + 3 + 4 ;");
+        nok("1 + 2 + TOTO + 3 + 4 ");
+        nok("toto -tata;");
+        nok("toto -654;");
+        ok("toto + - 654;");
+        nok("toto * tata;");
+        nok("toto * 654;");
+        nok("22 * tata;");
+        ok("22 * 666;");
+        ok("22 * - 666;");
+        nok("22 * + 666;");
+        ok("toto + tata;");
+    }
+
+    @Test
+    public void testConstants() {
+        ok("5;");
+        ok("1+2;");
+        ok("-(10);");
+        ok("-11;");
+        ok("1- 3;");
+        ok("1-3;");
+        ok("4--5;");
+        ok("4-------5;");
+        ok("6+-7;");
+        nok("8-+9");
     }
 
     /**

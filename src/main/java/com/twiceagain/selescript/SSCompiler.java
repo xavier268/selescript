@@ -15,6 +15,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This will generate ("compileToString") java code from a selecript scrapper
@@ -28,6 +30,8 @@ public class SSCompiler {
     protected SelescriptParser parser;
     protected ParseTree tree;
     protected final SSErrorListener errorListener = new SSErrorListener();
+
+    private static final Logger LOG = LoggerFactory.getLogger(SSCompiler.class);
 
     /**
      *
@@ -51,19 +55,19 @@ public class SSCompiler {
      * @param in : where the code to compileToString is read from ...
      */
     public SSCompiler(CharStream in) {
-        // define input
-        // CharStream in = CharStreams.fromString(input);
 
-        // Create  Lexer 
+        LOG.info("Starting compiler");
+        
+        LOG.info("Creating Lexer");
         Lexer lex = new SelescriptLexer(in);
 
         lex.removeErrorListeners();
         lex.addErrorListener(errorListener);
 
-        // Generate TokenStream
+        LOG.info("Creating token stream");
         TokenStream ts = new CommonTokenStream(lex);
 
-        // Generate parser
+        LOG.info("Generating parser");
         parser = new SelescriptParser(ts);
 
         // Add listener ... or compile later ...
@@ -72,8 +76,10 @@ public class SSCompiler {
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 
-        // Parse the grammar, returning the full tree.
+        LOG.info("Generating the abstract tree for the selescript source file");
         tree = parser.unit();
+        
+        LOG.info("Abstract tree generated");
 
     }
 
@@ -82,7 +88,6 @@ public class SSCompiler {
      *
      * @return
      */
-  
     public String getTreeString() {
         return tree.toStringTree(parser);
     }
@@ -90,9 +95,8 @@ public class SSCompiler {
     /**
      * Prints the tree as a string to stdin (for debugging).
      */
-  
     public void printTreeString() {
-        System.out.printf("\n%s", getTreeString());
+        System.out.printf("%n%s",getTreeString());
     }
 
     /**

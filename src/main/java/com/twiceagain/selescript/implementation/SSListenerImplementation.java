@@ -11,12 +11,17 @@ import auto.SelescriptParser.*;
 import com.twiceagain.selescript.Config;
 import static com.twiceagain.selescript.Config.NL;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author xavier
  */
 public class SSListenerImplementation extends SSAbstractListener implements SelescriptListener {
+    
+    
+    private  final static Logger LOG = LoggerFactory.getLogger(SSListenerImplementation.class);
     
     @Override
     public void enterUnit(SelescriptParser.UnitContext ctx) {
@@ -49,6 +54,10 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
                 .append(NL);
         // Define class field variables
         sb.append("protected Map<String,String> symtab = new HashMap<String,String>();")
+                .append(NL);
+        sb.append("private final static Logger LOG = LoggerFactory.getLogger(")
+                .append(Config.getTargetJavaClassName())
+                .append(".class);")
                 .append(NL)
                 .append(NL);
 
@@ -128,14 +137,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     public void exitEmitparam(SelescriptParser.EmitparamContext ctx) {
     }
     
-    @Override
-    public void enterNumber(SelescriptParser.NumberContext ctx) {
-    }
     
-    @Override
-    public void exitNumber(SelescriptParser.NumberContext ctx) {
-        prop.put(ctx, "\"" + ctx.getText() + "\"");
-    }
     
     @Override
     public void enterNot(SelescriptParser.NotContext ctx) {
@@ -155,14 +157,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     public void exitAt(SelescriptParser.AtContext ctx) {
     }
     
-    @Override
-    public void enterString(SelescriptParser.StringContext ctx) {
-    }
     
-    @Override
-    public void exitString(SelescriptParser.StringContext ctx) {
-        prop.put(ctx, ctx.getText());
-    }
     
     @Override
     public void enterId(SelescriptParser.IdContext ctx) {
@@ -170,7 +165,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     
     @Override
     public void exitId(SelescriptParser.IdContext ctx) {
-        isValidId(ctx.getText()); // Usefull or defaut to null ?
+        // isValidId(ctx.getText()); // Defaut to null (ie false) if not defined
         prop.put(ctx, "symtab.get(\"" + ctx.getText() + "\")");
     }
     
@@ -218,6 +213,110 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     @Override
     public void exitPar(ParContext ctx) {
         prop.put(ctx, prop.get(ctx.stringval()));
+    }
+
+    @Override
+    public void enterCpar(CparContext ctx) {
+    }
+
+    @Override
+    public void exitCpar(CparContext ctx) {
+    }
+
+    @Override
+    public void enterCtimes(CtimesContext ctx) {
+    }
+
+    @Override
+    public void exitCtimes(CtimesContext ctx) {
+    }
+
+    @Override
+    public void enterCdiv(CdivContext ctx) {
+    }
+
+    @Override
+    public void exitCdiv(CdivContext ctx) {
+    }
+
+    @Override
+    public void enterUminus(UminusContext ctx) {
+    }
+
+    @Override
+    public void exitUminus(UminusContext ctx) {
+    }
+
+    @Override
+    public void enterCplus(CplusContext ctx) {
+    }
+
+    @Override
+    public void exitCplus(CplusContext ctx) {
+    }
+
+    @Override
+    public void enterCminus(CminusContext ctx) {
+    }
+
+    @Override
+    public void exitCminus(CminusContext ctx) {
+    }
+
+    @Override
+    public void enterCnumber(CnumberContext ctx) {
+    }
+
+    @Override
+    public void exitCnumber(CnumberContext ctx) {
+    }
+
+    @Override
+    public void enterSstring(SstringContext ctx) {
+    }
+
+    @Override
+    public void exitSstring(SstringContext ctx) {
+    }
+
+    @Override
+    public void enterCsc(CscContext ctx) {
+    }
+
+    @Override
+    public void exitCsc(CscContext ctx) {
+    }
+
+    @Override
+    public void enterCsplus(CsplusContext ctx) {
+    }
+
+    @Override
+    public void exitCsplus(CsplusContext ctx) {
+    }
+
+    @Override
+    public void enterCsstring(CsstringContext ctx) {
+    }
+
+    @Override
+    public void exitCsstring(CsstringContext ctx) {
+    }
+
+    @Override
+    public void enterCspar(CsparContext ctx) {
+    }
+
+    @Override
+    public void exitCspar(CsparContext ctx) {
+    }
+
+    @Override
+    public void enterCsnot(CsnotContext ctx) {
+    }
+
+    @Override
+    public void exitCsnot(CsnotContext ctx) {
     }
     
 }
