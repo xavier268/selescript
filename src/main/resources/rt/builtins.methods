@@ -63,7 +63,7 @@
         } catch (InterruptedException ex) {
             LOG.info(ex.getMessage());
         } finally {
-        if(wd != null) wd.close();
+        if(wd != null) wd.quit();
         }
 
     }

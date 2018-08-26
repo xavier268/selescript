@@ -67,7 +67,7 @@ public class Config {
     private static final Logger LOG = LoggerFactory.getLogger(Config.class);
 
     private static final String SELESCRIPTVERSION = "1.2";
-
+    
     static {
         LOG.info("Selescript compiler");
         LOG.info("Version " + SELESCRIPTVERSION);
@@ -97,7 +97,7 @@ public class Config {
         TargetPackage = Arrays.asList(args);
         return this;
     }
-
+    
     public String getSelescriptVersion() {
         return SELESCRIPTVERSION;
     }
