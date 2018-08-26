@@ -5,19 +5,20 @@ echo "You may need to launch this as root, depending of your configuration detai
 echo ""
 
 # Test for docker to be running ..
-if docker info; then
-    echo "Docker seems to be available".
-else
+docker info | grep -E "Swarm|Server Version|Kernel"
+if [ $? -ne 0 ] ; then
     echo "Docker does not seem to be available on your machine".
     echo "You're on your own ... Aborting"
     exit 1;
 fi
 
-docker swarm init
+docker swarm init 2>/dev/null 1>/dev/null
+docker info | grep "Swarm"
 docker node ls
 docker stack deploy --compose-file selgrid.yaml selgrid
 docker stack ls
 docker service ls
+
 
 
 

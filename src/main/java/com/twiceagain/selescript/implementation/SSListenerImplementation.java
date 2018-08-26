@@ -54,7 +54,7 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
                 .append(" {").append(NL);
         // define useful constants
         sb.append("public final static String VERSION = \"")
-                .append(config.getVersion()).append("\";")
+                .append(config.getSelescriptVersion()).append("\";")
                 .append(NL)
                 .append("public final static String SELENIUMVERSION = \"")
                 .append(config.getSeleniumVersion()).append("\";")

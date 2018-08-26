@@ -47,7 +47,7 @@ public class ConfigTest {
      */
     @Test
     public void testGetVersion() {
-        assertNotNull(config.getVersion());
+        assertNotNull(config.getSelescriptVersion());
     }
 
     /**
@@ -88,7 +88,7 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
 
     @Test
     public void testCopyFiles() {
-        config.copyAllRuntimeFiles();
+        config.createAllRuntimeSupportFiles();
     }
     
     @Test
