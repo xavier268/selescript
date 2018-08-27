@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class ConfigTest {
     
-    public Config config = new Config("testclass").setTargetPackage("com","test");
+    public Config config = new Config("example").setTargetPackage("com","test");
 
     public ConfigTest() {
     }
