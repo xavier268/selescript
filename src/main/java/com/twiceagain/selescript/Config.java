@@ -41,6 +41,9 @@ public class Config {
 
     private String SOURCEFILENAME = null;
     private String PARAMETERFILENAME = null;
+
+    private boolean DEBUGMODE = true;
+
     /**
      * List of required imports.
      */
@@ -65,10 +68,11 @@ public class Config {
      */
     private transient static long UID = 0L;
 
-    
     private static final String SELESCRIPTVERSION = "1.2";
     private static final String SELENIUMVERSION = "3.14.0";
-    private static final String TARGETJAVAVERSION = "10";    
+    private static final String TARGETJAVAVERSION = "10";
+
+    private boolean DRYRUNFLAG = false;
 
     private static String TARGETPROJECTVERSION_CACHED = null;
 
@@ -130,6 +134,24 @@ public class Config {
 
     public String getTargetJavaVersion() {
         return TARGETJAVAVERSION;
+    }
+
+    public Config setDryRunFlag(boolean flag) {
+        DRYRUNFLAG = flag;
+        return this;
+    }
+
+    public Boolean getDryRunFlag() {
+        return DRYRUNFLAG;
+    }
+
+    public Config setDebugMode(boolean mode) {
+        DEBUGMODE = mode;
+        return this;
+    }
+
+    public Boolean getDebugMode() {
+        return DEBUGMODE;
     }
 
     /**

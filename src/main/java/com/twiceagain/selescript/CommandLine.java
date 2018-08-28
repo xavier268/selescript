@@ -47,7 +47,7 @@ public class CommandLine {
                     + "%nTerminate with Ctl-D (linux) or Ctl-Z(windows)%n");
             list = new SSListenerImplementation(CharStreams.fromStream(System.in, Charset.forName("UTF-8")));
 
-        } else {            
+        } else {
             System.out.printf(
                     "%nReading the script from file : %s%n",
                     config.getSourceFileName());
@@ -59,11 +59,15 @@ public class CommandLine {
             System.out.printf("%n******** ERROR ***********%n%s%n",
                     list.getErrorMessage());
         } else {
-            list.saveCode();
+            if (config.getDryRunFlag()) {
+                System.out.printf("%n%n **** Nothing actually saved to file : dryrun flag was selected ***%n%n");
+            } else {
+                list.saveCode();
+            }
             System.out.printf(
                     "%n====================="
                     + "%nThe generated project is ready in %s"
-                    + "%n You can go there and run : bash <run.sh%n",
+                    + "%nYou can go there and run : bash <run.sh%n",
                     config.getTargetDir());
         }
     }
@@ -97,9 +101,32 @@ public class CommandLine {
                     printVersionInfo(config);
                     return null;
                 }
+                
+                case "-d":
+                case "--debug": {
+                    config.setDebugMode(true);
+                    break;
+                }
+                
+                case "-n":
+                case "--nodebug": {
+                    config.setDebugMode(false);
+                    break;
+                }
+
+                case "--dryrun": {
+                    config.setDryRunFlag(true);
+                    break;
+                }
+
                 case "--help":
-                case "-h":
+                case "-h": {
+                    printHelp(config);
+                    return null;
+                }
+                
                 default: {
+                    System.out.printf("%n : Unrecognized command line option : %s%n", command);
                     printHelp(config);
                     return null;
                 }
@@ -121,12 +148,20 @@ public class CommandLine {
                 "     -v",
                 "     --version     : print version information and exit",
                 "",
+                "     -d",
+                "     --debug        : set debug mode to true",
+                "",
+                "     -n",
+                "     --nodebug      : set debug mode to false",
+                "",
+                "     --dryrun       : compile everything, but do not save to file",
+                "",
                 "     -s FILE",
                 "     --source FILE : compile from specified FILE. Default is to read from stdin.",
                 "",
                 "",
                 "     -c",
-                "     --classname CALSSNAME : naming generated script class",
+                "     --classname CLASSNAME : generated scrapper will be named CLASSNAME",
                 ""
         );
 
@@ -142,7 +177,7 @@ public class CommandLine {
                 + "%nSelescript version : %s"
                 + "%nUsing Selenium version : %s"
                 + "%nCompiling for java version : %s"
-                + "%nGenerated files will be saved in : %s",
+                + "%nGenerated files will be saved in : %s%n",
                 config.getSelescriptVersion(),
                 config.getSeleniumVersion(),
                 config.getTargetJavaVersion(),
