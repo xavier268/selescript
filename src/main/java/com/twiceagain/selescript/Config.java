@@ -35,15 +35,18 @@ public class Config {
     /**
      * Package for target generated scrapper.
      */
-    protected List<String> TargetPackage = Arrays.asList("com", "twiceagain", "scrapper");
+    private List<String> TargetPackage = Arrays.asList("com", "twiceagain", "scrapper");
     /**
      * The name of the generated java class.
      */
-    protected String JavaClassName = "AutoScrapper";
+    private String JavaClassName = "AutoScrapper";
+    
+    private String SOURCEFILENAME = null;
+    private String PARAMETERFILENAME = null;
     /**
      * List of required imports.
      */
-    protected static final List<String> TARGETIMPORTS = Arrays.asList(
+    private static final List<String> TARGETIMPORTS = Arrays.asList(
             "java.util.*",
             "org.openqa.selenium.*",
             "org.openqa.selenium.remote.*",
@@ -86,6 +89,13 @@ public class Config {
         this.JavaClassName = className;
         incTargetProjectVersion();
     }
+    
+    public Config setTargetJavaClassName(String className ){
+        this.JavaClassName = className;
+        incTargetProjectVersion();
+        return this;
+    }
+    
 
     /**
      * Fluent API to set the pachage as an array of String
@@ -98,6 +108,24 @@ public class Config {
         return this;
     }
     
+    public Config setSourceFileName(String source) {
+        SOURCEFILENAME = source;
+        return this;
+    }
+    
+    public String getSourceFileName() {
+        return SOURCEFILENAME;
+    }
+    
+    
+    public Config setInputParameterFileName(String params) {
+        PARAMETERFILENAME = params;
+        return this;
+    }
+    
+    public String getInputParameterFileName() {
+        return PARAMETERFILENAME;
+    }
     public String getSelescriptVersion() {
         return SELESCRIPTVERSION;
     }
@@ -186,7 +214,7 @@ public class Config {
      */
     public String getTargetDir() {
         try {
-            return new File("target/" + getTargetJavaClassName() + "-dist").getCanonicalPath();
+            return new File( getTargetJavaClassName() + "-dist").getCanonicalPath();
         } catch (IOException ex) {
             throw new SSException("Invalid default path : " + "target/" + getTargetJavaClassName() + "-dist");
         }

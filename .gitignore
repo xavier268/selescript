@@ -3,4 +3,9 @@ target/
 target/*
 target/**/*
 
+example-dist
+example-dist/
+example-dist/*
+example-dist/**/*
+
 /nbproject/
