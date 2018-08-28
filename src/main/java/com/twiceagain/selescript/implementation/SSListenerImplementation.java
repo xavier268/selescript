@@ -7,8 +7,7 @@ package com.twiceagain.selescript.implementation;
 
 import auto.SelescriptListener;
 import auto.SelescriptParser;
-import auto.SelescriptParser.*;
-import static com.twiceagain.selescript.Config.AP;
+import com.twiceagain.selescript.Config;
 import static com.twiceagain.selescript.Config.NL;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author xavier
  */
-public class SSListenerImplementation extends SSAbstractListener implements SelescriptListener {
+public class SSListenerImplementation extends SSListenerSringVal implements SelescriptListener {
 
     private final static Logger LOG = LoggerFactory.getLogger(SSListenerImplementation.class);
 
@@ -41,76 +40,6 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     public void enterUnit(SelescriptParser.UnitContext ctx) {
     }
 
-    @Override
-    public void exitUnit(SelescriptParser.UnitContext ctx) {
-        StringBuilder sb = new StringBuilder();
-        sb
-                .append(config.getFileHeader())
-                .append(config.getPackageDeclaration())
-                .append(config.getImportsDeclarations())
-                .append(NL).append(NL);
-        // Define class
-        sb.append("public class ").append(config.getTargetJavaClassName())
-                .append(" {").append(NL);
-        // define useful constants
-        sb.append("public final static String VERSION = \"")
-                .append(config.getSelescriptVersion()).append("\";")
-                .append(NL)
-                .append("public final static String SELENIUMVERSION = \"")
-                .append(config.getSeleniumVersion()).append("\";")
-                .append(NL)
-                .append("public final static String BUILDDATE = \"")
-                .append(new Date()).append("\";")
-                .append(NL)
-                .append("public final static String BUILDMILLIS = \"")
-                .append(System.currentTimeMillis()).append("\";")
-                .append(NL)
-                .append(NL);
-        // Define class field variables
-        sb.append("protected Map<String,String> symtab = new HashMap<>();")
-                .append(NL);
-        sb.append("private final static Logger LOG = LoggerFactory.getLogger(")
-                .append(config.getTargetJavaClassName())
-                .append(".class);")
-                .append(NL)
-                .append(NL);
-
-        // Add builtin methods
-        sb.append(config.getBuiltinsMethods())
-                .append(NL);
-        
-        // create a newInstance() static method to construct easily
-        sb.append("public static final ")
-                .append(config.getTargetJavaClassName())
-                .append(" newInstance() {")
-                .append(NL)
-                .append("return new ")
-                .append(config.getTargetJavaClassName())
-                .append("();}")
-                .append(NL)
-                .append(NL);
-        
-        // Create the scrap method
-        sb.append("/* This is the main method for scrapping */").append(NL);
-        sb.append("public void scrap(WebDriver wd){ ").append(NL);
-        sb.append("do { ").append(NL);
-
-        // Add code from statements.
-        for (StatementContext c : ctx.statement()) {
-
-            sb.append("/* ").append(c.getText()).append(" */").append(NL);
-            sb.append(prop.get(c));
-        }
-        // close class definition
-        sb.append(NL)
-                .append("} while(false) ; // one time outer loop").append(NL)
-                .append("} // Scrap").append(NL)
-                .append("} // Class definition").append(NL)
-                .append(NL);
-
-        // Annotate tree
-        prop.put(ctx, sb.toString());
-    }
 
     @Override
     public void enterGo0(SelescriptParser.Go0Context ctx) {
@@ -184,224 +113,35 @@ public class SSListenerImplementation extends SSAbstractListener implements Sele
     public void exitEmitparam(SelescriptParser.EmitparamContext ctx) {
     }
 
-    @Override
-    public void enterNot(SelescriptParser.NotContext ctx) {
-    }
-
-    @Override
-    public void exitNot(SelescriptParser.NotContext ctx) {
-        String s = "not(" + prop.get(ctx.stringval()) + ")";
-        prop.put(ctx, s);
-    }
-
-    @Override
-    public void enterAt(SelescriptParser.AtContext ctx) {
-    }
-
-    @Override
-    public void exitAt(SelescriptParser.AtContext ctx) {
-    }
-
-    @Override
-    public void enterId(SelescriptParser.IdContext ctx) {
-    }
-
-    @Override
-    public void exitId(SelescriptParser.IdContext ctx) {
-        // isValidId(ctx.getText()); // Defaut to null (ie false) if not defined
-        prop.put(ctx, "symtab.get(\"" + ctx.getText() + "\")");
-    }
-
-    @Override
-    public void enterConcat(SelescriptParser.ConcatContext ctx) {
-    }
-
-    @Override
-    public void exitConcat(SelescriptParser.ConcatContext ctx) {
-
-        String s = "plus("
-                + prop.get(ctx.stringval(0))
-                + ","
-                + prop.get(ctx.stringval(1))
-                + ")";
-        prop.put(ctx, s);
-
-    }
-
-    @Override
-    public void enterBiid(SelescriptParser.BiidContext ctx) {
-    }
-
-    @Override
-    public void exitBiid(SelescriptParser.BiidContext ctx) {
-        isValidBiids(ctx.getText());
-        prop.put(ctx, "BIID_" + ctx.getText().substring(1) + "()");
-    }
-
-    @Override
-    public void enterEq(SelescriptParser.EqContext ctx) {
-    }
-
-    @Override
-    public void exitEq(SelescriptParser.EqContext ctx) {
-        String s = "eq(" + prop.get(ctx.stringval(0)) + ","
-                + prop.get(ctx.stringval(1)) + ")";
-        prop.put(ctx, s);
-    }
-
-    @Override
-    public void enterPar(ParContext ctx) {
-    }
-
-    @Override
-    public void exitPar(ParContext ctx) {
-        prop.put(ctx, '('+prop.get(ctx.stringval())+')');
-    }
-
-    @Override
-    public void enterCpar(CparContext ctx) {
-    }
-
-    @Override
-    public void exitCpar(CparContext ctx) {
-        prop.put(ctx, prop.get(ctx.constantnumber()));
-    }
-
-    @Override
-    public void enterCtimes(CtimesContext ctx) {
-    }
-
-    @Override
-    public void exitCtimes(CtimesContext ctx) {
-        Integer i0 = Integer.decode(prop.get(ctx.constantnumber(0)));
-        Integer i1 = Integer.decode(prop.get(ctx.constantnumber(1)));
-        prop.put(ctx, String.format("%d", i0 * i1));
-    }
-
-    @Override
-    public void enterCdiv(CdivContext ctx) {
-    }
-
-    @Override
-    public void exitCdiv(CdivContext ctx) {
-        Integer i0 = Integer.decode(prop.get(ctx.constantnumber(0)));
-        Integer i1 = Integer.decode(prop.get(ctx.constantnumber(1)));
-        prop.put(ctx, String.format("%d", i0 / i1));
-    }
-
-    @Override
-    public void enterUminus(UminusContext ctx) {
-    }
-
-    @Override
-    public void exitUminus(UminusContext ctx) {
-        Integer i = Integer.decode(prop.get(ctx.constantnumber()));
-        prop.put(ctx, String.format("%d", -i));
-    }
-
-    @Override
-    public void enterCplus(CplusContext ctx) {
-    }
-
-    @Override
-    public void exitCplus(CplusContext ctx) {
-        Integer i0 = Integer.decode(prop.get(ctx.constantnumber(0)));
-        Integer i1 = Integer.decode(prop.get(ctx.constantnumber(1)));
-        prop.put(ctx, String.format("%d", i0 + i1));
-    }
-
-    @Override
-    public void enterCminus(CminusContext ctx) {
-    }
-
-    @Override
-    public void exitCminus(CminusContext ctx) {
-        Integer i0 = Integer.decode(prop.get(ctx.constantnumber(0)));
-        Integer i1 = Integer.decode(prop.get(ctx.constantnumber(1)));
-        prop.put(ctx, String.format("%d", i0 - i1));
-    }
-
-    @Override
-    public void enterCnumber(CnumberContext ctx) {
-    }
-
-    @Override
-    public void exitCnumber(CnumberContext ctx) {
-        prop.put(ctx, ctx.NUMBER().getText());
-    }
-
-    @Override
-    public void enterSstring(SstringContext ctx) {
-    }
-    /**
-     * Stringval and above are  always quoted in their internel representation.
-     * Constants below are never quoted.
-     * @param ctx 
-     */
-    @Override
-    public void exitSstring(SstringContext ctx) {
-        String x = prop.get(ctx.constantstring());
-        if(x != null) x = AP + x + AP;
-        prop.put(ctx, x);
-    }
-
-    @Override
-    public void enterCsc(CscContext ctx) {
-    }
-
-    @Override
-    public void exitCsc(CscContext ctx) {
-        prop.put(ctx,  prop.get(ctx.constantnumber()) );
-    }
-
-    @Override
-    public void enterCsplus(CsplusContext ctx) {
-    }
-
-    @Override
-    public void exitCsplus(CsplusContext ctx) {
-        String r = null;
-        String s0 = prop.get(ctx.constantstring(0));
-        String s1 = prop.get(ctx.constantstring(1));
-        if (s0 == null) {
-            prop.put(ctx, s1);
-            return;
+    public void exitUnit(SelescriptParser.UnitContext ctx) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getFileHeader()).append(config.getPackageDeclaration()).append(config.getImportsDeclarations()).append(Config.NL).append(Config.NL);
+        // Define class
+        sb.append("public class ").append(config.getTargetJavaClassName()).append(" {").append(Config.NL);
+        // define useful constants
+        sb.append("public final static String VERSION = \"").append(config.getSelescriptVersion()).append("\";").append(Config.NL).append("public final static String SELENIUMVERSION = \"").append(config.getSeleniumVersion()).append("\";").append(Config.NL).append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(Config.NL).append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(Config.NL).append(Config.NL);
+        // Define class field variables
+        sb.append("protected Map<String,String> symtab = new HashMap<>();").append(Config.NL);
+        sb.append("private final static Logger LOG = LoggerFactory.getLogger(").append(config.getTargetJavaClassName()).append(".class);").append(Config.NL).append(Config.NL);
+        // Add builtin methods
+        sb.append(config.getBuiltinsMethods()).append(Config.NL);
+        // create a newInstance() static method to construct easily
+        sb.append("public static final ").append(config.getTargetJavaClassName()).append(" newInstance() {").append(Config.NL).append("return new ").append(config.getTargetJavaClassName()).append("();}").append(Config.NL).append(Config.NL);
+        // Create the scrap method
+        sb.append("/* This is the main method for scrapping */").append(Config.NL);
+        sb.append("public void scrap(WebDriver wd){ ").append(Config.NL);
+        sb.append("do { ").append(Config.NL);
+        // Add code from statements.
+        for (SelescriptParser.StatementContext c : ctx.statement()) {
+            sb.append("/* ").append(c.getText()).append(" */").append(Config.NL);
+            sb.append(prop.get(c));
         }
-        if (s1 == null) {
-            prop.put(ctx, s0);
-            return;
-        }
-        prop.put(ctx, s0 + s1);
-
+        // close class definition
+        sb.append(Config.NL).append("} while(false) ; // one time outer loop").append(Config.NL).append("} // Scrap").append(Config.NL).append("} // Class definition").append(Config.NL).append(Config.NL);
+        // Annotate tree
+        prop.put(ctx, sb.toString());
     }
 
-    @Override
-    public void enterCsstring(CsstringContext ctx) {
-    }
 
-    @Override
-    public void exitCsstring(CsstringContext ctx) {
-        prop.put(ctx, trim2(ctx.getText()));
-    }
-
-    @Override
-    public void enterCspar(CsparContext ctx) {
-    }
-
-    @Override
-    public void exitCspar(CsparContext ctx) {
-        prop.put(ctx, prop.get(ctx.constantstring()));
-    }
-
-    @Override
-    public void enterCsnot(CsnotContext ctx) {
-    }
-
-    @Override
-    public void exitCsnot(CsnotContext ctx) {
-        if (prop.get(ctx.constantstring()) == null) {
-            prop.put(ctx, "");
-        }
-    }
 
 }

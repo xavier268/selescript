@@ -14,9 +14,7 @@ import com.twiceagain.selescript.exceptions.SSException;
 import com.twiceagain.selescript.exceptions.SSUndefinedBuiltinException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -279,6 +277,8 @@ public class SSAbstractListener implements SSListener {
         if(s==null || s.isEmpty()) return s;
         return s.substring(1);
     }
+
+    
     
     
 }
