@@ -113,6 +113,7 @@ public class SSListenerImplementation extends SSListenerSringVal implements Sele
     public void exitEmitparam(SelescriptParser.EmitparamContext ctx) {
     }
 
+    @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
         sb.append(config.getFileHeader()).append(config.getPackageDeclaration()).append(config.getImportsDeclarations()).append(Config.NL).append(Config.NL);
@@ -128,7 +129,7 @@ public class SSListenerImplementation extends SSListenerSringVal implements Sele
         // create a newInstance() static method to construct easily
         sb.append("public static final ").append(config.getTargetJavaClassName()).append(" newInstance() {").append(Config.NL).append("return new ").append(config.getTargetJavaClassName()).append("();}").append(Config.NL).append(Config.NL);
         // Create the scrap method
-        sb.append("/* This is the main method for scrapping */").append(Config.NL);
+        sb.append("/* Actual scrapping happens here */").append(Config.NL);
         sb.append("public void scrap(WebDriver wd){ ").append(Config.NL);
         sb.append("do { ").append(Config.NL);
         // Add code from statements.

@@ -19,7 +19,7 @@ public class SSErrorListener extends BaseErrorListener {
 
     private String firstErrorMessage = null;
     private int firstErrorLine;
-    private int firstErrorCharPostionInLine;
+    private int firstErrorCharPositionInLine;
     private boolean syntaxError = false;
 
     @Override
@@ -33,7 +33,7 @@ public class SSErrorListener extends BaseErrorListener {
             syntaxError = true;
             firstErrorMessage = msg;
             firstErrorLine = line;
-            firstErrorCharPostionInLine = charPositionInLine;
+            firstErrorCharPositionInLine = charPositionInLine;
         }
         super.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
     }
@@ -54,8 +54,8 @@ public class SSErrorListener extends BaseErrorListener {
         return firstErrorLine;
     }
 
-    public int getFirstErrorCharPostionInLine() {
-        return firstErrorCharPostionInLine;
+    public int getFirstErrorCharPositionInLine() {
+        return firstErrorCharPositionInLine;
     }
 
 }

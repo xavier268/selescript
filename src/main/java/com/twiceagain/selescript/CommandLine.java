@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 
 /**
@@ -34,22 +33,42 @@ public class CommandLine {
 
         Config config = parseArgs(args);
 
+        if (config == null) {
+            return;
+        } else {
+            printVersionInfo(config);
+        }
+
         SSListener list;
 
         if (config.getSourceFileName() == null) {
+            System.out.printf(
+                    "%nReading the script from stdin."
+                    + "%nTerminate with Ctl-D (linux) or Ctl-Z(windows)%n");
             list = new SSListenerImplementation(CharStreams.fromStream(System.in, Charset.forName("UTF-8")));
-        } else {
+
+        } else {            
+            System.out.printf(
+                    "%nReading the script from file : %s%n",
+                    config.getSourceFileName());
             list = new SSListenerImplementation(config.getSourceFileName());
         }
         list.compile(config);
-        System.out.printf(
-                "%n====================="
-                + "%nThe generated project is ready in %s"
-                + "%n You can go there and run : bash <run.sh%n",
-                 config.getTargetDir());
+        list.dump(); // debug
+        if (list.hasSyntaxError()) {
+            System.out.printf("%n******** ERROR ***********%n%s%n",
+                    list.getErrorMessage());
+        } else {
+            list.saveCode();
+            System.out.printf(
+                    "%n====================="
+                    + "%nThe generated project is ready in %s"
+                    + "%n You can go there and run : bash <run.sh%n",
+                    config.getTargetDir());
+        }
     }
 
-    private static Config parseArgs(String[] args) {
+    protected static Config parseArgs(String[] args) {
 
         Config config = new Config();
 
@@ -91,7 +110,7 @@ public class CommandLine {
 
     }
 
-    private static void printHelp(Config config) {
+    public static void printHelp(Config config) {
         printVersionInfo(config);
         List<String> h = Arrays.asList(
                 "Available commands : ",
@@ -115,12 +134,19 @@ public class CommandLine {
 
     }
 
-    private static void printVersionInfo(Config config) {
+    public static void printVersionInfo(Config config) {
 
-        System.out.printf("%nSelescript version : %s%nUning Selenium version : %s%n",
+        System.out.printf("%nSelescript compiler."
+                + "%n(c) Xavier Gandillot - 2018"
+                + "%nSee details on https://github.com/xavier268/selescript"
+                + "%nSelescript version : %s"
+                + "%nUsing Selenium version : %s"
+                + "%nCompiling for java version : %s"
+                + "%nGenerated files will be saved in : %s",
                 config.getSelescriptVersion(),
-                config.getSeleniumVersion());
-
+                config.getSeleniumVersion(),
+                config.getTargetJavaVersion(),
+                config.getTargetDir());
     }
 
 }

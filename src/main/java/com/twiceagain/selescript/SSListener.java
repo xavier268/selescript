@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -45,6 +46,7 @@ public interface SSListener extends ParseTreeListener {
     /**
      * For debugging.
      */
-    @Deprecated
+
     public void dump();
+    void dump(ParseTree node);
 }

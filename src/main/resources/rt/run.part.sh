@@ -18,9 +18,9 @@
 echo " Log for the run.sh sript on : " > log.txt
 date >> log.txt
 
-if [ ! -f target/$JAR ]; then
-    echo "Could not find file : target/$JAR"
-    echo "Preparing to compile ..."
+if [ ! -f target/$JAR ]; then   
+    echo "Compilation is needed."
+    echo "Preparing to compile target/$JAR"
     mvn -version >> log.txt
     if [ $? -ne 0 ] ; then 
         echo "Cannot compile because could not find maven !"

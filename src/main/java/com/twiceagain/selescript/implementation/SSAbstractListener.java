@@ -96,7 +96,7 @@ public class SSAbstractListener implements SSListener {
      */
     public SSAbstractListener(CharStream in) {
 
-        LOG.info("Constructing a new SSListener for source script");
+        
 
         Lexer lex = new SelescriptLexer(in);
         lex.removeErrorListeners();
@@ -107,7 +107,7 @@ public class SSAbstractListener implements SSListener {
         parser.addErrorListener(errorListener);
         rootNode = parser.unit();
 
-        LOG.info("AST for the source selescript file generated.");
+        
     }
 
     /**
@@ -223,10 +223,10 @@ public class SSAbstractListener implements SSListener {
         if (!hasSyntaxError()) {
             return "no error";
         } else {
-            return errorListener.getFirstErrorLine()
-                    + ":"
-                    + errorListener.getFirstErrorCharPostionInLine()
-                    + " -- " + errorListener.getFirstErrorMessage();
+            return "line " + errorListener.getFirstErrorLine()
+                    + ", position "
+                    + errorListener.getFirstErrorCharPositionInLine()
+                    + " : " + errorListener.getFirstErrorMessage();
         }
     }
 
@@ -236,8 +236,16 @@ public class SSAbstractListener implements SSListener {
 
     }
 
+    
+    
     @Override
     public void dump() {
+        dump(rootNode);
+    }
+    
+    @Override
+    public void dump(ParseTree node) {
+    
         new ParseTreeWalker().walk(new ParseTreeListener() {
             @Override
             public void visitTerminal(TerminalNode node) {
@@ -256,7 +264,7 @@ public class SSAbstractListener implements SSListener {
                 System.out.printf("%nDUMP %s : %s %n===>%s<===%n", ctx.getText(), ctx.toStringTree(parser), prop.get(ctx));
 
             }
-        }, rootNode);
+        }, node);
     }
     
     /**
