@@ -1,6 +1,23 @@
+
+    /*=============================================
+     ***** start of file : builtin.methods ********    
+     ==============================================*/
+    
     /**
-     ***** start of file : builtin.methods ********
+     * Log resource.
      */
+    private final static Logger LOG = LoggerFactory.getLogger(CLASS);
+    /**
+     * Symbol table.
+     */
+    protected Map<String, String> symtab = new HashMap<>();
+
+    /**
+     * Stack(deque) holding current search context at the top, and wd at the
+     * bottom.
+     */
+    protected Deque<SearchContext> wes = new ArrayDeque<>();
+
     // $url
     // $millis
     // $title
@@ -51,23 +68,92 @@
         return (s == null) ? "" : null;
     }
 
-    /*=================================================
-    * A default main method to make the scarpper self-starting
-    **/
-    public static void main(String[] args)  {
+    /**
+     * Static method just delegates to the non-static main() method.
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        // Just create the object and lunch init.
+        newInstance().main();
+    }
 
-        WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
+    /**
+     * The non-static equivalent of main. Opens a single window, and launches
+     * the scrapping. Closes everything at the end.
+     */
+    public void main() {
+        final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
         try {
-            newInstance().scrap(wd);
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
+            wes.clear();
+            wes.add(wd);
+            scrap(wd);
+        } catch (Exception ex) {
             LOG.info(ex.getMessage());
         } finally {
-        if(wd != null) wd.quit();
+            wes.clear();
+            wd.quit();
+        }
+    }
+
+    /**
+     * Object to iterate over WebElements in a given search context. Since some
+     * WebElements may take some time to load, the idea is to iterate with what
+     * we have, then look again, until no more new new SebElement is available.
+     * It maintain a Set of the visited WebElements not to return them twice.
+     */
+    public static class WebElementIterator implements Iterator<WebElement> {
+
+        protected Set<WebElement> visited = new HashSet<>();
+        protected Deque<WebElement> tovisit = new ArrayDeque<>();
+        protected String xpath;
+        protected SearchContext sc;
+
+        /**
+         * Will iterate over all the WebElements found by applying the provided
+         * xpath of the provided search context.
+         *
+         * @param sc
+         * @param xpath
+         */
+        public WebElementIterator(SearchContext sc, String xpath) {
+            this.sc = sc;
+            this.xpath = xpath;
+        }
+
+        /**
+         * Updates the list of WebElements to visit, excluding the ones we
+         * already got.
+         */
+        protected void refresh() {
+            sc.findElements(By.xpath(xpath)).forEach(
+                    (WebElement w) -> {
+                        if (!visited.contains(w)) {
+                            tovisit.add(w);
+                        }
+                    });
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (tovisit.isEmpty()) {
+                refresh();
+            }
+            return !tovisit.isEmpty();
+        }
+
+        @Override
+        public WebElement next() {
+            if(! hasNext()) throw new java.util.NoSuchElementException();
+            WebElement w = tovisit.pop();
+            visited.add(w);
+            return w;
         }
 
     }
 
-/***** end of file : builtins.methods ***********/
+    /*=============================================
+     **** end of file : builtins.methods **********
+    ==============================================*/
     
-
+    

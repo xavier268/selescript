@@ -40,7 +40,6 @@ public class SSListenerImplementation extends SSListenerSringVal implements Sele
     public void enterUnit(SelescriptParser.UnitContext ctx) {
     }
 
-
     @Override
     public void enterGo0(SelescriptParser.Go0Context ctx) {
     }
@@ -117,32 +116,50 @@ public class SSListenerImplementation extends SSListenerSringVal implements Sele
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
         sb.append(config.getFileHeader()).append(config.getPackageDeclaration()).append(config.getImportsDeclarations()).append(Config.NL).append(Config.NL);
+
         // Define class
-        sb.append("public class ").append(config.getTargetJavaClassName()).append(" {").append(Config.NL);
+        sb.append("public class ").append(config.getTargetJavaClassName()).append(" {").append(Config.NL).append(NL);
+
         // define useful constants
-        sb.append("public final static String VERSION = \"").append(config.getSelescriptVersion()).append("\";").append(Config.NL).append("public final static String SELENIUMVERSION = \"").append(config.getSeleniumVersion()).append("\";").append(Config.NL).append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(Config.NL).append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(Config.NL).append(Config.NL);
-        // Define class field variables
-        sb.append("protected Map<String,String> symtab = new HashMap<>();").append(Config.NL);
-        sb.append("private final static Logger LOG = LoggerFactory.getLogger(").append(config.getTargetJavaClassName()).append(".class);").append(Config.NL).append(Config.NL);
-        // Add builtin methods
-        sb.append(config.getBuiltinsMethods()).append(Config.NL);
+        sb
+                .append("public final static String VERSION = \"").append(config.getSelescriptVersion()).append("\";").append(Config.NL)
+                .append("public final static String SELENIUMVERSION = \"").append(config.getSeleniumVersion()).append("\";").append(Config.NL)
+                .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(Config.NL)
+                .append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(Config.NL)
+                .append("private final static Class CLASS = ").append(config.getTargetJavaClassName()).append(".class;").append(Config.NL)
+                .append(NL);
+
         // create a newInstance() static method to construct easily
-        sb.append("public static final ").append(config.getTargetJavaClassName()).append(" newInstance() {").append(Config.NL).append("return new ").append(config.getTargetJavaClassName()).append("();}").append(Config.NL).append(Config.NL);
+        sb
+                .append("public static final ").append(config.getTargetJavaClassName()).append(" newInstance() {").append(Config.NL).append("return new ").append(config.getTargetJavaClassName()).append("();}").append(Config.NL)
+                .append(Config.NL);
+
+        // Add builtin methods
+        sb
+                .append(NL)
+                .append(config.getBuiltinsMethods())
+                .append(Config.NL);
+
         // Create the scrap method
-        sb.append("/* Actual scrapping happens here */").append(Config.NL);
-        sb.append("public void scrap(WebDriver wd){ ").append(Config.NL);
-        sb.append("do { ").append(Config.NL);
+        sb
+                .append("/* Actual scrapping happens here */").append(Config.NL)
+                .append("public void scrap(WebDriver wd){ ").append(Config.NL)
+                .append("do { ")
+                .append(NL);
+        
         // Add code from statements.
-        for (SelescriptParser.StatementContext c : ctx.statement()) {
-            sb.append("/* ").append(c.getText()).append(" */").append(Config.NL);
+        ctx.statement().forEach(
+                (SelescriptParser.StatementContext c) -> {            
             sb.append(prop.get(c));
-        }
+        });
         // close class definition
-        sb.append(Config.NL).append("} while(false) ; // one time outer loop").append(Config.NL).append("} // Scrap").append(Config.NL).append("} // Class definition").append(Config.NL).append(Config.NL);
+        sb
+                .append("} while(false) ; // one time outer loop").append(Config.NL)
+                .append("} // Scrap").append(Config.NL)
+                .append("} // Class definition").append(Config.NL)
+                .append(Config.NL);
         // Annotate tree
         prop.put(ctx, sb.toString());
     }
-
-
 
 }
