@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript;
 
+import auto.SelescriptParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -49,4 +50,12 @@ public interface SSListener extends ParseTreeListener {
 
     public void dump();
     void dump(ParseTree node);
+
+    void enterGo(SelescriptParser.GoContext ctx);
+
+    void enterGo0(SelescriptParser.Go0Context ctx);
+
+    void exitGo(SelescriptParser.GoContext ctx);
+
+    void exitGo0(SelescriptParser.Go0Context ctx);
 }

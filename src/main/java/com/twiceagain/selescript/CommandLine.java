@@ -5,7 +5,7 @@
  */
 package com.twiceagain.selescript;
 
-import com.twiceagain.selescript.implementation.SSListenerImplementation;
+import com.twiceagain.selescript.implementation.SSListener99Implementation;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -45,13 +45,13 @@ public class CommandLine {
             System.out.printf(
                     "%nReading the script from stdin."
                     + "%nTerminate with Ctl-D (linux) or Ctl-Z(windows)%n");
-            list = new SSListenerImplementation(CharStreams.fromStream(System.in, Charset.forName("UTF-8")));
+            list = new SSListener99Implementation(CharStreams.fromStream(System.in, Charset.forName("UTF-8")));
 
         } else {
             System.out.printf(
                     "%nReading the script from file : %s%n",
                     config.getSourceFileName());
-            list = new SSListenerImplementation(config.getSourceFileName());
+            list = new SSListener99Implementation(config.getSourceFileName());
         }
         list.compile(config);
         list.dump(); // debug

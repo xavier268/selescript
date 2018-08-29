@@ -5,7 +5,7 @@
  */
 package com.twiceagain.selescript;
 
-import com.twiceagain.selescript.implementation.SSListenerImplementation;
+import com.twiceagain.selescript.implementation.SSListener99Implementation;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -100,7 +100,7 @@ public class GrammarTest {
      */
     protected void ok(String s) {
         System.out.printf("\n----------\nOK -> %s", s);
-        SSListener c = new SSListenerImplementation(s);
+        SSListener c = new SSListener99Implementation(s);
         c.printTreeString();
         if (c.hasSyntaxError()) {
             fail(c.getErrorMessage());
@@ -114,7 +114,7 @@ public class GrammarTest {
      */
     protected void nok(String s) {
         System.out.printf("\n----------\nNOK -> %s", s);
-        SSListener c = new SSListenerImplementation(s);
+        SSListener c = new SSListener99Implementation(s);
         if (!c.hasSyntaxError()) {
             c.printTreeString();
             fail("**This should have been detected as incorrect ??!!**");

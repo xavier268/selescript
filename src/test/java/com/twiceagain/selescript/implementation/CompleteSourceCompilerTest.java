@@ -20,7 +20,7 @@ public class CompleteSourceCompilerTest {
 
     @Test
     public void trimTest() {
-        SSListenerImplementation ll = new SSListenerImplementation("");
+        SSListener99Implementation ll = new SSListener99Implementation("");
         String s = "abcdef";
         assertEquals("bcdef", ll.trim1(s));
         assertEquals("bcde", ll.trim2(s));
@@ -30,17 +30,16 @@ public class CompleteSourceCompilerTest {
     @Test
     public void testCompilerInfrastructure() {
         String source
-                = "!1+ 2;"
-                + "! \"titi\";"
-                + "(!5)+6; "
-                + "( ! \"tata\" ) + \"titi\";"
-                + "\"tttt\" + \"tata\";"
-                + "toto = 1+3;"
-                + "titi = toto + 5;"
-                + "titi;" ;
+                = "1;"
+                + "2;"
+                + "go toto {  "
+                + "   3;"
+                + "   4;"
+                + "   }"
+                + "5;";
         
         System.out.printf("%nTest-compiling : %s%n", source);
-        SSListener ls = new SSListenerImplementation(source);
+        SSListener ls = new SSListener99Implementation(source);
         ls.compile(config);
         ls.dump();
 

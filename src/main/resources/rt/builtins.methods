@@ -96,34 +96,42 @@
         }
     }
 
+
+
     /**
      * Object to iterate over WebElements in a given search context. Since some
-     * WebElements may take some time to load, the idea is to iterate with what
-     * we have, then look again, until no more new new SebElement is available.
-     * It maintain a Set of the visited WebElements not to return them twice.
+     * WebElements may take some time to load, (or because ajax will make them
+     * load as we scroll down ...) the idea is to iterate with what we have,
+     * then look again, until no more new new SebElement is available. It
+     * maintain a Set of the visited WebElements not to return them twice.
      */
     public static class WebElementIterator implements Iterator<WebElement> {
 
         protected Set<WebElement> visited = new HashSet<>();
         protected Deque<WebElement> tovisit = new ArrayDeque<>();
         protected String xpath;
+        // Search context stack.
+        protected Deque<SearchContext> q;
+        // Base context we had upon entering
         protected SearchContext sc;
 
         /**
          * Will iterate over all the WebElements found by applying the provided
          * xpath of the provided search context.
          *
-         * @param sc
+         * @param q
          * @param xpath
          */
-        public WebElementIterator(SearchContext sc, String xpath) {
-            this.sc = sc;
+        public WebElementIterator(Deque<SearchContext> q, String xpath) {
+            this.q = q;
+            this.sc = q.getLast();
             this.xpath = xpath;
         }
 
         /**
          * Updates the list of WebElements to visit, excluding the ones we
-         * already got.
+         * already got. It also puts the current search context at the end of
+         * the queue.
          */
         protected void refresh() {
             sc.findElements(By.xpath(xpath)).forEach(
@@ -142,11 +150,21 @@
             return !tovisit.isEmpty();
         }
 
+        /**
+         * Warning : calling next() will put the provided WebElement on top of the
+         * stack. It is up to the program to remove it with removeLast();
+         *
+         * @return
+         */
         @Override
         public WebElement next() {
-            if(! hasNext()) throw new java.util.NoSuchElementException();
+
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
+            }
             WebElement w = tovisit.pop();
             visited.add(w);
+            q.add(w); // The program should ensure this is always removed !
             return w;
         }
 

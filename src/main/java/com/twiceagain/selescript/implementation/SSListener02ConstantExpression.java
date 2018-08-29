@@ -16,17 +16,17 @@ import org.antlr.v4.runtime.CharStream;
  *
  * @author xavier
  */
-public abstract class SSListenerConstantExpression extends SSAbstractListener implements SSListener, SelescriptListener{
+public abstract class SSListener02ConstantExpression extends SSAbstractListener implements SSListener, SelescriptListener{
 
-    public SSListenerConstantExpression(String s) {
+    public SSListener02ConstantExpression(String s) {
         super(s);
     }
 
-    public SSListenerConstantExpression(Path path) throws IOException {
+    public SSListener02ConstantExpression(Path path) throws IOException {
         super(path);
     }
 
-    public SSListenerConstantExpression(CharStream in) {
+    public SSListener02ConstantExpression(CharStream in) {
         super(in);
     }
 

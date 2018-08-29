@@ -9,6 +9,7 @@ import auto.SelescriptListener;
 import auto.SelescriptParser;
 import com.twiceagain.selescript.Config;
 import static com.twiceagain.selescript.Config.NL;
+import com.twiceagain.selescript.SSListener;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Date;
@@ -20,19 +21,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author xavier
  */
-public class SSListenerImplementation extends SSListenerSringVal implements SelescriptListener {
+public class SSListener99Implementation extends SSListener09Go implements SSListener, SelescriptListener {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SSListenerImplementation.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SSListener99Implementation.class);
 
-    public SSListenerImplementation(CharStream in) {
+    public SSListener99Implementation(CharStream in) {
         super(in);
     }
 
-    public SSListenerImplementation(String s) {
+    public SSListener99Implementation(String s) {
         super(s);
     }
 
-    public SSListenerImplementation(Path path) throws IOException {
+    public SSListener99Implementation(Path path) throws IOException {
         super(path);
     }
 
@@ -40,21 +41,6 @@ public class SSListenerImplementation extends SSListenerSringVal implements Sele
     public void enterUnit(SelescriptParser.UnitContext ctx) {
     }
 
-    @Override
-    public void enterGo0(SelescriptParser.Go0Context ctx) {
-    }
-
-    @Override
-    public void exitGo0(SelescriptParser.Go0Context ctx) {
-    }
-
-    @Override
-    public void enterGo(SelescriptParser.GoContext ctx) {
-    }
-
-    @Override
-    public void exitGo(SelescriptParser.GoContext ctx) {
-    }
 
     @Override
     public void enterAssign(SelescriptParser.AssignContext ctx) {

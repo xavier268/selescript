@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author xavier
  */
-public class SSAbstractListener implements SSListener {
+public abstract class SSAbstractListener implements SSListener {
 
     /**
      * The set of IDs that have been defined so far.
