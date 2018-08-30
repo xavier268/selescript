@@ -14,11 +14,15 @@ statement
     :   'go'    '{' statement * '}'             # go0   // one-time loop
     |   'go'    stringval '{' statement * '}'   # go    // loop for locators
     |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'emit' emitparam ? ( ',' emitparam ) ';'# emit
+    |   functionstatement                       # fstatement
     |   stringval ';'                           # check // break/continue on null value
     ;
 
-emitparam
+functionstatement 
+    :  'emit' param ? ( ',' param ) ';'         # emit
+    ;
+
+param
     :   ( ID ':' ) ? stringval 
     ;
 

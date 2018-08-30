@@ -79,14 +79,7 @@ public class SSListener99Implementation extends SSListener09Statement implements
     }
 
 
-    @Override
-    public void enterEmitparam(SelescriptParser.EmitparamContext ctx) {
-    }
-
-    @Override
-    public void exitEmitparam(SelescriptParser.EmitparamContext ctx) {
-    }
-
+   
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
@@ -135,6 +128,26 @@ public class SSListener99Implementation extends SSListener09Statement implements
                 .append(Config.NL);
         // Annotate tree
         prop.put(ctx, sb.toString());
+    }
+
+    @Override
+    public void enterFstatement(SelescriptParser.FstatementContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exitFstatement(SelescriptParser.FstatementContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void enterParam(SelescriptParser.ParamContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exitParam(SelescriptParser.ParamContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -96,12 +96,19 @@
         }
     }
 
+
+    /**
+     * Iterates over the webelements obtained applying xpath to the provided
+     * search context. Since some webelemnts can appear later, it refreshs
+     * regularly while iterating.
+     */
     public static class WebElementIterator implements Iterable<WebElement>, Iterator<WebElement> {
 
-        private String xpath;
-        private SearchContext sc;
-        private Deque<WebElement> tovisit = new ArrayDeque<>();
-        private Set<WebElement> visited = new HashSet<>();
+        private final String xpath;
+        private final SearchContext sc;
+        private final Deque<WebElement> tovisit = new ArrayDeque<>();
+        private final Set<WebElement> visited = new HashSet<>();
+
 
         /**
          * Will iterate over all the WebElements found by applying the provided
