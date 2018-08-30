@@ -11,6 +11,8 @@ import static com.twiceagain.selescript.Config.NL;
 import com.twiceagain.selescript.SSListener;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.v4.runtime.CharStream;
 
 /**
@@ -18,7 +20,7 @@ import org.antlr.v4.runtime.CharStream;
  *
  * @author xavier
  */
-public abstract class SSListener09Statement extends SSListener05StringVal implements SSListener, SelescriptListener {
+public abstract class SSListener09Statement extends SSListener07Param implements SSListener, SelescriptListener {
 
     public SSListener09Statement(String s) {
         super(s);
@@ -116,6 +118,28 @@ public abstract class SSListener09Statement extends SSListener05StringVal implem
         String s = "if((" + prop.get(ctx.stringval()) + ")==null) continue;" + NL;
 
         prop.put(ctx, s);
+    }
+
+    @Override
+    public void enterEmit(SelescriptParser.EmitContext ctx) {
+    }
+
+    @Override
+    public void exitEmit(SelescriptParser.EmitContext ctx) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("emit(");
+        List<String> ls = new ArrayList<>();
+        ctx.param().forEach((pc) -> {
+            ls.add(prop.get(pc));
+        });
+        sb
+                .append(String.join(",",ls))
+                .append(" );")
+                .append(NL);
+        
+        prop.put(ctx,sb.toString());
     }
 
 }

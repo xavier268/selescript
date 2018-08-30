@@ -30,15 +30,12 @@ public class CompleteSourceCompilerTest {
     @Test
     public void testCompilerInfrastructure() {
         String source
-                = "1; @ 2;"
-                + "go toto { 12 ; titi = @ toto ;"
-                + "go titi {"
-                + "22;"
-                + "23;"
-                + "}"
-                + "15;"
-                + " }"               
-                  + "5;";
+                = "toto = 125 ;"
+                + "emit titre125 : toto ;"
+                + "emit button : @ \".//body\" ;"
+                + "emit titi:2 + 3 ;"
+                + "emit;"
+                + "emit toto: titi;";
         
         System.out.printf("%nTest-compiling : %s%n", source);
         SSListener ls = new SSListener99Implementation(source);

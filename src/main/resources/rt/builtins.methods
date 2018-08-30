@@ -83,6 +83,29 @@
 
     }
 
+    /*----------------------------------------------------
+    * Emits the provided fields to stout.
+    **/
+    public void emit(String ... par) {
+        Integer count = 0;      
+        List<String> ls = new ArrayList<>();
+        
+        for(int i=0;  i<par.length;i+=2) {
+            count ++;
+            StringBuilder sb = new StringBuilder();
+             if(par[i] == null) {
+                sb.append("\"F_").append(count).append("\":");
+                } else {
+                sb.append("\"").append(par[i]).append("\":");
+                }
+             
+            sb.append("\"").append(par[i+1]).append("\"");
+                
+            ls.add(sb.toString());
+            }
+         System.out.printf("%n{%s}%n", String.join(",",ls)); 
+         }
+
     /**
      * Static method just delegates to the non-static main() method.
      *
@@ -99,6 +122,8 @@
      */
     public void main() {
         final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
+        // wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);//DEBUG
+        wd.get("http://www.google.fr"); // DEBUG
         try {
             wes.clear();
             wes.add(wd);

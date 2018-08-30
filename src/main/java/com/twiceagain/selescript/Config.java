@@ -54,6 +54,7 @@ public class Config {
      */
     private static final List<String> TARGETIMPORTS = Arrays.asList(
             "java.util.*",
+            "java.util.concurrent.*",
             "org.openqa.selenium.*",
             "org.openqa.selenium.remote.*",
             "org.slf4j.*"
