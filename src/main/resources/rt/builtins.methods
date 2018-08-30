@@ -68,6 +68,21 @@
         return (s == null) ? "" : null;
     }
 
+    /*---------------------------------------------------
+    * Implements the dereferencing operator. Return null if not valid.
+    **/
+    protected String at(String s) {        
+    try {
+    List<WebElement> lwe = wes.getLast().findElements(By.xpath(s));
+    if(lwe.isEmpty()) return null;
+    return lwe.get(0).getText();
+    } catch(Exception ex) {
+        LOG.info("Error while dereferencing xpath : " + s,ex);
+        return null;
+    }
+
+    }
+
     /**
      * Static method just delegates to the non-static main() method.
      *

@@ -30,8 +30,8 @@ public class CompleteSourceCompilerTest {
     @Test
     public void testCompilerInfrastructure() {
         String source
-                = "1;"
-                + "go toto { 12 ; "
+                = "1; @ 2;"
+                + "go toto { 12 ; titi = @ toto ;"
                 + "go titi {"
                 + "22;"
                 + "23;"

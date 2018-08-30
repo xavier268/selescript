@@ -102,5 +102,13 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
     }
     
     
+    @Test
+    public void md5test() {
+        String s;
+        
+        s="lkj";
+        assertEquals("48E2E79FEC9BC01D9A0E0A8FA68B289",config.getMd5Hash(s));
+    }
+    
     
 }

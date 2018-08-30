@@ -11,10 +11,13 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -22,6 +25,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Configuration information and various tools.
@@ -449,6 +454,25 @@ public class Config {
                 + "-"
                 + getTargetProjectVersion()
                 + "-jar-with-dependencies.jar";
+    }
+
+    public String getMd5Hash(String s) {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(s.getBytes(Charset.forName("UTF-8")));
+            byte[] d = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : d) {
+                sb.append(String.format("%X", b));
+            }
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException ex) {
+            System.err.printf("%nErreor while computing MD5 hash for %s", s);
+            throw new SSException(ex);
+        }
+
     }
 
 }
