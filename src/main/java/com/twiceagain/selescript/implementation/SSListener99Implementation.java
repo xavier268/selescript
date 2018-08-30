@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author xavier
  */
-public class SSListener99Implementation extends SSListener09Go implements SSListener, SelescriptListener {
+public class SSListener99Implementation extends SSListener09Statement implements SSListener, SelescriptListener {
 
     private final static Logger LOG = LoggerFactory.getLogger(SSListener99Implementation.class);
 
@@ -78,17 +78,6 @@ public class SSListener99Implementation extends SSListener09Go implements SSList
     public void exitEmit(SelescriptParser.EmitContext ctx) {
     }
 
-    @Override
-    public void enterCheck(SelescriptParser.CheckContext ctx) {
-    }
-
-    @Override
-    public void exitCheck(SelescriptParser.CheckContext ctx) {
-        // It was tempting to just continue when we know input is null, 
-        // but the compiler will refuse to compile unreacheable code ...
-        String s = "if((" + prop.get(ctx.stringval()) + ")==null) continue;" + NL;
-        prop.put(ctx, s);
-    }
 
     @Override
     public void enterEmitparam(SelescriptParser.EmitparamContext ctx) {

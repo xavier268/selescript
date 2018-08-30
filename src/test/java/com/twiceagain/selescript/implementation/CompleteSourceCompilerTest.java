@@ -31,12 +31,14 @@ public class CompleteSourceCompilerTest {
     public void testCompilerInfrastructure() {
         String source
                 = "1;"
-                + "2;"
-                + "go toto {  "
-                + "   3;"
-                + "   4;"
-                + "   }"
-                + "5;";
+                + "go toto { 12 ; "
+                + "go titi {"
+                + "22;"
+                + "23;"
+                + "}"
+                + "15;"
+                + " }"               
+                  + "5;";
         
         System.out.printf("%nTest-compiling : %s%n", source);
         SSListener ls = new SSListener99Implementation(source);
