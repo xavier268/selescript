@@ -142,4 +142,24 @@ public abstract class SSListener09Statement extends SSListener07Param implements
         prop.put(ctx,sb.toString());
     }
 
+    @Override
+    public void enterAnd(SelescriptParser.AndContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void enterOr(SelescriptParser.OrContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exitAnd(SelescriptParser.AndContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exitOr(SelescriptParser.OrContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

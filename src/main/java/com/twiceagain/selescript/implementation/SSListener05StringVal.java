@@ -64,6 +64,7 @@ public abstract class SSListener05StringVal extends SSListener02ConstantExpressi
     }
 
     @Override
+    @Deprecated(since = "Updated grammar TODO")
     public void exitAt(SelescriptParser.AtContext ctx) {
         String s = "at(" + prop.get(ctx.stringval()) + ")";               
         prop.put(ctx, s);

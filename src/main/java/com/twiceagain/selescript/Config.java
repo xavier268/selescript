@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Configuration information and various tools.
@@ -74,7 +72,7 @@ public class Config {
      */
     private transient static long UID = 0L;
 
-    private static final String SELESCRIPTVERSION = "0.3";
+    private static final String SELESCRIPTVERSION = "0.3.1";
     private static final String SELENIUMVERSION = "3.14.0";
     private static final String TARGETJAVAVERSION = "10";
 

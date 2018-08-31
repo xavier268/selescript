@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.twiceagain</groupId>
     <artifactId>selescript</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <properties>

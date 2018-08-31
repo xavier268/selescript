@@ -27,9 +27,11 @@ stringval
     :   constantstring                          # sstring
     |   stringval '==' stringval                # eq    // Not null means true
     |   '(' stringval ')'                       # par
-    |   '@' stringval                           # at    // derefence based on current search context
+    |   '@' (ID ':' )? stringval                # at    // derefence based on current search context
     |   '!' stringval                           # not   // Not null means true
-    |   stringval '+'  stringval                # concat
+    |   stringval '+' stringval                 # concat
+    |   stringval '|' stringval                 # or    // logical or
+    |   stringval '&' stringval                 # and   // logical and
     |   BIID                                    # biid
     |   ID                                      # id
     ;
