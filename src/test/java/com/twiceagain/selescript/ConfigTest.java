@@ -56,7 +56,7 @@ public class ConfigTest {
     @Test
     public void testResourcesAvailability() {
 
-        assertNotNull(config.getBuiltinsMethods());
+        assertNotNull(config.getBuiltinCode());
         assertFalse(config.getBuiltinsList().isEmpty());
 
         System.out.printf("%nThe recognized builtins tokens are : %s%n", config.getBuiltinsList());

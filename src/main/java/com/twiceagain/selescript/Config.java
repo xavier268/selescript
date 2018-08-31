@@ -55,6 +55,7 @@ public class Config {
             "java.util.concurrent.*",
             "org.openqa.selenium.*",
             "org.openqa.selenium.remote.*",
+            "org.openqa.selenium.support.ui.*",
             "org.slf4j.*"
     );
     /**
@@ -205,8 +206,9 @@ public class Config {
                 .next();
     }
 
-    public String getBuiltinsMethods() {
-        return getResourceAsString("rt/builtins.methods");
+    public String getBuiltinCode() {
+        return getResourceAsString("rt/builtins.methods")
+                + getResourceAsString("rt/builtins.variables");
     }
 
     /**

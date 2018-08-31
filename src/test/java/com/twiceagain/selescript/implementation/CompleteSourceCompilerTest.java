@@ -5,15 +5,21 @@
  */
 package com.twiceagain.selescript.implementation;
 
+import com.twiceagain.selescript.CommandLine;
 import com.twiceagain.selescript.Config;
 import com.twiceagain.selescript.SSListener;
+import com.twiceagain.selescript.exceptions.SSConfigurationException;
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- *
+ * Used for debugging while developping.
  * @author xavier
  */
+// @Ignore
 public class CompleteSourceCompilerTest {
 
     Config config = new Config("example").setTargetPackage("com", "test");
@@ -28,9 +34,12 @@ public class CompleteSourceCompilerTest {
     }
 
     @Test
+    @Ignore
     public void testCompilerInfrastructure() {
         String source
-                = "toto = 125 ;"
+                = "$url = \"http:www.google.fr\" ;"
+                + "emit url : $url ;"
+                + "emit lien :  @ href:\".//a\" ;"
                 + "emit titre125 : toto ;"
                 + "emit button : @ \".//body\" ;"
                 + "emit titi:2 + 3 ;"
@@ -48,5 +57,21 @@ public class CompleteSourceCompilerTest {
         }
         ls.saveCode();
         // System.out.printf("%n%s%n", s);
+    }
+    
+    @Test(expected = NoSuchFileException.class)
+    public void testCommandLineWithExteranlSourceAndWrongName() throws IOException {        
+        
+        CommandLine.main("--dryrun", "-s", "WrongNameWhichDoesNotExists.ss");
+    }
+    
+    @Test
+    public void testDemo1() throws IOException {
+        CommandLine.main( "-s", "demos/demo1.ss","-c","demo1");
+    }
+    
+    @Test (expected = SSConfigurationException.class)
+    public void testInvalidCLIOption() throws IOException {
+        CommandLine.main("--");
     }
 }

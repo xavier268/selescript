@@ -8,6 +8,7 @@ package com.twiceagain.selescript.implementation;
 import auto.SelescriptListener;
 import auto.SelescriptParser;
 import com.twiceagain.selescript.Config;
+import static com.twiceagain.selescript.Config.AP;
 import com.twiceagain.selescript.SSListener;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,7 +18,7 @@ import org.antlr.v4.runtime.CharStream;
  *
  * @author xavier
  */
-public abstract class SSListener05StringVal extends SSListener02ConstantExpression implements SSListener, SelescriptListener{
+public abstract class SSListener05StringVal extends SSListener02ConstantExpression implements SSListener, SelescriptListener {
 
     public SSListener05StringVal(String s) {
         super(s);
@@ -64,16 +65,28 @@ public abstract class SSListener05StringVal extends SSListener02ConstantExpressi
     }
 
     @Override
-    @Deprecated(since = "Updated grammar TODO")
     public void exitAt(SelescriptParser.AtContext ctx) {
-        String s = "at(" + prop.get(ctx.stringval()) + ")";               
-        prop.put(ctx, s);
+        StringBuilder sb = new StringBuilder();
+        sb.append("at(");
+        if (ctx.ID() == null) {
+            sb.append(ctx.ID());
+        } else {
+            sb
+                    .append(AP)
+                    .append(ctx.ID().getText())
+                    .append(AP);
+        }
+        sb
+                .append(",")
+                .append(prop.get(ctx.stringval()))
+                .append(")");
+        prop.put(ctx, sb.toString());
     }
 
     @Override
     public void exitBiid(SelescriptParser.BiidContext ctx) {
         isValidBiids(ctx.getText());
-        prop.put(ctx, "BIID_" + ctx.getText().substring(1) + "()");
+        prop.put(ctx, "biidGet(wd,wes.getLast()," + AP + ctx.getText() + AP + ")");
     }
 
     @Override
@@ -106,8 +119,9 @@ public abstract class SSListener05StringVal extends SSListener02ConstantExpressi
     }
 
     /**
-     * Stringval and above are  always quoted in their internel representation.
+     * Stringval and above are always quoted in their internel representation.
      * Constants below are never quoted.
+     *
      * @param ctx
      */
     @Override
@@ -119,5 +133,4 @@ public abstract class SSListener05StringVal extends SSListener02ConstantExpressi
         prop.put(ctx, x);
     }
 
-    
 }

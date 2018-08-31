@@ -42,33 +42,6 @@ public class SSListener99Implementation extends SSListener09Statement implements
     }
 
 
-    @Override
-    public void enterAssign(SelescriptParser.AssignContext ctx) {
-    }
-
-    @Override
-    public void exitAssign(SelescriptParser.AssignContext ctx) {
-
-        StringBuilder r = new StringBuilder();
-        if (ctx.BIID() != null) {
-            r
-                    .append("BUILTINS_")
-                    .append(ctx.BIID().getText().substring(1))
-                    .append("(")
-                    .append(prop.get(ctx.stringval()))
-                    .append(");")
-                    .append(NL);
-        } else {
-            r
-                    .append("symtab.put(\"")
-                    .append(ctx.ID().getText())
-                    .append("\",")
-                    .append(prop.get(ctx.stringval()))
-                    .append(");")
-                    .append(NL);
-        }
-        prop.put(ctx, r.toString());
-    }
 
 
 
@@ -98,7 +71,7 @@ public class SSListener99Implementation extends SSListener09Statement implements
         // Add builtin methods
         sb
                 .append(NL)
-                .append(config.getBuiltinsMethods())
+                .append(config.getBuiltinCode())
                 .append(Config.NL);
 
         // Create the scrap method
@@ -122,6 +95,9 @@ public class SSListener99Implementation extends SSListener09Statement implements
         // Annotate tree
         prop.put(ctx, sb.toString());
     }
+
+
+
 
 
    

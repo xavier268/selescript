@@ -18,9 +18,7 @@
      */
     protected Deque<SearchContext> wes = new ArrayDeque<>();
 
-    // $url
-    // $millis
-    // $title
+    
 
     /*------------------------------------------------------------
     * A dedicated concatenation that behaves well with null values.
@@ -68,20 +66,39 @@
         return (s == null) ? "" : null;
     }
 
-    /*---------------------------------------------------
-    * Implements the dereferencing operator. Return null if not valid.
-    **/
-    protected String at(String s) {        
-    try {
-    List<WebElement> lwe = wes.getLast().findElements(By.xpath(s));
-    if(lwe.isEmpty()) return null;
-    return lwe.get(0).getText();
-    } catch(Exception ex) {
-        LOG.info("Error while dereferencing xpath : " + s,ex);
-        return null;
-    }
+
+    /**---------------------------------------------------------------------
+     * Implements the dereferencing operator. Return null if not valid. Once
+     * derefererenced, if attribute is specified, return the string value of
+     * that attribute. If no attribute is specified, apply getText() to the
+     * first WebElement found.
+     *
+     * @param attr
+     * @param s
+     * @return
+     *
+     */
+    protected String at(String attr, String s) {
+        try {
+            if (s == null || s.isEmpty()) {
+                return null;
+            }
+            List<WebElement> lwe = wes.getLast().findElements(By.xpath(s));
+            if (lwe.isEmpty()) {
+                return null;
+            }
+            if (attr == null) {
+                return lwe.get(0).getText();
+            } else {
+                return lwe.get(0).getAttribute(attr);
+            }
+        } catch (Exception ex) {
+            LOG.info("Error while dereferencing xpath : " + attr + ":" + s , ex);
+            return null;
+        }
 
     }
+
 
     /*----------------------------------------------------
     * Emits the provided fields to stout.
@@ -106,6 +123,53 @@
          System.out.printf("%n{%s}%n", String.join(",",ls)); 
          }
 
+
+
+    /**
+     * ---------------------------------------------------------------
+     *
+     * Click on the first WebElement that matches the provided xpath.
+     *
+     * @param wd
+     * @param xpath
+     */
+    protected void click(WebDriver wd, String xpath) {
+        click(wd, xpath, false);
+    }
+    protected void clickw(WebDriver wd, String xpath) {
+        click(wd, xpath, true);
+    }
+
+    /**
+     * --------------------------------------------------------------
+     *
+     * Click on the first WebElement that matches the provided xpath.
+     *
+     * @param wd
+     * @param xpath
+     * @param linkShouldGo - Set to true if the link we click is expected to
+     * trigger a page reload.
+     *
+     */
+    protected void click(WebDriver wd, String xpath, boolean linkShouldGo) {
+        if (xpath == null) {
+            return;
+        }
+        List<WebElement> lwe = wes.getLast().findElements(By.xpath(xpath));
+        if (lwe.isEmpty()) {
+            return;
+        }
+        lwe.get(0).click();
+
+        if (linkShouldGo) {
+            // Wait up to 5 seconds for the page to disappear.
+            (new WebDriverWait (wd, 5)).until(ExpectedConditions.stalenessOf(lwe.get(0)));
+        }
+
+    }
+
+
+
     /**
      * Static method just delegates to the non-static main() method.
      *
@@ -123,7 +187,7 @@
     public void main() {
         final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
         // wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);//DEBUG
-        wd.get("http://www.google.fr"); // DEBUG
+        // wd.get("http://www.google.fr"); // DEBUG
         try {
             wes.clear();
             wes.add(wd);

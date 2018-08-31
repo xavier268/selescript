@@ -5,9 +5,11 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.exceptions.SSConfigurationException;
 import com.twiceagain.selescript.implementation.SSListener99Implementation;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
@@ -29,12 +31,12 @@ public class CommandLine {
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String... args) throws IOException {
 
         Config config = parseArgs(args);
 
         if (config == null) {
-            return;
+            throw new SSConfigurationException("Could not configure based on provided cli arguments");
         } else {
             printVersionInfo(config);
         }
@@ -51,7 +53,7 @@ public class CommandLine {
             System.out.printf(
                     "%nReading the script from file : %s%n",
                     config.getSourceFileName());
-            list = new SSListener99Implementation(config.getSourceFileName());
+            list = new SSListener99Implementation(Paths.get(config.getSourceFileName()));
         }
         list.compile(config);
         list.dump(); // debug

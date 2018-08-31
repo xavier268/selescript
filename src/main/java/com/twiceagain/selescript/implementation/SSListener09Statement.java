@@ -7,6 +7,7 @@ package com.twiceagain.selescript.implementation;
 
 import auto.SelescriptListener;
 import auto.SelescriptParser;
+import static com.twiceagain.selescript.Config.AP;
 import static com.twiceagain.selescript.Config.NL;
 import com.twiceagain.selescript.SSListener;
 import java.io.IOException;
@@ -160,6 +161,59 @@ public abstract class SSListener09Statement extends SSListener07Param implements
     @Override
     public void exitOr(SelescriptParser.OrContext ctx) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void enterTimer(SelescriptParser.TimerContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exitTimer(SelescriptParser.TimerContext ctx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void enterAssign(SelescriptParser.AssignContext ctx) {
+    }
+
+    @Override
+    public void exitAssign(SelescriptParser.AssignContext ctx) {
+        StringBuilder r = new StringBuilder();
+        if (ctx.BIID() != null) {
+            r
+                    .append("biidSet(wd,wes.getLast(),")
+                    .append(AP)
+                    .append(ctx.BIID().getText())
+                    .append(AP)
+                    .append(",")
+                    .append(prop.get(ctx.stringval()))
+                    .append(");")
+                    .append(NL);
+        } else {
+            r.append("symtab.put(\"").append(ctx.ID().getText()).append("\",").append(prop.get(ctx.stringval())).append(");").append(NL);
+        }
+        prop.put(ctx, r.toString());
+    }
+
+    @Override
+    public void enterClick(SelescriptParser.ClickContext ctx) {
+    }
+
+    @Override
+    public void exitClick(SelescriptParser.ClickContext ctx) {        
+        String s = "click(wd," + prop.get(ctx.stringval()) + ");" + NL;
+        prop.put(ctx,s);
+    }
+
+    @Override
+    public void enterClickw(SelescriptParser.ClickwContext ctx) {
+    }
+
+    @Override
+    public void exitClickw(SelescriptParser.ClickwContext ctx) {
+        String s = "clickw(wd," + prop.get(ctx.stringval()) + ");" + NL;
+        prop.put(ctx,s);
     }
 
 }

@@ -14,7 +14,10 @@ statement
     :   'go'    '{' statement * '}'             # go0   // one-time loop
     |   'go'    stringval '{' statement * '}'   # go    // loop for locators
     |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'emit' param ? ( ',' param )* ';'         # emit
+    |   'timer' constantnumber ';'              # timer  // Time in millis
+    |   'emit' param ? ( ',' param )* ';'       # emit
+    |   'click' stringval ';'                   # click  // on the specified xpath
+    |   'clickw' stringval ';'                  # clickw // click and wait for page to start reloading
     |   stringval ';'                           # check // break/continue on null value
     ;
 
@@ -71,7 +74,7 @@ STRING : '"' .*? '"' ;
 NUMBER  : [0-9]+ ;
 
 // Acceptable ID starts with a letter
-ID : [a-zA-Z][a-zA-Z0-9]* ;
+ID : [a-zA-Z_][a-zA-Z_0-9]* ;
 
 // Built-in Ids start with a single $ sign
 BIID : '$' ID ;
