@@ -222,7 +222,7 @@ public abstract class SSListener09Statement extends SSListener07Param implements
 
     @Override
     public void exitPrint(SelescriptParser.PrintContext ctx) {        
-        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval())+");");
+        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval())+");"+ NL);
     }
 
 }

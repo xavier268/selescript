@@ -15,7 +15,7 @@ import org.junit.Test;
  *
  * @author xavier
  */
-public class MakeDemos {
+public class MakeDemosTest {
 
     @Test
     public void demoHelloWorld() throws IOException {
@@ -23,13 +23,18 @@ public class MakeDemos {
     }
 
     @Test
-    public void demo1() throws IOException {
-        CommandLine.main("-s", "demos/demo1.ss", "-c", "demo1");
+    public void demoGoogle() throws IOException {
+        CommandLine.main("-s", "demos/demoGoogle.ss", "-c", "DemoGoogle", "--debug");
     }
-    
+
+    @Test
+    public void demo1() throws IOException {
+        CommandLine.main("-s", "demos/demo1.ss", "-c", "Demo1");
+    }
+
     @Test(expected = SSException.class)
     public void demoSyntaxError() throws IOException {
-        CommandLine.main("-s","demos/demoSyntaxError.ss","--dryrun");
+        CommandLine.main("-s", "demos/demoSyntaxError.ss", "--dryrun");
     }
 
 }

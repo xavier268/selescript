@@ -47,7 +47,7 @@ public class Config {
     /**
      * The name of the generated java class.
      */
-    private String JavaClassName = "AutoScrapper";
+    private String JavaClassName = "NoNameScrapper";
 
     private String SOURCEFILENAME = null;
     private String PARAMETERFILENAME = null;
@@ -245,7 +245,7 @@ public class Config {
      */
     public String getTargetDir() {
         try {
-            return new File("target/" + getTargetJavaClassName() + "-dist").getCanonicalPath();
+            return new File("target/dist-" + getTargetJavaClassName() ).getCanonicalPath();
         } catch (IOException ex) {
             throw new SSException("Invalid default path : " + "target/" + getTargetJavaClassName() + "-dist");
         }
