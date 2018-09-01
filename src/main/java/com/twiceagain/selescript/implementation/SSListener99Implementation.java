@@ -12,7 +12,6 @@ import static com.twiceagain.selescript.Config.NL;
 import com.twiceagain.selescript.SSListener;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Date;
 import org.antlr.v4.runtime.CharStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +75,7 @@ public class SSListener99Implementation extends SSListener09Statement implements
         // Create the scrap method
         sb
                 .append("/* Actual scrapping happens here */").append(Config.NL)
+                .append("@Override").append(NL)
                 .append("public void scrap(WebDriver wd){ ").append(Config.NL)
                 .append("do { ")
                 .append(NL);
@@ -94,5 +94,6 @@ public class SSListener99Implementation extends SSListener09Statement implements
         // Annotate tree
         prop.put(ctx, sb.toString());
     }
+
 
 }

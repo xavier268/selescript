@@ -6,6 +6,7 @@
 package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
+import com.twiceagain.selescript.exceptions.SSException;
 import com.twiceagain.selescript.implementation.SSListener99Implementation;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -39,6 +40,10 @@ public class CommandLine {
             throw new SSConfigurationException("Could not configure based on provided cli arguments");
         } else {
             printVersionInfo(config);
+            // If debug mode, we dump the configuration first.
+            if (config.getDebugMode()) {
+                config.dump();
+            }
         }
 
         SSListener list;
@@ -56,10 +61,11 @@ public class CommandLine {
             list = new SSListener99Implementation(Paths.get(config.getSourceFileName()));
         }
         list.compile(config);
-        list.dump(); // debug
+        if (config.getDebugMode()) {
+            list.dump();
+        }
         if (list.hasSyntaxError()) {
-            System.out.printf("%n******** ERROR ***********%n%s%n",
-                    list.getErrorMessage());
+            throw new SSException(list.getErrorMessage());
         } else {
             if (config.getDryRunFlag()) {
                 System.out.printf("%n%n **** Nothing actually saved to file : dryrun flag was selected ***%n%n");
@@ -83,6 +89,8 @@ public class CommandLine {
             switch (command) {
 
                 case "-c":
+                case "--class":
+                case "--name":
                 case "--classname": {
                     i++;
                     String param = args[i];
@@ -101,22 +109,17 @@ public class CommandLine {
                 case "-v":
                 case "--version": {
                     printVersionInfo(config);
-                    return null;
+                    System.exit(0);
                 }
-                
+
                 case "-d":
                 case "--debug": {
                     config.setDebugMode(true);
                     break;
                 }
-                
-                case "-n":
-                case "--nodebug": {
-                    config.setDebugMode(false);
-                    break;
-                }
 
-                case "--dryrun": {
+                case "--dryrun":
+                case "--dry-run": {
                     config.setDryRunFlag(true);
                     break;
                 }
@@ -124,9 +127,9 @@ public class CommandLine {
                 case "--help":
                 case "-h": {
                     printHelp(config);
-                    return null;
+                    System.exit(0);
                 }
-                
+
                 default: {
                     System.out.printf("%n : Unrecognized command line option : %s%n", command);
                     printHelp(config);
@@ -153,9 +156,7 @@ public class CommandLine {
                 "     -d",
                 "     --debug        : set debug mode to true",
                 "",
-                "     -n",
-                "     --nodebug      : set debug mode to false",
-                "",
+                "     --dry-run",
                 "     --dryrun       : compile everything, but do not save to file",
                 "",
                 "     -s FILE",
@@ -163,6 +164,8 @@ public class CommandLine {
                 "",
                 "",
                 "     -c",
+                "     --class",
+                "     --name",
                 "     --classname CLASSNAME : generated scrapper will be named CLASSNAME",
                 ""
         );

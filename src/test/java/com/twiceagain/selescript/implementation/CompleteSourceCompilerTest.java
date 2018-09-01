@@ -65,10 +65,7 @@ public class CompleteSourceCompilerTest {
         CommandLine.main("--dryrun", "-s", "WrongNameWhichDoesNotExists.ss");
     }
     
-    @Test
-    public void testDemo1() throws IOException {
-        CommandLine.main( "-s", "demos/demo1.ss","-c","demo1");
-    }
+   
     
     @Test (expected = SSConfigurationException.class)
     public void testInvalidCLIOption() throws IOException {

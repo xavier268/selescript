@@ -15,10 +15,11 @@ statement
     |   'go'    stringval '{' statement * '}'   # go    // loop for locators
     |   ( ID | BIID ) '=' stringval ';'         # assign
     |   'timer' constantnumber ';'              # timer  // Time in millis
-    |   'emit' param ? ( ',' param )* ';'       # emit
+    |   'emit' param ? ( ',' param )* ';'       # emit   // json format by default
+    |   'print' stringval ';'                   # print  //plain text
     |   'click' stringval ';'                   # click  // on the specified xpath
     |   'clickw' stringval ';'                  # clickw // click and wait for page to start reloading
-    |   stringval ';'                           # check // break/continue on null value
+    |   stringval ';'                           # check  // break/continue on null value
     ;
 
 param
