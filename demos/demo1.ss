@@ -16,7 +16,7 @@ emit     url:$url,     text:text ;
 
 emit status:"OK" ;
 
-! @ "this-xpath-does-not-exist" ;
+@ "this-xpath-does-not-exist" ;
 
 emit "This message should never appear" ;
 

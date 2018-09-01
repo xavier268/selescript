@@ -56,8 +56,10 @@ public class Config {
             "org.openqa.selenium.*",
             "org.openqa.selenium.remote.*",
             "org.openqa.selenium.support.ui.*",
-            "org.slf4j.*"
+            "org.slf4j.*",
+            "com.twiceagain.selescript.runtime.*"
     );
+
     /**
      * File systems separator used.
      */
@@ -80,6 +82,15 @@ public class Config {
     private boolean DRYRUNFLAG = false;
 
     private static String TARGETPROJECTVERSION_CACHED = null;
+
+    private static final String RUNTIMEDIRECTORY
+            = "src" + FILESEPARATOR
+            + "main" + FILESEPARATOR
+            + "java" + FILESEPARATOR
+            + "com" + FILESEPARATOR
+            + "twiceagain" + FILESEPARATOR
+            + "selescript" + FILESEPARATOR
+            + "runtime" + FILESEPARATOR;
 
     public Config() {
         incTargetProjectVersion();
@@ -206,11 +217,6 @@ public class Config {
                 .next();
     }
 
-    public String getBuiltinCode() {
-        return getResourceAsString("rt/builtins.methods")
-                + getResourceAsString("rt/builtins.variables");
-    }
-
     /**
      * Reads a whitespace or nl separated list of tokens, keeping only those
      * prefixed with $.
@@ -255,6 +261,10 @@ public class Config {
         return Paths.get(getTargetDir(), "src", "main", "java", String.join(FILESEPARATOR, TargetPackage));
     }
 
+    public Path getTargetJavaClassRuntimeDirectory() {
+        return Paths.get(getTargetDir(), "src", "main", "java", "com", "twiceagain", "selescript", "runtime");
+    }
+
     /**
      * The path to the default generated java class file.
      *
@@ -270,7 +280,7 @@ public class Config {
      * @param source - relative to the root of the resources directory.
      * @param target - relative to the TARGETDIRECTORY
      */
-    protected void copyFromResource(String source, String target) {
+    protected void copyFromResourceToTargetDir(String source, String target) {
 
         new File(getTargetDir()).mkdirs();
 
@@ -283,7 +293,7 @@ public class Config {
                     .getResourceAsStream(source));
 
             if (is == null) {
-                throw new SSException("Could not open requestde resources : " + source);
+                throw new SSException("Could not open requested resources : " + source);
             }
             os = new BufferedOutputStream(
                     new FileOutputStream(
@@ -381,10 +391,22 @@ public class Config {
     protected void createAllRuntimeSupportFiles() {
 
         // Copy relevant resources
-        copyFromResource("rt/selgrid.yaml", "selgrid.yaml");
-        copyFromResource("rt/selgrid.start.sh", "selgrid.start.sh");
-        copyFromResource("rt/selgrid.stop.sh", "selgrid.stop.sh");
-        copyFromResource("rt/README.txt", "README.txt");
+        copyFromResourceToTargetDir("rt/selgrid.yaml", "selgrid.yaml");
+        copyFromResourceToTargetDir("rt/selgrid.start.sh", "selgrid.start.sh");
+        copyFromResourceToTargetDir("rt/selgrid.stop.sh", "selgrid.stop.sh");
+        copyFromResourceToTargetDir("rt/README.txt", "README.txt");
+
+        // Copy RUNTIMEDIRECTORY classes     
+        copyFromResourceToTargetDir("runtime/Base.java",
+                RUNTIMEDIRECTORY + "Base.java");
+        copyFromResourceToTargetDir("runtime/Methods.java",
+                RUNTIMEDIRECTORY + "Methods.java");
+        copyFromResourceToTargetDir("runtime/Variables.java",
+                RUNTIMEDIRECTORY + "Variables.java");
+        copyFromResourceToTargetDir("runtime/Scrapper.java",
+                RUNTIMEDIRECTORY + "Scrapper.java");
+        copyFromResourceToTargetDir("runtime/WebElementIterator.java",
+                RUNTIMEDIRECTORY + "WebElementIterator.java");
 
         // Create custom files
         createPomFile();
@@ -400,6 +422,8 @@ public class Config {
     public void saveCode(String code) {
 
         getTargetJavaClassDirectory().toFile().mkdirs();
+        getTargetJavaClassRuntimeDirectory().toFile().mkdirs();
+
         createAllRuntimeSupportFiles();
 
         Path p = getTargetJavaClassPath();

@@ -96,6 +96,13 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+        <!-- not really needed, but a convenieince for the ide to edit, hence provided -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.14.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <name>selescript</name>
 </project>

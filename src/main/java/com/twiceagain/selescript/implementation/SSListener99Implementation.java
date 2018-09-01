@@ -41,18 +41,17 @@ public class SSListener99Implementation extends SSListener09Statement implements
     public void enterUnit(SelescriptParser.UnitContext ctx) {
     }
 
-
-
-
-
-   
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
         sb.append(config.getFileHeader()).append(config.getPackageDeclaration()).append(config.getImportsDeclarations()).append(Config.NL).append(Config.NL);
 
         // Define class
-        sb.append("public class ").append(config.getTargetJavaClassName()).append(" {").append(Config.NL).append(NL);
+        sb.append("public class ")
+                .append(config.getTargetJavaClassName())
+                .append(" extends Methods implements Scrapper {")
+                .append(Config.NL)
+                .append(NL);
 
         // define useful constants
         sb
@@ -63,16 +62,14 @@ public class SSListener99Implementation extends SSListener09Statement implements
                 .append("private final static Class CLASS = ").append(config.getTargetJavaClassName()).append(".class;").append(Config.NL)
                 .append(NL);
 
-        // create a newInstance() static method to construct easily
+        // create a basic main method calling predefined non-static main
         sb
-                .append("public static final ").append(config.getTargetJavaClassName()).append(" newInstance() {").append(Config.NL).append("return new ").append(config.getTargetJavaClassName()).append("();}").append(Config.NL)
-                .append(Config.NL);
-
-        // Add builtin methods
-        sb
+                .append("public static void main(String ... args ) {")
                 .append(NL)
-                .append(config.getBuiltinCode())
+                .append("new ")
+                .append(config.getTargetJavaClassName()).append("().main() ;}")
                 .append(Config.NL);
+        
 
         // Create the scrap method
         sb
@@ -80,12 +77,12 @@ public class SSListener99Implementation extends SSListener09Statement implements
                 .append("public void scrap(WebDriver wd){ ").append(Config.NL)
                 .append("do { ")
                 .append(NL);
-        
+
         // Add code from statements.
         ctx.statement().forEach(
-                (SelescriptParser.StatementContext c) -> {            
-            sb.append(prop.get(c));
-        });
+                (SelescriptParser.StatementContext c) -> {
+                    sb.append(prop.get(c));
+                });
         // close class definition
         sb
                 .append("} while(false) ; // one time outer loop").append(Config.NL)
@@ -95,12 +92,5 @@ public class SSListener99Implementation extends SSListener09Statement implements
         // Annotate tree
         prop.put(ctx, sb.toString());
     }
-
-
-
-
-
-   
-
 
 }
