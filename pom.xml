@@ -96,7 +96,8 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
-        <!-- not really needed, but a convenieince for the ide to edit, hence provided -->
+        <!-- not really needed, but a convenience for the ide to edit the java
+        runtime librairy in the resources. Scope is provided for that reason -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>

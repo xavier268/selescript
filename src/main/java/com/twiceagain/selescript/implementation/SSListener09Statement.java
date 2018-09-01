@@ -216,4 +216,13 @@ public abstract class SSListener09Statement extends SSListener07Param implements
         prop.put(ctx,s);
     }
 
+    @Override
+    public void enterPrint(SelescriptParser.PrintContext ctx) {
+    }
+
+    @Override
+    public void exitPrint(SelescriptParser.PrintContext ctx) {        
+        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval())+");");
+    }
+
 }

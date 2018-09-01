@@ -52,19 +52,15 @@ public class Config {
     private String SOURCEFILENAME = null;
     private String PARAMETERFILENAME = null;
 
-    private boolean DEBUGMODE = true;
+    private boolean DEBUGMODE = false;
 
     /**
      * List of required imports.
      */
     private static final List<String> TARGETIMPORTS = Arrays.asList(
-            "java.util.*",
-            "java.util.concurrent.*",
-            "org.openqa.selenium.*",
-            "org.openqa.selenium.remote.*",
-            "org.openqa.selenium.support.ui.*",
-            "org.slf4j.*",
-            String.join(".", RUNTIMEPACKAGE)
+           
+            "org.openqa.selenium.*",            
+            String.join(".", RUNTIMEPACKAGE) + ".*"
     );
 
     /**
@@ -572,7 +568,7 @@ public class Config {
                 + "%n====================================="
                 + "%n===  Detailled configuration dump ==="
                 + "%n====================================="
-                + "%s"
+                + "%n%s"
                 + "%n====================================="
                 + "%n===   end of configuration dump  ===="
                 + "%n====================================="

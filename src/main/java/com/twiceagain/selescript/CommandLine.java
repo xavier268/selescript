@@ -39,6 +39,10 @@ public class CommandLine {
             throw new SSConfigurationException("Could not configure based on provided cli arguments");
         } else {
             printVersionInfo(config);
+            // If debug mode, we dump the configuration first.
+            if(config.getDebugMode()) {
+                config.dump();
+            } 
         }
 
         SSListener list;
@@ -101,7 +105,7 @@ public class CommandLine {
                 case "-v":
                 case "--version": {
                     printVersionInfo(config);
-                    return null;
+                    System.exit(0);
                 }
                 
                 case "-d":
@@ -124,7 +128,7 @@ public class CommandLine {
                 case "--help":
                 case "-h": {
                     printHelp(config);
-                    return null;
+                    System.exit(0);
                 }
                 
                 default: {
