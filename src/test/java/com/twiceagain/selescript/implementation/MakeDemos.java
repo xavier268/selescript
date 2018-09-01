@@ -19,7 +19,7 @@ public class MakeDemos {
 
     @Test
     public void demoHelloWorld() throws IOException {
-        CommandLine.main("-s", "demos/demoHelloWorld.ss", "-c", "HelloWorld", "-debug");
+        CommandLine.main("-s", "demos/demoHelloWorld.ss", "-c", "HelloWorld", "--debug");
     }
 
     @Test
