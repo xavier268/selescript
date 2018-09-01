@@ -36,7 +36,14 @@ public class Config {
     /**
      * Package for target generated scrapper.
      */
-    private List<String> TargetPackage = Arrays.asList("com", "twiceagain", "scrapper");
+    private List<String> TargetPackage = Arrays.asList(
+            "com", "twiceagain", "scrapper");
+    /**
+     * Package for the runtime class librairy.
+     */
+    private static final List<String> RUNTIMEPACKAGE = Arrays.asList(
+            "com", "twiceagain", "selescript", "runtime");
+
     /**
      * The name of the generated java class.
      */
@@ -57,7 +64,7 @@ public class Config {
             "org.openqa.selenium.remote.*",
             "org.openqa.selenium.support.ui.*",
             "org.slf4j.*",
-            "com.twiceagain.selescript.runtime.*"
+            String.join(".", RUNTIMEPACKAGE)
     );
 
     /**
@@ -83,14 +90,14 @@ public class Config {
 
     private static String TARGETPROJECTVERSION_CACHED = null;
 
-    private static final String RUNTIMEDIRECTORY
+    private static final String TARGETRUNTIMEDIRECTORY
             = "src" + FILESEPARATOR
             + "main" + FILESEPARATOR
             + "java" + FILESEPARATOR
-            + "com" + FILESEPARATOR
-            + "twiceagain" + FILESEPARATOR
-            + "selescript" + FILESEPARATOR
-            + "runtime" + FILESEPARATOR;
+            + String.join(FILESEPARATOR, RUNTIMEPACKAGE) + FILESEPARATOR;
+
+    private static final String SOURCERUNTIMEDIRECTORY
+            = String.join(FILESEPARATOR, RUNTIMEPACKAGE) + FILESEPARATOR;
 
     public Config() {
         incTargetProjectVersion();
@@ -395,23 +402,24 @@ public class Config {
         copyFromResourceToTargetDir("rt/selgrid.start.sh", "selgrid.start.sh");
         copyFromResourceToTargetDir("rt/selgrid.stop.sh", "selgrid.stop.sh");
         copyFromResourceToTargetDir("rt/README.txt", "README.txt");
+        copyFromResourceToTargetDir("rt/LICENSE.txt", "LICENSE.txt");
 
-        // Copy RUNTIMEDIRECTORY classes     
-        copyFromResourceToTargetDir("runtime/Base.java",
-                RUNTIMEDIRECTORY + "Base.java");
-        copyFromResourceToTargetDir("runtime/Methods.java",
-                RUNTIMEDIRECTORY + "Methods.java");
-        copyFromResourceToTargetDir("runtime/Variables.java",
-                RUNTIMEDIRECTORY + "Variables.java");
-        copyFromResourceToTargetDir("runtime/Scrapper.java",
-                RUNTIMEDIRECTORY + "Scrapper.java");
-        copyFromResourceToTargetDir("runtime/WebElementIterator.java",
-                RUNTIMEDIRECTORY + "WebElementIterator.java");
+        // Copy runtime librairy classes     
+        copyRuntimeJavaClass("Base");
+        copyRuntimeJavaClass("Methods");
+        copyRuntimeJavaClass("Variables");
+        copyRuntimeJavaClass("Scrapper");
+        copyRuntimeJavaClass("WebElementIterator");
 
         // Create custom files
         createPomFile();
         createRunFiles();
 
+    }
+
+    private void copyRuntimeJavaClass(String className) {
+        copyFromResourceToTargetDir(SOURCERUNTIMEDIRECTORY + className + ".java",
+                TARGETRUNTIMEDIRECTORY + className + ".java");
     }
 
     /**
@@ -420,6 +428,13 @@ public class Config {
      * @param code - the String reprensenting the entire code to be saved.
      */
     public void saveCode(String code) {
+
+        if (getDryRunFlag()) {
+            System.out.printf(
+                    "%n**** You are running in  DRYRUN mode ****"
+                    + "%nNothing will be saved ...%n");
+            return;
+        }
 
         getTargetJavaClassDirectory().toFile().mkdirs();
         getTargetJavaClassRuntimeDirectory().toFile().mkdirs();
@@ -497,6 +512,89 @@ public class Config {
             System.err.printf("%nErreor while computing MD5 hash for %s", s);
             throw new SSException(ex);
         }
+
+    }
+
+    /**
+     * Will display detailled info about the configuration.
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("DEBUGMODE : ").append(DEBUGMODE).append(NL)
+                .append("DRYRUNFLAG : ").append(DRYRUNFLAG).append(NL)
+                .append("FILESEPARATOR : ").append(FILESEPARATOR).append(NL)
+                .append("JavaClassName : ").append(JavaClassName).append(NL)
+                .append("PARAMETERFILENAME : ").append(PARAMETERFILENAME).append(NL)
+                .append("RUNTIMEPACKAGE : ").append(RUNTIMEPACKAGE).append(NL)
+                .append("SELENIUMVERSION : ").append(SELENIUMVERSION).append(NL)
+                .append("SELESCRIPTVERSION : ").append(SELESCRIPTVERSION).append(NL)
+                .append("SOURCEFILENAME : ").append(SOURCEFILENAME).append(NL)
+                .append("SOURCERUNTIMEDIRECTORY : ").append(SOURCERUNTIMEDIRECTORY).append(NL)
+                .append("TARGETIMPORTS : ").append(TARGETIMPORTS).append(NL)
+                .append("TARGETJAVAVERSION : ").append(TARGETJAVAVERSION).append(NL)
+                .append("TARGETPROJECTVERSION_CACHED : ").append(TARGETPROJECTVERSION_CACHED).append(NL)
+                .append("TARGETRUNTIMEDIRECTORY : ").append(TARGETRUNTIMEDIRECTORY).append(NL)
+                .append("TargetPackage : ").append(TargetPackage).append(NL)
+                .append("UID : ").append(UID).append(NL)
+                .append("getBuiltinsList : ").append(getBuiltinsList()).append(NL)
+                .append("getDebugMode : ").append(getDebugMode()).append(NL)
+                .append("getDryRunFlag : ").append(getDryRunFlag()).append(NL)
+                .append("getFileHeader : ").append(getFileHeader()).append(NL)
+                .append("getImportsDeclarations : ").append(getImportsDeclarations()).append(NL)
+                .append("getInputParameterFileName : ").append(getInputParameterFileName()).append(NL)
+                .append("getPackageDeclaration : ").append(getPackageDeclaration()).append(NL)
+                .append("getSeleniumVersion : ").append(getSeleniumVersion()).append(NL)
+                .append("getSelescriptVersion : ").append(getSelescriptVersion()).append(NL)
+                .append("getSourceFileName : ").append(getSourceFileName()).append(NL)
+                .append("getTargetDir : ").append(getTargetDir()).append(NL)
+                .append("gettargetJavaClassDirectory : ").append(getTargetJavaClassDirectory()).append(NL)
+                .append("getTargetJavaClassName : ").append(getTargetJavaClassName()).append(NL)
+                .append("getTargetJavaClassPath : ").append(getTargetJavaClassPath()).append(NL)
+                .append("getTargetJavaClassRuntimeDirectory : ").append(getTargetJavaClassRuntimeDirectory()).append(NL)
+                .append("getTargetJavaVersion : ").append(getTargetJavaVersion()).append(NL)
+                .append("getTargetProjectName : ").append(getTargetProjectName()).append(NL)
+                .append("gettargetProjectVersion : ").append(getTargetProjectVersion()).append(NL)
+                .append("getTargetProjectExecutableJarName : ").append(getTargetProjetExecutableJarName()).append(NL)
+                .append("getConstantDeclarations : ").append(getConstantDeclarations()).append(NL)
+                .append(NL);
+
+        return sb.toString();
+
+    }
+
+    public void dump() {
+        System.out.printf(""
+                + "%n====================================="
+                + "%n===  Detailled configuration dump ==="
+                + "%n====================================="
+                + "%s"
+                + "%n====================================="
+                + "%n===   end of configuration dump  ===="
+                + "%n====================================="
+                + "%n", toString());
+    }
+    
+    /**
+     * Return the code that declares various useful constants.
+     * @return 
+     */
+    public String getConstantDeclarations() {
+        // define useful constants
+        return new StringBuilder()
+                .append("public final static String VERSION = \"").append(getSelescriptVersion()).append("\";").append(NL)
+                .append("public final static String SELENIUMVERSION = \"").append(getSeleniumVersion()).append("\";").append(NL)
+                .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(NL)
+                .append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(NL)
+                .append("private final static Class CLASS = ").append(getTargetJavaClassName()).append(".class;").append(NL)
+                .append(NL)
+                .toString();
+        
+        
 
     }
 

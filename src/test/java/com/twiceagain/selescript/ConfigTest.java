@@ -19,7 +19,7 @@ import org.junit.Ignore;
  *
  * @author xavier
  */
-@Ignore
+// @Ignore
 public class ConfigTest {
     
     public Config config = new Config("example").setTargetPackage("com","test");
@@ -58,38 +58,12 @@ public class ConfigTest {
     public void testResourcesAvailability() {
 
         assertFalse(config.getBuiltinsList().isEmpty());
-
-        System.out.printf("%nThe recognized builtins tokens are : %s%n", config.getBuiltinsList());
     }
 
     @Test(expected = NullPointerException.class)
     public void testGettingNonExistentResourceFile() {
         config.getResourceAsString("invalidName");
-    }
-
-    @Test
-    public void testHeader() {
-        System.out.printf("%s", config.getPackageDeclaration());
-        System.out.printf("%s", config.getImportsDeclarations());
-    }
-
-    @Test
-    public void testPathConfig() {
-        System.out.printf("%nCurrent defaut target path : %s%n",
-                config.getTargetDir());
-System.out.printf("%nCurrent defaut target java class path : %s%n",
-                config.getTargetJavaClassDirectory().toString());
-
-System.out.printf("%nCurrent defaut target java class file name : %s%n",
-                config.getTargetJavaClassPath().toString());
-
-
-    }
-
-    @Test
-    public void testCopyFiles() {
-        config.createAllRuntimeSupportFiles();
-    }
+    }    
     
     @Test
     public void uidTest1() {
@@ -108,6 +82,11 @@ System.out.printf("%nCurrent defaut target java class file name : %s%n",
         
         s="lkj";
         assertEquals("48E2E79FEC9BC01D9A0E0A8FA68B289",config.getMd5Hash(s));
+    }
+    
+    @Test
+    public void dump() {
+        config.dump();
     }
     
     

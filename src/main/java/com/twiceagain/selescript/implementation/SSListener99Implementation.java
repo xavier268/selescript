@@ -44,22 +44,24 @@ public class SSListener99Implementation extends SSListener09Statement implements
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
-        sb.append(config.getFileHeader()).append(config.getPackageDeclaration()).append(config.getImportsDeclarations()).append(Config.NL).append(Config.NL);
+        
+        sb
+                .append(config.getFileHeader())
+                .append(config.getPackageDeclaration())
+                .append(config.getImportsDeclarations())
+                .append(NL).append(NL);
 
         // Define class
-        sb.append("public class ")
+        sb
+                .append("public class ")
                 .append(config.getTargetJavaClassName())
                 .append(" extends Methods implements Scrapper {")
-                .append(Config.NL)
+                .append(NL)
                 .append(NL);
-
-        // define useful constants
+        
+        // Add useful constants.
         sb
-                .append("public final static String VERSION = \"").append(config.getSelescriptVersion()).append("\";").append(Config.NL)
-                .append("public final static String SELENIUMVERSION = \"").append(config.getSeleniumVersion()).append("\";").append(Config.NL)
-                .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(Config.NL)
-                .append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(Config.NL)
-                .append("private final static Class CLASS = ").append(config.getTargetJavaClassName()).append(".class;").append(Config.NL)
+                .append(config.getConstantDeclarations())
                 .append(NL);
 
         // create a basic main method calling predefined non-static main
