@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.exceptions.SSException;
@@ -12,12 +7,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -45,9 +42,13 @@ public class Config {
             "com", "twiceagain", "selescript", "runtime");
 
     /**
-     * The name of the generated java class.
+     * The default name of the generated java class.
      */
-    private String JavaClassName = "NoNameScrapper";
+    private static final String JAVACLASSNAME_DEFAULT = "NoName";
+    /**
+     * Tghe configurated class name.
+     */
+    private String JavaClassName = JAVACLASSNAME_DEFAULT;
 
     private String SOURCEFILENAME = null;
     private String PARAMETERFILENAME = null;
@@ -58,8 +59,7 @@ public class Config {
      * List of required imports.
      */
     private static final List<String> TARGETIMPORTS = Arrays.asList(
-           
-            "org.openqa.selenium.*",            
+            "org.openqa.selenium.*",
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );
 
@@ -245,7 +245,7 @@ public class Config {
      */
     public String getTargetDir() {
         try {
-            return new File("target/dist-" + getTargetJavaClassName() ).getCanonicalPath();
+            return new File("target/dist-" + getTargetJavaClassName()).getCanonicalPath();
         } catch (IOException ex) {
             throw new SSException("Invalid default path : " + "target/" + getTargetJavaClassName() + "-dist");
         }
@@ -253,6 +253,10 @@ public class Config {
 
     public String getTargetJavaClassName() {
         return JavaClassName;
+    }
+
+    public String getTargetJavaClassDefault() {
+        return JAVACLASSNAME_DEFAULT;
     }
 
     /**
@@ -574,10 +578,11 @@ public class Config {
                 + "%n====================================="
                 + "%n", toString());
     }
-    
+
     /**
      * Return the code that declares various useful constants.
-     * @return 
+     *
+     * @return
      */
     public String getConstantDeclarations() {
         // define useful constants
@@ -589,9 +594,28 @@ public class Config {
                 .append("private final static Class CLASS = ").append(getTargetJavaClassName()).append(".class;").append(NL)
                 .append(NL)
                 .toString();
-        
-        
 
+    }
+
+    /**
+     * Utility to list all files in a given directory.
+     *
+     * @param directory - relative to the calling program, or the pom location.
+     * @return - the list comprising only the filenames and their extensions.
+     */
+    public static List<String> listFilesFromDirectory(String directory) {
+        List<String> fileNames = new ArrayList<>();
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(directory))) {
+            for (Path path : directoryStream) {
+                // Ignore directories and special files.
+                if (Files.isRegularFile(path)) {
+                    fileNames.add(path.getFileName().toString());
+                }
+            }
+        } catch (IOException ex) {
+            throw new SSException("Could not list the files in " + directory, ex);
+        }
+        return fileNames;
     }
 
 }

@@ -9,6 +9,7 @@ import com.twiceagain.selescript.CommandLine;
 import com.twiceagain.selescript.Config;
 import com.twiceagain.selescript.SSListener;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
+import com.twiceagain.selescript.exceptions.SSException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import static org.junit.Assert.*;
@@ -70,5 +71,10 @@ public class CompleteSourceCompilerTest {
     @Test (expected = SSConfigurationException.class)
     public void testInvalidCLIOption() throws IOException {
         CommandLine.main("--");
+    }
+    
+    @Test(expected = SSException.class)
+    public void demoSyntaxError() throws IOException {
+        CommandLine.main("-s", "demos/erroneous/demoSyntaxError.ss", "--dryrun");
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
@@ -138,6 +133,18 @@ public class CommandLine {
             }
 
         }
+
+        // Adjust class name if not set but source file was set.
+        if (config.getSourceFileName() != null
+                && !config.getSourceFileName().isEmpty()
+                && config.getTargetJavaClassDefault().equals(config.getTargetJavaClassName())) {
+
+            String c = Paths.get(config.getSourceFileName()).getFileName().toString().replace(".ss", "");
+            c = c.substring(0, 1).toUpperCase() + c.substring(1);
+            config.setTargetJavaClassName(c);
+            System.out.println("Classname was not specified, setting it to : " + c);
+        }
+
         return config;
 
     }
@@ -154,19 +161,23 @@ public class CommandLine {
                 "     --version     : print version information and exit",
                 "",
                 "     -d",
-                "     --debug        : set debug mode to true",
+                "     --debug        : set debug mode to true, default is false",
                 "",
                 "     --dry-run",
-                "     --dryrun       : compile everything, but do not save to file",
+                "     --dryrun       : compile everything, but do not save to file.",
+                "                      Default is to actually save to file",
                 "",
                 "     -s FILE",
-                "     --source FILE : compile from specified FILE. Default is to read from stdin.",
+                "     --source FILE : compile from specified FILE.",
+                "                     Default is to read from stdin.",
                 "",
                 "",
                 "     -c",
                 "     --class",
                 "     --name",
-                "     --classname CLASSNAME : generated scrapper will be named CLASSNAME",
+                "     --classname CLASSNAME : generated scrapper will be named CLASSNAME.",
+                "                             Default will be derived from source file if",
+                "                             available, or 'NoName' if reading from stdin.",
                 ""
         );
 

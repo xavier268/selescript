@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
@@ -49,6 +48,14 @@ public class ConfigTest {
     @Test
     public void testGetVersion() {
         assertNotNull(config.getSelescriptVersion());
+    }
+    
+    @Test
+    public void testReadingDemosSOurcefiles() {
+        List<String> ls = Config.listFilesFromDirectory("demos");
+        System.out.println("Demo file list : " + ls.toString());
+        assertTrue("There should be at least 3 files", ls.size() >= 3);
+        assertTrue("The first file sohould have a .ss ending", ls.get(0).endsWith(".ss"));
     }
 
     /**
