@@ -404,7 +404,7 @@ public class Config {
         copyFromResourceToTargetDir("rt/README.txt", "README.txt");
         copyFromResourceToTargetDir("rt/LICENSE.txt", "LICENSE.txt");
 
-        // Copy runtime librairy classes     
+        // Copy runtime librairy classes 
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
         copyRuntimeJavaClass("Variables");
