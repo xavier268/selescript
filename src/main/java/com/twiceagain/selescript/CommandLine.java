@@ -1,8 +1,11 @@
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.compiler.SSCompiler;
+import com.twiceagain.selescript.configuration.Config;
+import com.twiceagain.selescript.configuration.SSListener;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
 import com.twiceagain.selescript.exceptions.SSException;
-import com.twiceagain.selescript.implementation.SSListener99Implementation;
+import com.twiceagain.selescript.implementation.SSListenerUnit;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
@@ -11,8 +14,7 @@ import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
 
 /**
- * A main function to handle command line parameters and provide a related
- * Config object.
+ * Main entry point for command line use.
  *
  * @author xavier
  */
@@ -41,40 +43,36 @@ public class CommandLine {
             }
         }
 
-        SSListener list;
-
         if (config.getSourceFileName() == null) {
             System.out.printf(
                     "%nReading the script from stdin."
                     + "%nTerminate with Ctl-D (linux) or Ctl-Z(windows)%n");
-            list = new SSListener99Implementation(CharStreams.fromStream(System.in, Charset.forName("UTF-8")));
-
         } else {
             System.out.printf(
                     "%nReading the script from file : %s%n",
                     config.getSourceFileName());
-            list = new SSListener99Implementation(Paths.get(config.getSourceFileName()));
         }
-        list.compile(config);
-        if (config.getDebugMode()) {
-            list.dump();
-        }
-        if (list.hasSyntaxError()) {
-            throw new SSException(list.getErrorMessage());
+
+        SSCompiler comp = new SSCompiler(config);
+
+        if (config.getDryRunFlag()) {
+            System.out.printf("%n%n **** Nothing actually saved to file : dryrun flag was selected ***%n%n");
         } else {
-            if (config.getDryRunFlag()) {
-                System.out.printf("%n%n **** Nothing actually saved to file : dryrun flag was selected ***%n%n");
-            } else {
-                list.saveCode();
-            }
-            System.out.printf(
-                    "%n====================="
-                    + "%nThe generated project is ready in %s"
-                    + "%nYou can go there and run : bash <run.sh%n",
-                    config.getTargetDir());
+            comp.saveCode();
         }
+        System.out.printf(
+                "%n====================="
+                + "%nThe generated project is ready in %s"
+                + "%nYou can go there and run : bash <run.sh%n",
+                config.getTargetDir());
     }
 
+    
+    /**
+     * Parse the command line arguments.
+     * @param args
+     * @return 
+     */
     protected static Config parseArgs(String[] args) {
 
         Config config = new Config();

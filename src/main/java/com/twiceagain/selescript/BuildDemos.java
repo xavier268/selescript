@@ -1,11 +1,12 @@
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.configuration.Config;
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Make all the demos. Any files in the demos directory are assumed to be the
- * demos files to compile.
+ * Compile all the demos. Any files in the demos directory are assumed to be the
+ * demos files to compile, except in sub-directories.
  *
  * @author xavier
  */

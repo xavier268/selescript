@@ -5,65 +5,25 @@
  */
 package com.twiceagain.selescript.implementation;
 
-import auto.SelescriptListener;
 import auto.SelescriptParser;
-import com.twiceagain.selescript.Config;
-import static com.twiceagain.selescript.Config.AP;
-import com.twiceagain.selescript.SSListener;
-import java.io.IOException;
-import java.nio.file.Path;
-import org.antlr.v4.runtime.CharStream;
+import com.twiceagain.selescript.configuration.Config;
+import static com.twiceagain.selescript.configuration.Config.AP;
+import com.twiceagain.selescript.configuration.SSListener;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  *
  * @author xavier
  */
-public abstract class SSListener05StringVal extends SSListener02ConstantExpression implements SSListener, SelescriptListener {
+public class SSListenerStringVal extends SSBaseListener implements SSListener {
 
-    public SSListener05StringVal(String s) {
-        super(s);
+    public SSListenerStringVal(Config config, ParseTreeProperty<String> prop) {
+        super(config, prop);
     }
 
-    public SSListener05StringVal(Path path) throws IOException {
-        super(path);
-    }
+    
 
-    public SSListener05StringVal(CharStream in) {
-        super(in);
-    }
-
-    @Override
-    public void enterAt(SelescriptParser.AtContext ctx) {
-    }
-
-    @Override
-    public void enterBiid(SelescriptParser.BiidContext ctx) {
-    }
-
-    @Override
-    public void enterConcat(SelescriptParser.ConcatContext ctx) {
-    }
-
-    @Override
-    public void enterEq(SelescriptParser.EqContext ctx) {
-    }
-
-    @Override
-    public void enterId(SelescriptParser.IdContext ctx) {
-    }
-
-    @Override
-    public void enterNot(SelescriptParser.NotContext ctx) {
-    }
-
-    @Override
-    public void enterPar(SelescriptParser.ParContext ctx) {
-    }
-
-    @Override
-    public void enterSstring(SelescriptParser.SstringContext ctx) {
-    }
-
+    
     @Override
     public void exitAt(SelescriptParser.AtContext ctx) {
         StringBuilder sb = new StringBuilder();

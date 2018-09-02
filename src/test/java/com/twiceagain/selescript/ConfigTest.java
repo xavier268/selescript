@@ -5,6 +5,7 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.configuration.Config;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -64,7 +65,7 @@ public class ConfigTest {
     @Test
     public void testResourcesAvailability() {
 
-        assertFalse(config.getBuiltinsList().isEmpty());
+        assertFalse(config.getBuiltinsSet().isEmpty());
     }
 
     @Test(expected = NullPointerException.class)

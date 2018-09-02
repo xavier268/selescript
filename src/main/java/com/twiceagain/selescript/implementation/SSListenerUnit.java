@@ -5,36 +5,24 @@
  */
 package com.twiceagain.selescript.implementation;
 
-import auto.SelescriptListener;
 import auto.SelescriptParser;
-import com.twiceagain.selescript.Config;
-import static com.twiceagain.selescript.Config.NL;
-import com.twiceagain.selescript.SSListener;
-import java.io.IOException;
-import java.nio.file.Path;
-import org.antlr.v4.runtime.CharStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.twiceagain.selescript.configuration.Config;
+import static com.twiceagain.selescript.configuration.Config.NL;
+import com.twiceagain.selescript.configuration.SSListener;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  *
  * @author xavier
  */
-public class SSListener99Implementation extends SSListener09Statement implements SSListener, SelescriptListener {
+public class SSListenerUnit extends SSBaseListener implements SSListener {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SSListener99Implementation.class);
-
-    public SSListener99Implementation(CharStream in) {
-        super(in);
+    public SSListenerUnit(Config config, ParseTreeProperty<String> prop) {
+        super(config, prop);
     }
 
-    public SSListener99Implementation(String s) {
-        super(s);
-    }
-
-    public SSListener99Implementation(Path path) throws IOException {
-        super(path);
-    }
+    
+   
 
     @Override
     public void enterUnit(SelescriptParser.UnitContext ctx) {

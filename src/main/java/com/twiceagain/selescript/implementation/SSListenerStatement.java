@@ -5,43 +5,27 @@
  */
 package com.twiceagain.selescript.implementation;
 
-import auto.SelescriptListener;
 import auto.SelescriptParser;
-import static com.twiceagain.selescript.Config.AP;
-import static com.twiceagain.selescript.Config.NL;
-import com.twiceagain.selescript.SSListener;
-import java.io.IOException;
-import java.nio.file.Path;
+import com.twiceagain.selescript.configuration.Config;
+import static com.twiceagain.selescript.configuration.Config.AP;
+import static com.twiceagain.selescript.configuration.Config.NL;
+import com.twiceagain.selescript.configuration.SSListener;
 import java.util.ArrayList;
 import java.util.List;
-import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * Handles the statements events.
  *
  * @author xavier
  */
-public abstract class SSListener09Statement extends SSListener07Param implements SSListener, SelescriptListener {
+public class SSListenerStatement extends SSListenerParam implements SSListener {
 
-    public SSListener09Statement(String s) {
-        super(s);
+    public SSListenerStatement(Config config, ParseTreeProperty<String> prop) {
+        super(config, prop);
     }
 
-    public SSListener09Statement(Path path) throws IOException {
-        super(path);
-    }
-
-    public SSListener09Statement(CharStream in) {
-        super(in);
-    }
-
-    @Override
-    public void enterGo(SelescriptParser.GoContext ctx) {
-    }
-
-    @Override
-    public void enterGo0(SelescriptParser.Go0Context ctx) {
-    }
+   
 
     @Override
     public void exitGo(SelescriptParser.GoContext ctx) {
@@ -108,10 +92,6 @@ public abstract class SSListener09Statement extends SSListener07Param implements
     }
 
     @Override
-    public void enterCheck(SelescriptParser.CheckContext ctx) {
-    }
-
-    @Override
     public void exitCheck(SelescriptParser.CheckContext ctx) {
         // It was tempting to just continue when we know input is null,
         // but the compiler will refuse to compile unreacheable code ...
@@ -122,55 +102,21 @@ public abstract class SSListener09Statement extends SSListener07Param implements
     }
 
     @Override
-    public void enterEmit(SelescriptParser.EmitContext ctx) {
-    }
-
-    @Override
     public void exitEmit(SelescriptParser.EmitContext ctx) {
-        
+
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("emit(");
         List<String> ls = new ArrayList<>();
         ctx.param().forEach((pc) -> {
             ls.add(prop.get(pc));
         });
         sb
-                .append(String.join(",",ls))
+                .append(String.join(",", ls))
                 .append(" );")
                 .append(NL);
-        
-        prop.put(ctx,sb.toString());
-    }
 
-    @Override
-    public void enterAnd(SelescriptParser.AndContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void enterOr(SelescriptParser.OrContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void exitAnd(SelescriptParser.AndContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void exitOr(SelescriptParser.OrContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void enterTimer(SelescriptParser.TimerContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void exitTimer(SelescriptParser.TimerContext ctx) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        prop.put(ctx, sb.toString());
     }
 
     @Override
@@ -197,32 +143,20 @@ public abstract class SSListener09Statement extends SSListener07Param implements
     }
 
     @Override
-    public void enterClick(SelescriptParser.ClickContext ctx) {
-    }
-
-    @Override
-    public void exitClick(SelescriptParser.ClickContext ctx) {        
+    public void exitClick(SelescriptParser.ClickContext ctx) {
         String s = "click(wd," + prop.get(ctx.stringval()) + ");" + NL;
-        prop.put(ctx,s);
-    }
-
-    @Override
-    public void enterClickw(SelescriptParser.ClickwContext ctx) {
+        prop.put(ctx, s);
     }
 
     @Override
     public void exitClickw(SelescriptParser.ClickwContext ctx) {
         String s = "clickw(wd," + prop.get(ctx.stringval()) + ");" + NL;
-        prop.put(ctx,s);
+        prop.put(ctx, s);
     }
 
     @Override
-    public void enterPrint(SelescriptParser.PrintContext ctx) {
-    }
-
-    @Override
-    public void exitPrint(SelescriptParser.PrintContext ctx) {        
-        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval())+");"+ NL);
+    public void exitPrint(SelescriptParser.PrintContext ctx) {
+        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval()) + ");" + NL);
     }
 
 }

@@ -5,13 +5,16 @@
  */
 package com.twiceagain.selescript;
 
-import com.twiceagain.selescript.implementation.SSListener99Implementation;
+import com.twiceagain.selescript.compiler.SSCompiler;
+import com.twiceagain.selescript.configuration.Config;
+import com.twiceagain.selescript.exceptions.SSException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
 
 /**
  * Test grammar syntax.
@@ -43,11 +46,13 @@ public class GrammarTest {
     }
 
     @Test
-    public void testUnit() {
+    public void testOk() {
         ok("go { } ");
-        ok("");
-        nok(";");
-
+    }
+    
+    @Test    
+    public void testNok() {
+        nok("2");
     }
 
     @Test
@@ -100,8 +105,8 @@ public class GrammarTest {
      */
     protected void ok(String s) {
         System.out.printf("\n----------\nOK -> %s", s);
-        SSListener c = new SSListener99Implementation(s);
-        c.printTreeString();
+        SSCompiler c = new SSCompiler(s);
+        System.out.println(c.getTreeString());
         if (c.hasSyntaxError()) {
             fail(c.getErrorMessage());
         }
@@ -114,13 +119,13 @@ public class GrammarTest {
      */
     protected void nok(String s) {
         System.out.printf("\n----------\nNOK -> %s", s);
-        SSListener c = new SSListener99Implementation(s);
-        if (!c.hasSyntaxError()) {
-            c.printTreeString();
-            fail("**This should have been detected as incorrect ??!!**");
-        } else {
-            System.out.printf("\nExpected error : %s", c.getErrorMessage());
-            c.printTreeString();
+        
+        try{
+            SSCompiler c = new SSCompiler(s);
+        } catch (SSException ex) {
+            System.out.println("Expected error duly detected : " + ex.getMessage());
+            return;
         }
+        fail("Error should have been detected ...");
     }
 }

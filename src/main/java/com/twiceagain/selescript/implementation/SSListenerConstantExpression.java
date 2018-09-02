@@ -5,77 +5,20 @@
  */
 package com.twiceagain.selescript.implementation;
 
-import auto.SelescriptListener;
 import auto.SelescriptParser;
-import com.twiceagain.selescript.SSListener;
-import java.io.IOException;
-import java.nio.file.Path;
-import org.antlr.v4.runtime.CharStream;
+import com.twiceagain.selescript.configuration.Config;
+import com.twiceagain.selescript.configuration.SSListener;
+import com.twiceagain.selescript.exceptions.SSNumberFormatException;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  *
  * @author xavier
  */
-public abstract class SSListener02ConstantExpression extends SSAbstractListener implements SSListener, SelescriptListener{
+public class SSListenerConstantExpression extends SSBaseListener implements SSListener {
 
-    public SSListener02ConstantExpression(String s) {
-        super(s);
-    }
-
-    public SSListener02ConstantExpression(Path path) throws IOException {
-        super(path);
-    }
-
-    public SSListener02ConstantExpression(CharStream in) {
-        super(in);
-    }
-
-    @Override
-    public void enterCdiv(SelescriptParser.CdivContext ctx) {
-    }
-
-    @Override
-    public void enterCminus(SelescriptParser.CminusContext ctx) {
-    }
-
-    @Override
-    public void enterCnumber(SelescriptParser.CnumberContext ctx) {
-    }
-
-    @Override
-    public void enterCpar(SelescriptParser.CparContext ctx) {
-    }
-
-    @Override
-    public void enterCplus(SelescriptParser.CplusContext ctx) {
-    }
-
-    @Override
-    public void enterCsc(SelescriptParser.CscContext ctx) {
-    }
-
-    @Override
-    public void enterCsnot(SelescriptParser.CsnotContext ctx) {
-    }
-
-    @Override
-    public void enterCspar(SelescriptParser.CsparContext ctx) {
-    }
-
-    @Override
-    public void enterCsplus(SelescriptParser.CsplusContext ctx) {
-    }
-
-    @Override
-    public void enterCsstring(SelescriptParser.CsstringContext ctx) {
-    }
-
-    @Override
-    public void enterCtimes(SelescriptParser.CtimesContext ctx) {
-    }
-
-    @Override
-    public void enterUminus(SelescriptParser.UminusContext ctx) {
+    public SSListenerConstantExpression(Config config, ParseTreeProperty<String> prop) {
+        super(config, prop);
     }
 
     @Override
@@ -156,10 +99,12 @@ public abstract class SSListener02ConstantExpression extends SSAbstractListener 
 
     @Override
     public void exitUminus(SelescriptParser.UminusContext ctx) {
-        Integer i = Integer.decode(prop.get(ctx.constantnumber()));
-        prop.put(ctx, String.format("%d", -i));
+        try {
+            Integer i = Integer.decode(prop.get(ctx.constantnumber()));
+            prop.put(ctx, String.format("%d", -i));
+        } catch (NumberFormatException ex) {
+            throw new SSNumberFormatException("Trying to apply Uminus to " + ctx.constantnumber(), ex);
+        }
     }
-    
-    
-    
+
 }
