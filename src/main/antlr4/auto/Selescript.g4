@@ -31,7 +31,7 @@ stringval
     :   constantstring                          # sstring
     |   stringval '==' stringval                # eq    // Not null means true
     |   '(' stringval ')'                       # par
-    |   '@' (ID ':' )? stringval                # at    // derefence based on current search context
+    |   '@' (ID ? ':' )? ( stringval ) ?          # at    // derefence based on current search context
     |   '!' stringval                           # not   // Not null means true
     |   stringval '+' stringval                 # concat
     |   stringval '|' stringval                 # or    // logical or
@@ -67,21 +67,29 @@ constantnumber
 // ------ Lexer ------------
 
 
-// There is no way to escape the double quote inside string
-// Note the greedy ? ...
-STRING : '"' .*? '"' ; 
+// There is no escape for double quote inside string, use single quotes !
+// Note the greedy *? 
+STRING : '"' .* ? '"' ; 
 
 // Numbers are not signed integer ( but unary minus exists )
-NUMBER  : [0-9]+ ;
+NUMBER  : NONZERODIGIT DIGIT* ;
+
+
 
 // Acceptable ID starts with a letter
-ID : [a-zA-Z_][a-zA-Z_0-9]* ;
+ID : LETTER DIGITORLETTER * ;
 
 // Built-in Ids start with a single $ sign
 BIID : '$' ID ;
 
+fragment DIGITORLETTER : DIGIT | LETTER ;
+fragment DIGIT : [0-9] ;
+fragment NONZERODIGIT : [1-9] ;
+fragment LETTER : [a-zA-Z_] ;
+
+
 // Skip white spaces
 WS :  [ \t\r\n\u000C]+ -> skip ;
 
-// Note the greedy ? ...
+// Note the greedy *? ...
 COMMENT : '/*' .*?  '*/' -> skip ;

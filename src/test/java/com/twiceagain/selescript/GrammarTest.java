@@ -99,6 +99,12 @@ public class GrammarTest {
         ok("6+-7;");
         nok("8-+9");
     }
+    
+    @Test
+    public void testLiteralString() {
+        ok(" \"normal string\" ; ");
+        // ok(" \"one escape \\\" string\" ; ");
+    }
 
     /**
      * Test compiling provided string for correctness.
