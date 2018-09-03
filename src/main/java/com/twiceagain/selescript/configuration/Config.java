@@ -82,7 +82,7 @@ public class Config {
     /**
      * Unique ID generation.
      */
-    private transient static long UID = 0L;
+    private transient long uid = 0L;
 
     private static final String SELESCRIPTVERSION = "0.4.0";
     private static final String SELENIUMVERSION = "3.14.0";
@@ -540,9 +540,8 @@ public class Config {
      * @return
      */
     public String createUniqueId() {
-        UID++;
-
-        return String.format("uid_%d", UID);
+        uid++;
+        return String.format("uid_%d", uid);
 
     }
 
@@ -636,7 +635,7 @@ public class Config {
                 .append("TARGETPROJECTVERSION_CACHED : ").append(TARGETPROJECTVERSION_CACHED).append(NL)
                 .append("TARGETRUNTIMEDIRECTORY : ").append(TARGETRUNTIMEDIRECTORY).append(NL)
                 .append("TargetPackage : ").append(TargetPackage).append(NL)
-                .append("UID : ").append(UID).append(NL)
+                .append("uid : ").append(uid).append(NL)
                 .append("getBuiltinsSet : ").append(getBuiltinsSet()).append(NL)
                 .append("getDebugMode : ").append(getDebugMode()).append(NL)
                 .append("getDryRunFlag : ").append(getDryRunFlag()).append(NL)

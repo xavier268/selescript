@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.implementation;
+package com.twiceagain.selescript.compiler;
 
+import com.twiceagain.selescript.listeners.SSBaseListener;
 import com.twiceagain.selescript.CommandLine;
 import com.twiceagain.selescript.configuration.Config;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;

@@ -11,11 +11,11 @@ import com.twiceagain.selescript.configuration.Config;
 import com.twiceagain.selescript.configuration.SSErrorListener;
 import com.twiceagain.selescript.exceptions.SSException;
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
-import com.twiceagain.selescript.implementation.SSListenerConstantExpression;
-import com.twiceagain.selescript.implementation.SSListenerParam;
-import com.twiceagain.selescript.implementation.SSListenerStatement;
-import com.twiceagain.selescript.implementation.SSListenerStringVal;
-import com.twiceagain.selescript.implementation.SSListenerUnit;
+import com.twiceagain.selescript.listeners.SSListenerConstantExpression;
+import com.twiceagain.selescript.listeners.SSListenerParam;
+import com.twiceagain.selescript.listeners.SSListenerStatement;
+import com.twiceagain.selescript.listeners.SSListenerStringVal;
+import com.twiceagain.selescript.listeners.SSListenerUnit;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashSet;
@@ -67,16 +67,16 @@ public final class SSCompiler {
      */
     private SelescriptParser parser;
 
-    private Config config;
+    protected Config config;
 
     /**
      * Compile according to the provided configuration object.This is the
- prefered way to go. The code is generated, but not saved, until the
- compiler is requested to do so.
+     * prefered way to go. The code is generated, but not saved, until the
+     * compiler is requested to do so.
      *
      * @param conf
      */
-    public SSCompiler(Config conf)  {
+    public SSCompiler(Config conf) {
         CharStream in;
         if (conf == null) {
             config = new Config();
@@ -90,7 +90,6 @@ public final class SSCompiler {
             } catch (IOException ex) {
                 throw new SSException("Could not read from " + config.getSourceFileName(), ex);
             }
-            
 
         } else {
             try {
@@ -105,14 +104,29 @@ public final class SSCompiler {
     }
 
     /**
-     * Compile from String, mainly for debugging purpose. Uses a debug-friendly
-     * configuration.
+     * Compile from String, mainly for debugging purpose. Creates its own
+     * debug-friendly configuration : dryrun, debugmode.
      *
      * @param scriptCode
      */
     public SSCompiler(String scriptCode) {
-        
-        config = new Config().setDebugMode(true).setDryRunFlag(true);        
+
+        this(null, scriptCode);
+    }
+
+    /**
+     * Compile from string, using the provide configuration. Dryrun will be
+     * forced. If config is null, a debug/dryrun config is created.
+     *
+     * @param conf
+     * @param scriptCode
+     */
+    public SSCompiler(Config conf, String scriptCode) {
+        if (conf == null) {
+            config = new Config().setDebugMode(true).setDryRunFlag(true);
+        } else {
+            config = conf.setDryRunFlag(true);
+        }
         compile(CharStreams.fromString(scriptCode));
 
     }
@@ -123,7 +137,7 @@ public final class SSCompiler {
      * @param in
      */
     protected final void compile(CharStream in) {
-        
+
         Lexer lex = new SelescriptLexer(in);
         lex.removeErrorListeners();
         lex.addErrorListener(errorListener);
@@ -132,29 +146,26 @@ public final class SSCompiler {
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         rootNode = parser.unit();
-        
+
         if (hasSyntaxError()) {
             throw new SSSyntaxException(getErrorMessage());
         }
-        
+
         // Now, let's walk the generated tree with the listeners - order matters !
         new ParseTreeWalker().walk(new SSListenerConstantExpression(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerStringVal(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerParam(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerStatement(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerUnit(config, prop), rootNode);
-        
+
         if (config.getDebugMode()) {
             dump();
         }
-        
+
         if (hasSyntaxError()) {
             throw new SSException(getErrorMessage());
         }
 
-        
-
-        
     }
 
     /**
@@ -167,6 +178,19 @@ public final class SSCompiler {
             throw new SSException("There is no parse tree - no code available ! ");
         }
         return prop.get(rootNode);
+    }
+
+    /**
+     * Retun a hash of the generated code, excluding the variable properties
+     * (time dependant, ...) so that this value is expected to stay the same
+     * accross successive compilations. in practice, anything happening BEFORE
+     * the first occurence of @Override is ignored.
+     *
+     * @return
+     */
+    public String getCodeHash() {
+        String c = getCode().split("@Override", 2)[1];
+        return config.getMd5Hash(c);
     }
 
     /**
@@ -217,8 +241,6 @@ public final class SSCompiler {
     public void dump() {
         dump(rootNode);
     }
-    
-    
 
     /**
      * Dumps the annotated tree or sub-tree.

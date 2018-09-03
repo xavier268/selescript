@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.implementation;
+package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptBaseListener;
 import com.twiceagain.selescript.configuration.Config;

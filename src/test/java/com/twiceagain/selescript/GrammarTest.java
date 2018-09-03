@@ -15,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
 /**
  * Test grammar syntax.
  *
@@ -23,7 +22,10 @@ import static org.junit.Assert.*;
  */
 public class GrammarTest {
 
-    public Config config = new Config("example").setTargetPackage("com", "test");
+    public Config config = new Config("example")
+            .setTargetPackage("test", "grammar")
+            .setDebugMode(false)
+            .setDryRunFlag(true);
 
     public GrammarTest() {
     }
@@ -49,8 +51,8 @@ public class GrammarTest {
     public void testOk() {
         ok("go { } ");
     }
-    
-    @Test    
+
+    @Test
     public void testNok() {
         nok("2");
     }
@@ -66,10 +68,10 @@ public class GrammarTest {
 
     @Test
     public void testStringval() {
-        ok(" TOTO + 2 + 3 ;");
-        ok(" TOTO + 5 + ! 6 ;");
-        ok(" TOTO + 1 + 5 + ! 6 ;");
-        ok(" 3 + ! 5 + TOTO + 6 ; ");
+        ok("TOTO + 2 + 3 ;");
+        ok("TOTO + 5 + ! 6 ;");
+        ok("TOTO + 1 + 5 + ! 6 ;");
+        ok("3 + ! 5 + TOTO + 6 ; ");
         ok("1 + 2 + TOTO + 3 + 4 ;");
         nok("1 + 2 + TOTO + 3 + 4 ");
         nok("toto -tata;");
@@ -104,10 +106,10 @@ public class GrammarTest {
      * @param s
      */
     protected void ok(String s) {
-        System.out.printf("\n----------\nOK -> %s", s);
-        SSCompiler c = new SSCompiler(s);
-        System.out.println(c.getTreeString());
+        System.out.printf("%n%s\t===> OK", s);
+        SSCompiler c = new SSCompiler(config, s);
         if (c.hasSyntaxError()) {
+            c.dump();
             fail(c.getErrorMessage());
         }
     }
@@ -118,14 +120,17 @@ public class GrammarTest {
      * @param s
      */
     protected void nok(String s) {
-        System.out.printf("\n----------\nNOK -> %s", s);
-        
-        try{
-            SSCompiler c = new SSCompiler(s);
+        System.out.printf("%n%s\t===> NOK", s);
+        SSCompiler c;
+        try {
+            c = new SSCompiler(config, s);
         } catch (SSException ex) {
-            System.out.println("Expected error duly detected : " + ex.getMessage());
+            System.out.printf("\tError as expected : %s", ex.getMessage());
             return;
         }
-        fail("Error should have been detected ...");
+        c.dump();
+        fail("\nAn error was expected compiling : " 
+                + s 
+                + "\nThe code above should not have compiled successfully ... but it did !\n");
     }
 }

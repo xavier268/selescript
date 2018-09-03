@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -79,7 +80,6 @@ public class ConfigTest {
         for(int i=0;i<10; i++) {
             ss.add(config.createUniqueId());
         }
-        System.out.printf("%nUnique ids test : %s%n", ss.toString());
         assertEquals(10, ss.size());
     }
     
@@ -92,10 +92,7 @@ public class ConfigTest {
         assertEquals("48E2E79FEC9BC01D9A0E0A8FA68B289",config.getMd5Hash(s));
     }
     
-    @Test
-    public void dump() {
-        config.dump();
-    }
+    
     
     
 }
