@@ -2,16 +2,11 @@ package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.compiler.SSCompiler;
 import com.twiceagain.selescript.configuration.Config;
-import com.twiceagain.selescript.configuration.SSListener;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
-import com.twiceagain.selescript.exceptions.SSException;
-import com.twiceagain.selescript.implementation.SSListenerUnit;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import org.antlr.v4.runtime.CharStreams;
 
 /**
  * Main entry point for command line use.
@@ -41,17 +36,7 @@ public class CommandLine {
             if (config.getDebugMode()) {
                 config.dump();
             }
-        }
-
-        if (config.getSourceFileName() == null) {
-            System.out.printf(
-                    "%nReading the script from stdin."
-                    + "%nTerminate with Ctl-D (linux) or Ctl-Z(windows)%n");
-        } else {
-            System.out.printf(
-                    "%nReading the script from file : %s%n",
-                    config.getSourceFileName());
-        }
+        }       
 
         SSCompiler comp = new SSCompiler(config);
 
@@ -130,7 +115,8 @@ public class CommandLine {
                 }
             }
 
-        }
+        }        
+        
 
         // Adjust class name if not set but source file was set.
         if (config.getSourceFileName() != null

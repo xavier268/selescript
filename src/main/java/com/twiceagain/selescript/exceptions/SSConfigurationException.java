@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- *
+ * Exception becaouse of invalid configuration settings.
  * @author xavier
  */
 public class SSConfigurationException extends SSException {

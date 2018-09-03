@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- *
+ * Attempting to set/get an undefined builtin variable.
  * @author xavier
  */
 public class SSUndefinedBuiltinException extends SSException {

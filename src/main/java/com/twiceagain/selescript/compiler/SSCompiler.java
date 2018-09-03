@@ -10,6 +10,7 @@ import auto.SelescriptParser;
 import com.twiceagain.selescript.configuration.Config;
 import com.twiceagain.selescript.configuration.SSErrorListener;
 import com.twiceagain.selescript.exceptions.SSException;
+import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.implementation.SSListenerConstantExpression;
 import com.twiceagain.selescript.implementation.SSListenerParam;
 import com.twiceagain.selescript.implementation.SSListenerStatement;
@@ -69,43 +70,50 @@ public final class SSCompiler {
     private Config config;
 
     /**
-     * Compile according to the provided configuration object. This is the
-     * prefered way to go. The code is generated, but not saved, until the
-     * compiler is requested to do so.
+     * Compile according to the provided configuration object.This is the
+ prefered way to go. The code is generated, but not saved, until the
+ compiler is requested to do so.
      *
      * @param conf
-     * @throws java.io.IOException
      */
-    public SSCompiler(Config conf) throws IOException {
+    public SSCompiler(Config conf)  {
         CharStream in;
-        if (config == null) {
+        if (conf == null) {
             config = new Config();
         } else {
             config = conf;
         }
         if (config.getSourceFileName() != null) {
-            // read from file ...
-            in = CharStreams.fromFileName(config.getSourceFileName());
+            try {
+                // read from file ...
+                in = CharStreams.fromFileName(config.getSourceFileName());
+            } catch (IOException ex) {
+                throw new SSException("Could not read from " + config.getSourceFileName(), ex);
+            }
+            
 
         } else {
-            // read from stdin ..
-            in = CharStreams.fromStream(System.in, Charset.forName("UTF-8"));
+            try {
+                // read from stdin ..
+                in = CharStreams.fromStream(System.in, Charset.forName("UTF-8"));
+            } catch (IOException ex) {
+                throw new SSException("Could not open stdin as a CharStream ?!", ex);
+            }
         }
         // Do the actual compile.
         compile(in);
     }
 
     /**
-     * Compile from String, maibly for debugging purpose. Uses a debug-friendly
+     * Compile from String, mainly for debugging purpose. Uses a debug-friendly
      * configuration.
      *
-     * @param script
+     * @param scriptCode
      */
-    public SSCompiler(String script) {
+    public SSCompiler(String scriptCode) {
         
-        config = new Config().setDebugMode(true).setDryRunFlag(true);
-        
-        compile(CharStreams.fromString(script));
+        config = new Config().setDebugMode(true).setDryRunFlag(true);        
+        compile(CharStreams.fromString(scriptCode));
 
     }
 
@@ -115,7 +123,7 @@ public final class SSCompiler {
      * @param in
      */
     protected final void compile(CharStream in) {
-
+        
         Lexer lex = new SelescriptLexer(in);
         lex.removeErrorListeners();
         lex.addErrorListener(errorListener);
@@ -125,6 +133,10 @@ public final class SSCompiler {
         parser.addErrorListener(errorListener);
         rootNode = parser.unit();
         
+        if (hasSyntaxError()) {
+            throw new SSSyntaxException(getErrorMessage());
+        }
+        
         // Now, let's walk the generated tree with the listeners - order matters !
         new ParseTreeWalker().walk(new SSListenerConstantExpression(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerStringVal(config, prop), rootNode);
@@ -132,14 +144,17 @@ public final class SSCompiler {
         new ParseTreeWalker().walk(new SSListenerStatement(config, prop), rootNode);
         new ParseTreeWalker().walk(new SSListenerUnit(config, prop), rootNode);
         
-
         if (config.getDebugMode()) {
             dump();
         }
-
+        
         if (hasSyntaxError()) {
             throw new SSException(getErrorMessage());
         }
+
+        
+
+        
     }
 
     /**

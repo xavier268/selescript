@@ -186,8 +186,7 @@
      */
     public void main() {
         final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
-        // wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);//DEBUG
-        // wd.get("http://www.google.fr"); // DEBUG
+        
         try {
             wes.clear();
             wes.add(wd);

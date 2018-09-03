@@ -6,27 +6,27 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- *
+ * Syntax error while parsing the script.
  * @author xavier
  */
-public class SSUndefinedIDException extends SSException {
+public class SSSyntaxException extends SSException{
 
-    public SSUndefinedIDException() {
+    public SSSyntaxException() {
     }
 
-    public SSUndefinedIDException(String message) {
+    public SSSyntaxException(String message) {
         super(message);
     }
 
-    public SSUndefinedIDException(String message, Throwable cause) {
+    public SSSyntaxException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public SSUndefinedIDException(Throwable cause) {
+    public SSSyntaxException(Throwable cause) {
         super(cause);
     }
 
-    public SSUndefinedIDException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public SSSyntaxException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
     

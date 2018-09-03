@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- *
+ * Number format conversion. Typically null or too long number.
  * @author xavier
  */
 public class SSNumberFormatException extends SSException {

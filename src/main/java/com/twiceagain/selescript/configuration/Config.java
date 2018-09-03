@@ -1,5 +1,6 @@
 package com.twiceagain.selescript.configuration;
 
+import com.twiceagain.selescript.exceptions.SSConfigurationException;
 import com.twiceagain.selescript.exceptions.SSException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -132,7 +133,25 @@ public class Config {
         return this;
     }
 
+    /**
+     * Set the source file to either null (means stdin) or a valid, readable
+     * file name. If file name is invalid, throw exception.
+     *
+     * @param source
+     * @return
+     */
     public Config setSourceFileName(String source) {
+        // Check validity
+        if (source != null) {
+            Path s = Paths.get(source);
+            if (!Files.exists(s) || !Files.isReadable(s) || !Files.isRegularFile(s)) {
+                throw new SSConfigurationException("Trying to read non valid file at :" + s.toAbsolutePath());
+            } else {
+                System.out.println("Reading script from " + s.toAbsolutePath());
+            }
+        } else {
+            System.out.println("Reading script from stdin");
+        }
         SOURCEFILENAME = source;
         incTargetProjectVersion();
         return this;
@@ -705,7 +724,7 @@ public class Config {
                         }
                     }
                 } catch (IOException ex) {
-                    throw new SSException("Could not list the files in " + directory,
+                    throw new SSConfigurationException("Could not list the files in " + directory,
                             ex
                     );
 
