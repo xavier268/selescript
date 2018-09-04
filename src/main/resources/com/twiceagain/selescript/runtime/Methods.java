@@ -36,6 +36,56 @@ abstract public class Methods extends Variables {
     }
 
     /**
+     * Not equals.
+     *
+     * @param s1
+     * @param s2
+     * @return null(false) or emptyString(true)
+     */
+    protected String neq(String s1, String s2) {
+        return not(eq(s1, s2));
+    }
+
+    /*     
+     * null ~ null -> null.
+     * null ~ p -> null. 
+     * s ~ p -> s if matched, null if no match.
+     */
+    /**
+     * Test pattern matching.
+     *
+     * @param s
+     * @param pattern
+     * @return
+     */
+    protected String match(String s, String pattern) {
+
+        if (s == null) {
+            return null;
+        }
+        return (s.matches(pattern)) ? "" : null;
+
+    }
+
+    protected String nomatch(String s1, String s2) {
+        return not(match(s1, s2));
+    }
+
+    protected String or(String s1, String s2) {
+        if (s1 != null) {
+            return s1;
+        }
+        return s2;
+    }
+
+    protected String and(String s1, String s2) {
+        if (s1 == null) {
+            return null;
+        }
+        return s2;
+    }
+
+    /**
      * ---------------------------------------------------------------------
      * Implements the dereferencing operator. Default(null) xpath is current
      * element. Default attribute(null) get the text. If xpth generates multiple

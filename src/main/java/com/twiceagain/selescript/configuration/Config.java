@@ -84,7 +84,7 @@ public class Config {
      */
     private transient long uid = 0L;
 
-    private static final String SELESCRIPTVERSION = "0.4.0";
+    private static final String SELESCRIPTVERSION = "0.4.1";
     private static final String SELENIUMVERSION = "3.14.0";
     private static final String TARGETJAVAVERSION = "10";
 

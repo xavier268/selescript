@@ -58,12 +58,22 @@ public class GrammarTest {
     }
 
     @Test
-    public void testComments() {
+    public void testComments1() {
         ok("go  { } ");
         nok("go { /* khjkhk kjhk j /* } ");
         ok("go  { /* khjkhk kjhk j  */ } ");
         ok("go /* hh */  { } ");
         ok("/* ////***/go  {}");
+    }
+
+    @Test
+    public void testComment2() {
+        ok("45 ; // comment ; \n 11 ;  ");
+        ok("46 ; \"// not a comment\" ; // comment ; \n 11 ;  ");
+        ok("47 ; \"// not a \n \r comment\" ; // comment ; \n 11 ;  ");
+        ok("48 ; // \" string in comment \r");
+        ok("49 ; // \" string in comment \n");
+
     }
 
     @Test
@@ -84,26 +94,68 @@ public class GrammarTest {
         ok("22 * - 666;");
         nok("22 * + 666;");
         ok("toto + tata;");
+
+    }
+
+    @Test
+    public void tesStringValEq() {
+
+        ok(" toto == tata ;         ");
+        ok(" toto == 22 ;           ");
+        ok(" 22 == tata ;           ");
+        ok(" 23 == -22 ;            ");
+        ok(" 12 == 12 ;             ");
+
+        ok(" toto != tata ;         ");
+        ok(" toto != 22 ;           ");
+        ok(" 22 != tata ;           ");
+        ok(" 23 != -22 ;            ");
+        ok(" 12 != 12 ;             ");
+
+        ok(" titi = 45 == 45 ;      ");
+        ok(" titi = (45 == 45) ;    ");
+        ok(" titi = !(45 == 45) ;   ");
+
+        ok(" titi = 46 == 45 ;      ");
+        ok(" titi = (46 == 45) ;    ");
+        ok(" titi = !(46 == 45) ;   ");
+
     }
 
     @Test
     public void testConstants() {
+        System.out.println("\n********* Constants");
+
         ok("5;");
         ok("1+2;");
         ok("-(10);");
+        ok("-(10 + 2);");
         ok("-11;");
         ok("1- 3;");
         ok("1-3;");
         ok("4--5;");
         ok("4-------5;");
         ok("6+-7;");
-        nok("8-+9");
+        ok("6/7;");
+        ok("6/-7;");
+        ok("-6/7;");
+        nok("8-+9;");
+        ok("8+-9;");
+
+        ok("  \"aaa\"           ;");
+        ok("  \"aaa\" +2   ;");
+        ok("  \"aaa\" + 2 + 1   ;");
+        ok("  \"aaa\" + 2 * 3  ;");
+        ok("  ! \"aaa\"    ;");
+        ok("  \"aaa\"    ;");
+        ok("  3 + \"aaa\"    ;");
+
     }
-    
+
     @Test
     public void testLiteralString() {
         ok(" \"normal string\" ; ");
-        // ok(" \"one escape \\\" string\" ; ");
+        // ok(" \"one escape \\\" string\" ; ");    
     }
 
     /**
@@ -135,8 +187,8 @@ public class GrammarTest {
             return;
         }
         c.dump();
-        fail("\nAn error was expected compiling : " 
-                + s 
+        fail("\nAn error was expected compiling : "
+                + s
                 + "\nThe code above should not have compiled successfully ... but it did !\n");
     }
 }
