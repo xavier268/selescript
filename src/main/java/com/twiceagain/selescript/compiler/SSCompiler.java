@@ -29,7 +29,6 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -52,7 +51,7 @@ public final class SSCompiler {
     /**
      * The annotated tree to store the code as we compile the tree.
      */
-    private final ParseTreeProperty<String> prop = new ParseTreeProperty<>();
+    private final SSProperties prop = new SSProperties();
 
     /**
      * The root node holding the main code, once compilation has happened.

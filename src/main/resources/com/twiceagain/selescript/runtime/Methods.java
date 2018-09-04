@@ -1,4 +1,3 @@
-
 package com.twiceagain.selescript.runtime;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Defines access to builtin Methods
+ *
  * @author xavier
  */
 abstract public class Methods extends Variables {
@@ -35,11 +35,11 @@ abstract public class Methods extends Variables {
         return null; // false
     }
 
-    /**---------------------------------------------------------------------
-     * Implements the dereferencing operator. Return null if not valid. Once
-     * derefererenced, if attribute is specified, return the string value of
-     * that attribute. If no attribute is specified, apply getText() to the
-     * first WebElement found.
+    /**
+     * ---------------------------------------------------------------------
+     * Implements the dereferencing operator. Default(null) xpath is current
+     * element. Default attribute(null) get the text. If xpth generates multiple
+     * elements, keep the first one only.
      *
      * @param attr
      * @param s
@@ -48,20 +48,26 @@ abstract public class Methods extends Variables {
      */
     protected String at(String attr, String s) {
         try {
-            if (s == null || s.isEmpty()) {
-                return null;
+            // Default xpath is current element.
+            if (s == null) {
+                s = ".";
+                if (wes.size() <= 1) { // If we are at the root, default to body.
+                    s = ".//body";
+                }
             }
+            // If xpath not found, return null.
             List<WebElement> lwe = wes.getLast().findElements(By.xpath(s));
             if (lwe.isEmpty()) {
                 return null;
             }
+
             if (attr == null) {
                 return lwe.get(0).getText();
             } else {
                 return lwe.get(0).getAttribute(attr);
             }
         } catch (Exception ex) {
-            LOG.info("Error while dereferencing xpath : " + attr + ":" + s, ex);
+            LOG.info("Error while dereferencing xpath : " + s + " with attribute " + attr, ex);
             return null;
         }
     }
@@ -153,5 +159,5 @@ abstract public class Methods extends Variables {
         }
         return s1 + s2;
     }
-    
+
 }

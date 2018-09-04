@@ -21,9 +21,6 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
         super(config, prop);
     }
 
-    
-
-    
     @Override
     public void exitAt(SelescriptParser.AtContext ctx) {
         StringBuilder sb = new StringBuilder();
@@ -36,10 +33,13 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
                     .append(ctx.ID().getText())
                     .append(AP);
         }
-        sb
-                .append(",")
-                .append(prop.get(ctx.stringval()))
-                .append(")");
+        sb.append(",");
+        if (ctx.stringval() == null) {
+            sb.append(ctx.stringval());
+        } else {
+            sb.append(prop.get(ctx.stringval()));
+        }
+        sb.append(")");
         prop.put(ctx, sb.toString());
     }
 
