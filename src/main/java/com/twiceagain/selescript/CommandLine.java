@@ -2,7 +2,6 @@ package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.compiler.SSCompiler;
 import com.twiceagain.selescript.configuration.Config;
-import static com.twiceagain.selescript.configuration.Config.AP;
 import static com.twiceagain.selescript.configuration.Config.FILESEPARATOR;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
 import com.twiceagain.selescript.exceptions.SSException;
@@ -11,8 +10,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Main entry point for command line use.

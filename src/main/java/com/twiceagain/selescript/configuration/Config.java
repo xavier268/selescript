@@ -513,9 +513,13 @@ public class Config {
         // Copy runtime librairy classes 
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
-        copyRuntimeJavaClass("Variables");
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("WebElementIterator");
+
+        copyRuntimeJavaClass("BaseVariable");
+        getBuiltinsSet().forEach((s) -> {
+            copyRuntimeJavaClass(s);
+        });
 
         // Create custom files
         createPomFile();
@@ -773,6 +777,27 @@ public class Config {
                 }
                 return fileNames;
 
+    }
+
+    /**
+     * Generates an object for each builtin variable.
+     *
+     * @return
+     */
+    public String getBuiltinsDeclarations() {
+        final StringBuilder sb = new StringBuilder(NL);
+
+        getBuiltinsSet().forEach((b) -> {
+            sb
+                    .append(b)
+                    .append(" _") // object is callsname prefixed with _
+                    .append(b)
+                    .append("= new ")
+                    .append(b)
+                    .append("(wes);")
+                    .append(NL);
+        });
+        return sb.append(NL).toString();
     }
 
 }

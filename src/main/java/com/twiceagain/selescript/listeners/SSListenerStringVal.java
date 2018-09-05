@@ -46,7 +46,7 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
     @Override
     public void exitBiid(SelescriptParser.BiidContext ctx) {
         isValidBiids(ctx.getText());
-        prop.put(ctx, "biidGet(wd,wes.getLast()," + AP + ctx.getText() + AP + ")");
+        prop.put(ctx, "_" + ctx.getText() + ".get()");
     }
 
     @Override
@@ -60,9 +60,9 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
         String s = "eq(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
-    
+
     @Override
-    public void exitNeq(SelescriptParser.NeqContext ctx){
+    public void exitNeq(SelescriptParser.NeqContext ctx) {
         String s = "neq(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
@@ -98,34 +98,34 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
         }
         prop.put(ctx, x);
     }
-    
+
     @Override
     public void exitMatch(SelescriptParser.MatchContext ctx) {
         String s = "match(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
-    
+
     @Override
     public void exitNomatch(SelescriptParser.NomatchContext ctx) {
         String s = "nomatch(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
-   
+
     @Override
     public void exitOr(SelescriptParser.OrContext ctx) {
         String s = "or(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
-    
+
     @Override
     public void exitAnd(SelescriptParser.AndContext ctx) {
         String s = "and(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
     }
-    
+
     @Override
     public void exitNull(SelescriptParser.NullContext ctx) {
-        prop.put(ctx,null);
+        prop.put(ctx, null);
     }
 
 }

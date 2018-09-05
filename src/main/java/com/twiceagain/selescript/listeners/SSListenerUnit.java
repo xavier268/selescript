@@ -23,11 +23,6 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
 
     
    
-
-    @Override
-    public void enterUnit(SelescriptParser.UnitContext ctx) {
-    }
-
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
@@ -46,9 +41,10 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
                 .append(NL)
                 .append(NL);
         
-        // Add useful constants.
+        // Add useful constants and create builtins
         sb
                 .append(config.getConstantDeclarations())
+                .append(config.getBuiltinsDeclarations())
                 .append(NL);
 
         // create a basic main method calling predefined non-static main

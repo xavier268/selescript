@@ -11,14 +11,14 @@ import org.openqa.selenium.WebDriver;
  */
 
 /**
- * Abstract class for all builtin-variables;
+ * Base class for all builtin-variables;
  * @author xavier
  */
-public  abstract class BaseVariable {
+public  class  BaseVariable {
     
-     public Deque<SearchContext> wes ;
+    public  Deque<SearchContext> wes ;
 
-    public BaseVariable(Deque<SearchContext> wes) {
+    protected   BaseVariable(Deque<SearchContext> wes) {
         this.wes = wes;
     }       
     
@@ -31,10 +31,6 @@ public  abstract class BaseVariable {
                 "Unexpected null or empty wes. Cannot dind current webdriver.");
         return (WebDriver) wes.getFirst();
     
-    }
-    
-     abstract public  String get() ;
-     abstract public  void set(String value);
-    
+    }   
     
 }

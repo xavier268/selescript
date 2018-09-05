@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author xavier
  */
-abstract public class Methods extends Variables {
+abstract public class Methods extends Base {
 
     /*--------------------------------------------------
      * A dedicated equal that behave well with null values.

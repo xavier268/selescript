@@ -25,8 +25,6 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         super(config, prop);
     }
 
-   
-
     @Override
     public void exitGo(SelescriptParser.GoContext ctx) {
 
@@ -120,19 +118,13 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     }
 
     @Override
-    public void enterAssign(SelescriptParser.AssignContext ctx) {
-    }
-
-    @Override
     public void exitAssign(SelescriptParser.AssignContext ctx) {
         StringBuilder r = new StringBuilder();
         if (ctx.BIID() != null) {
             r
-                    .append("biidSet(wd,wes.getLast(),")
-                    .append(AP)
+                    .append("_")
                     .append(ctx.BIID().getText())
-                    .append(AP)
-                    .append(",")
+                    .append(".set(")
                     .append(prop.get(ctx.stringval()))
                     .append(");")
                     .append(NL);

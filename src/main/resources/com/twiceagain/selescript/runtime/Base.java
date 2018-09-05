@@ -21,12 +21,12 @@ abstract public class Base implements Scrapper {
     /**
      * Symbol table.
      */
-    protected Map<String, String> symtab = new HashMap<>();
+    final protected Map<String, String> symtab = new HashMap<>();
     /**
      * Stack(deque) holding current search context at the top, and wd at the
      * bottom.
      */
-    protected Deque<SearchContext> wes = new ArrayDeque<>();
+    final protected Deque<SearchContext> wes = new ArrayDeque<>();
 
     /**
      * Shared logger for all runtime classes.
@@ -38,6 +38,8 @@ abstract public class Base implements Scrapper {
      * static method from the final scrapper class.
      */
     public void main() {
+        
+        
         final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
          try {
             wes.clear();
