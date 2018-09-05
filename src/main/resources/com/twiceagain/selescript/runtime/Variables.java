@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
  * @author xavier
  */
 abstract public class Variables extends Base {
+    
+    
 
     /**
      * Getting the value (StringVal) of a Builtin Variable.

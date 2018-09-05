@@ -39,10 +39,9 @@ abstract public class Base implements Scrapper {
      */
     public void main() {
         final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
-        // wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);//DEBUG
-        // wd.get("http://www.google.fr"); // DEBUG
-        try {
+         try {
             wes.clear();
+            // Add the webdriver at the start of the wes deque.
             wes.add(wd);
             scrap(wd);
         } catch (Exception ex) {
