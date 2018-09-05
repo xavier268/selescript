@@ -2,11 +2,17 @@ package com.twiceagain.selescript;
 
 import com.twiceagain.selescript.compiler.SSCompiler;
 import com.twiceagain.selescript.configuration.Config;
+import static com.twiceagain.selescript.configuration.Config.AP;
+import static com.twiceagain.selescript.configuration.Config.FILESEPARATOR;
 import com.twiceagain.selescript.exceptions.SSConfigurationException;
+import com.twiceagain.selescript.exceptions.SSException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main entry point for command line use.
@@ -36,7 +42,7 @@ public class CommandLine {
             if (config.getDebugMode()) {
                 config.dump();
             }
-        }       
+        }
 
         SSCompiler comp = new SSCompiler(config);
 
@@ -44,19 +50,66 @@ public class CommandLine {
             System.out.printf("%n%n **** Nothing actually saved to file : dryrun flag was selected ***%n%n");
         } else {
             comp.saveCode();
+
+            if (config.getExecuteFlag()) {
+                System.out.printf("%n====================="
+                        + "%nThe generated project is ready in %s"
+                        + "%nCompiling and running it now"
+                        + "%n=====================",
+                        config.getTargetDir());
+                run(config);
+            } else {
+                System.out.printf(
+                        "%n====================="
+                        + "%nThe generated project is ready in %s"
+                        + "%nYou can go there and run : bash <run.sh%n"
+                        + "%n=====================",
+                        config.getTargetDir());
+            }
+
         }
-        System.out.printf(
-                "%n====================="
-                + "%nThe generated project is ready in %s"
-                + "%nYou can go there and run : bash <run.sh%n",
-                config.getTargetDir());
+
     }
 
-    
+    /**
+     * Ask bash to run the command provided.Warning, this is lWarning, this is
+     * linux specific.
+     *
+     * @param config
+     */
+    public static void run(Config config) {
+        if (config != null && !config.isLinux()) {
+            throw new SSException("Execute option is not yet available on windows.");
+        }
+        if (config == null || config.getDryRunFlag() || !config.getExecuteFlag()) {
+            return;
+        }
+
+        String rf =  "bash <" + config.getTargetDir() + FILESEPARATOR + "run.sh ";
+        System.out.printf("%nPreparing to execute : %s%n", rf);
+        
+        
+
+        // Launch a new process ..
+        ProcessBuilder builder = new ProcessBuilder()
+                .command("/usr/bin/bash", "-c",  rf)
+                .directory(new File(config.getTargetDir())) // current working dir
+                // todo redirect error to log file ...
+                .inheritIO(); // redirect all IO to same as current process
+        try {
+            Process p = builder.start(); // Launch, and let run ...
+            p.waitFor(); // debug - synchroneous wait ...
+        } catch (IOException | InterruptedException ex) {
+            throw new SSException("Exception while running process", ex);
+        } 
+
+    }
+
     /**
      * Parse the command line arguments.
+     *
      * @param args
-     * @return 
+     * @return
      */
     protected static Config parseArgs(String[] args) {
 
@@ -102,6 +155,13 @@ public class CommandLine {
                     break;
                 }
 
+                case "-x":
+                case "--execute":
+                case "--run": {
+                    config.setExecuteFlag(true);
+                    break;
+                }
+
                 case "--help":
                 case "-h": {
                     printHelp(config);
@@ -115,8 +175,7 @@ public class CommandLine {
                 }
             }
 
-        }        
-        
+        }
 
         // Adjust class name if not set but source file was set.
         if (config.getSourceFileName() != null
@@ -159,6 +218,8 @@ public class CommandLine {
                 "     --execute",
                 "     --run          : execute immediately the compiled script.",
                 "                      Default is not to run immediately.",
+                "                      Execute has no effect if in --dry-run mode",
+                "                      WARNING : this is LINUX specific",
                 "",
                 "     -c",
                 "     --class",

@@ -61,6 +61,9 @@ public class Config {
 
     private boolean DEBUGMODE = false;
 
+    static final boolean ISWINDOWS = System.getProperty("os.name")
+            .toLowerCase().startsWith("windows");
+
     /**
      * List of required imports.
      */
@@ -89,6 +92,7 @@ public class Config {
     private static final String TARGETJAVAVERSION = "10";
 
     private boolean DRYRUNFLAG = false;
+    private boolean EXECUTEFLAG = false;
 
     private static String TARGETPROJECTVERSION_CACHED = null;
 
@@ -119,6 +123,15 @@ public class Config {
         this.JavaClassName = className;
         incTargetProjectVersion();
         return this;
+    }
+
+    public Config setExecuteFlag(boolean f) {
+        EXECUTEFLAG = f;
+        return this;
+    }
+
+    public boolean getExecuteFlag() {
+        return EXECUTEFLAG;
     }
 
     /**
@@ -276,13 +289,22 @@ public class Config {
      */
     public String getTargetDir() {
         try {
-            return new File("target/dist-" + getTargetJavaClassName())
+            return new File("target" + FILESEPARATOR + "dist-" + getTargetJavaClassName())
                     .getCanonicalPath();
 
         } catch (IOException ex) {
             throw new SSException("Invalid default path : " + "target/" + getTargetJavaClassName() + "-dist");
 
         }
+    }
+
+    /**
+     * Linux specific.
+     *
+     * @return
+     */
+    public String getTargetRunFile() {
+        return getTargetDir() + FILESEPARATOR + "run.sh";
     }
 
     public String getTargetJavaClassName() {
@@ -382,6 +404,24 @@ public class Config {
             }
         }
 
+    }
+
+    /**
+     * Are we running on windows ?
+     *
+     * @return
+     */
+    public boolean isWindows() {
+        return ISWINDOWS;
+    }
+
+    /**
+     * Are we running on Linux ? Assume non windows means Linux ;-)
+     *
+     * @return
+     */
+    public boolean isLinux() {
+        return !isWindows();
     }
 
     /**
@@ -622,6 +662,7 @@ public class Config {
         sb
                 .append("DEBUGMODE : ").append(DEBUGMODE).append(NL)
                 .append("DRYRUNFLAG : ").append(DRYRUNFLAG).append(NL)
+                .append("EXECUTEFLAG : ").append(EXECUTEFLAG).append(NL)
                 .append("FILESEPARATOR : ").append(FILESEPARATOR).append(NL)
                 .append("JavaClassName : ").append(JavaClassName).append(NL)
                 .append("PARAMETERFILENAME : ").append(PARAMETERFILENAME).append(NL)
@@ -639,6 +680,7 @@ public class Config {
                 .append("getBuiltinsSet : ").append(getBuiltinsSet()).append(NL)
                 .append("getDebugMode : ").append(getDebugMode()).append(NL)
                 .append("getDryRunFlag : ").append(getDryRunFlag()).append(NL)
+                .append("getExecuteFlag : ").append(getExecuteFlag()).append(NL)
                 .append("getFileHeader : ").append(getFileHeader()).append(NL)
                 .append("getImportsDeclarations : ").append(getImportsDeclarations()).append(NL)
                 .append("getInputParameterFileName : ").append(getInputParameterFileName()).append(NL)
@@ -652,6 +694,7 @@ public class Config {
                 .append("getTargetJavaClassPath : ").append(getTargetJavaClassPath()).append(NL)
                 .append("getTargetJavaClassRuntimeDirectory : ").append(getTargetJavaClassRuntimeDirectory()).append(NL)
                 .append("getTargetJavaVersion : ").append(getTargetJavaVersion()).append(NL)
+                .append("getTargetRunFile : ").append(getTargetRunFile()).append(NL)
                 .append("getTargetProjectName : ").append(getTargetProjectName()).append(NL)
                 .append("gettargetProjectVersion : ").append(getTargetProjectVersion()).append(NL)
                 .append("getTargetProjectExecutableJarName : ").append(getTargetProjetExecutableJarName()).append(NL)
