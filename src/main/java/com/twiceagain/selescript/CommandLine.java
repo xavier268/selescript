@@ -85,23 +85,21 @@ public class CommandLine {
             return;
         }
 
-        String rf =  "bash <" + config.getTargetDir() + FILESEPARATOR + "run.sh ";
+        String rf = "bash <" + config.getTargetDir() + FILESEPARATOR + "run.sh";
         System.out.printf("%nPreparing to execute : %s%n", rf);
-        
-        
 
         // Launch a new process ..
         ProcessBuilder builder = new ProcessBuilder()
-                .command("/usr/bin/bash", "-c",  rf)
+                .command("/usr/bin/bash", "-c", rf)
                 .directory(new File(config.getTargetDir())) // current working dir
                 // todo redirect error to log file ...
                 .inheritIO(); // redirect all IO to same as current process
         try {
             Process p = builder.start(); // Launch, and let run ...
-            p.waitFor(); // debug - synchroneous wait ...
-        } catch (IOException | InterruptedException ex) {
+            // p.waitFor(); // debug - synchroneous wait ...
+        } catch (IOException /* | InterruptedException */ ex) {
             throw new SSException("Exception while running process", ex);
-        } 
+        }
 
     }
 

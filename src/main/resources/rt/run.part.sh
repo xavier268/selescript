@@ -21,7 +21,7 @@ echo "Log for the run.sh sript on : " > "$LOG"
 date >> "$LOG"
 
 if [ ! -f target/$JAR ]; then   
-    echo "Compilation is needed."
+    echo "Compilation is needed. Please wait ..."
     echo "Preparing to compile target/$JAR"
     mvn -version >> "$LOG"
     if [ $? -ne 0 ] ; then 
