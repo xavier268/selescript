@@ -12,6 +12,8 @@ import com.twiceagain.selescript.configuration.SSListener;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
+ * StringVal are string values (possibly null). They are stored internally as
+ * valid fragments of java code, e.g., Strings are quoted.
  *
  * @author xavier
  */

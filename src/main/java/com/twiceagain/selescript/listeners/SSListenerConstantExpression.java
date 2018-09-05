@@ -12,6 +12,10 @@ import com.twiceagain.selescript.exceptions.SSNumberFormatException;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
+ * Constant Strings or numbers are stored internally as unquoted strings. Quotes
+ * will be added when litteral Strings or nummbers are promoted to StringVal.
+ * Litteral constant can never be null (null is a StringVal, not a litteral
+ * number or String).
  *
  * @author xavier
  */
