@@ -54,6 +54,26 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     }
 
     /**
+     * Each timer is defined by its initail time and tag. Tag is optional, and
+     * has internal default. Time is a CONSTANT number expressed in millis. Once
+     * timer is above timeout, then the innermost loop is interrupted. Timer is
+     * scoped to the current serach context.
+     *
+     * @param ctx
+     */
+    @Override
+    public void exitTimer(SelescriptParser.TimerContext ctx) {
+
+        String id = AP + "$$default" + AP;
+        if (ctx.ID() != null) {
+            id = ctx.ID().getText();
+        }
+        long t = Long.decode(ctx.constantnumber().getText());
+        prop.put(ctx, "if(timer(" + id + "," + t + ")) break;");
+
+    }
+
+    /**
      * The Go0 loop will lopp once, unconditionnaly.
      *
      * @param ctx

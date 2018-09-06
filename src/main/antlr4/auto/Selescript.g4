@@ -14,7 +14,7 @@ statement
     :   'go'    '{' statement * '}'             # go0   // one-time loop
     |   'go'    stringval '{' statement * '}'   # go    // loop for locators
     |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'timer' constantnumber ';'              # timer  // Time in millis
+    |   'timer' ( ID ':' ) constantnumber ';'   # timer  // Set timer in millis
     |   'emit' param ? ( ',' param )* ';'       # emit   // json format by default
     |   'print' stringval ';'                   # print  //plain text
     |   'click' stringval ';'                   # click  // on the specified xpath
