@@ -7,6 +7,7 @@ package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
 import com.twiceagain.selescript.configuration.Config;
+import static com.twiceagain.selescript.configuration.Config.AP;
 import static com.twiceagain.selescript.configuration.Config.NL;
 import com.twiceagain.selescript.configuration.SSListener;
 import java.util.ArrayList;
@@ -47,7 +48,9 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
             sb
                     .append(puid)
                     .append(".put(")
+                    .append(AP)
                     .append(s1)
+                    .append(AP)
                     .append(",")
                     .append(s2)
                     .append(");")
