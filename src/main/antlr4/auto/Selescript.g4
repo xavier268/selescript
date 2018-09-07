@@ -11,10 +11,8 @@ unit
     ;
 
 statement 
-    :   'go'    '{' statement * '}'             # go0   // one-time loop
-    |   'go'    stringval '{' statement * '}'   # go    // loop for locators
+    :   'go'  param ? ( ',' param )*  '{' statement * '}'    # go   // one-time loop
     |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'timer' ( ID ':' ) constantnumber ';'   # timer  // Set timer in millis
     |   'emit' param ? ( ',' param )* ';'       # emit   // json format by default
     |   'print' stringval ';'                   # print  //plain text
     |   'click' stringval ';'                   # click  // on the specified xpath
@@ -78,7 +76,7 @@ NULL : 'null' ;
 STRING : '"' .* ? '"' ; 
 
 // Numbers are not signed integer ( but unary minus exists )
-NUMBER  : NONZERODIGIT DIGIT* ;
+NUMBER  : '0' | NONZERODIGIT DIGIT* ;
 
 // Acceptable ID starts with a letter
 ID : LETTER DIGITORLETTER * ;

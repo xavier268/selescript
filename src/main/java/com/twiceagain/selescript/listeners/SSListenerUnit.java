@@ -60,8 +60,8 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
         sb
                 .append("/* Actual scrapping happens here */").append(Config.NL)
                 .append("@Override").append(NL)
-                .append("public void scrap(WebDriver wd){ ").append(Config.NL)
-                .append("do { ")
+                .append("public void scrap(){ ").append(Config.NL)
+                .append("do {")
                 .append(NL);
 
         // Add code from statements.
@@ -71,7 +71,7 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
                 });
         // close class definition
         sb
-                .append("} while(false) ; // one time outer loop").append(Config.NL)
+                .append("} while(false) ; // one-off outer loop").append(Config.NL)
                 .append("} // Scrap").append(Config.NL)
                 .append("} // Class definition").append(Config.NL)
                 .append(Config.NL);

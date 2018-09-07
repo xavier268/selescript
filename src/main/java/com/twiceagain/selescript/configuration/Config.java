@@ -69,6 +69,7 @@ public class Config {
      */
     private static final List<String> TARGETIMPORTS = Arrays.asList(
             "org.openqa.selenium.*",
+            "java.util.*",
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );
 
@@ -514,7 +515,7 @@ public class Config {
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
         copyRuntimeJavaClass("Scrapper");
-        copyRuntimeJavaClass("WebElementIterator");
+        copyRuntimeJavaClass("FrameStack");
 
         copyRuntimeJavaClass("BaseVariable");
         getBuiltinsSet().forEach((s) -> {
@@ -794,7 +795,7 @@ public class Config {
                     .append(b)
                     .append("= new ")
                     .append(b)
-                    .append("(wes);")
+                    .append("(fs);")
                     .append(NL);
         });
         return sb.append(NL).toString();

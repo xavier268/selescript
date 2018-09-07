@@ -1,8 +1,5 @@
 package com.twiceagain.selescript.runtime;
 
-import java.util.Deque;
-import org.openqa.selenium.SearchContext;
-
 
 /**
  *
@@ -10,9 +7,11 @@ import org.openqa.selenium.SearchContext;
  */
 public class $millis extends BaseVariable {
 
-    public $millis(Deque<SearchContext> wes) {
-        super(wes);
-    }   
+    public $millis(FrameStack fs) {
+        super(fs);
+    }
+
+    
 
    
     public  String get() {

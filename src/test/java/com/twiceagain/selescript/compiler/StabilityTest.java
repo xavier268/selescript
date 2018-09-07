@@ -7,6 +7,7 @@ package com.twiceagain.selescript.compiler;
 
 import com.twiceagain.selescript.configuration.Config;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -19,6 +20,7 @@ import org.junit.Test;
 public class StabilityTest {
     
     @Test
+    @Ignore
     public void testSignatures() {
     st("demos/demoHelloWorld.ss", "2F3250D51DE2D2E42B8949A9E8CABA9");
     }

@@ -126,7 +126,7 @@ public class GrammarTest {
     public void testConstants() {
         System.out.println("\n********* Constants");
 
-        ok("5;");
+        ok("50;");
         ok("1+2;");
         ok("-(10);");
         ok("-(10 + 2);");
@@ -149,6 +149,10 @@ public class GrammarTest {
         ok("  ! \"aaa\"    ;");
         ok("  \"aaa\"    ;");
         ok("  3 + \"aaa\"    ;");
+        
+        ok("0;");
+        nok("01 ;");
+        nok("00 ;");
 
     }
 

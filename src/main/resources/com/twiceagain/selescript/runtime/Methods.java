@@ -3,7 +3,6 @@ package com.twiceagain.selescript.runtime;
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -101,12 +100,12 @@ abstract public class Methods extends Base {
             // Default xpath is current element.
             if (s == null) {
                 s = ".";
-                if (wes.size() <= 1) { // If we are at the root, default to body.
+                if (fs.size() <= 1) { // If we are at the root, default to body.
                     s = ".//body";
                 }
             }
             // If xpath not found, return null.
-            List<WebElement> lwe = wes.getLast().findElements(By.xpath(s));
+            List<WebElement> lwe = fs.getSc().findElements(By.xpath(s));
             if (lwe.isEmpty()) {
                 return null;
             }
@@ -127,11 +126,10 @@ abstract public class Methods extends Base {
      *
      * Click on the first WebElement that matches the provided xpath.
      *
-     * @param wd
      * @param xpath
      */
-    protected void click(WebDriver wd, String xpath) {
-        click(wd, xpath, false);
+    protected void click(String xpath) {
+        click(xpath, false);
     }
 
     /**
@@ -139,29 +137,28 @@ abstract public class Methods extends Base {
      *
      * Click on the first WebElement that matches the provided xpath.
      *
-     * @param wd
      * @param xpath
      * @param linkShouldGo - Set to true if the link we click is expected to
      * trigger a page reload.
      *
      */
-    protected void click(WebDriver wd, String xpath, boolean linkShouldGo) {
+    protected void click(String xpath, boolean linkShouldGo) {
         if (xpath == null) {
             return;
         }
-        List<WebElement> lwe = wes.getLast().findElements(By.xpath(xpath));
+        List<WebElement> lwe = fs.getSc().findElements(By.xpath(xpath));
         if (lwe.isEmpty()) {
             return;
         }
         lwe.get(0).click();
         if (linkShouldGo) {
             // Wait up to 5 seconds for the page to disappear.
-            (new WebDriverWait(wd, 5)).until(ExpectedConditions.stalenessOf(lwe.get(0)));
+            (new WebDriverWait(fs.getWd(), 5)).until(ExpectedConditions.stalenessOf(lwe.get(0)));
         }
     }
 
-    protected void clickw(WebDriver wd, String xpath) {
-        click(wd, xpath, true);
+    protected void clickw( String xpath) {
+        click(xpath, true);
     }
 
     /*----------------------------------------------------
@@ -209,5 +206,6 @@ abstract public class Methods extends Base {
         }
         return s1 + s2;
     }
-
+    
+   
 }

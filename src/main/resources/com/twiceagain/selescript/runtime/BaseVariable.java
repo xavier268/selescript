@@ -16,10 +16,10 @@ import org.openqa.selenium.WebDriver;
  */
 public  class  BaseVariable {
     
-    public  Deque<SearchContext> wes ;
+    public  FrameStack fs ;
 
-    protected   BaseVariable(Deque<SearchContext> wes) {
-        this.wes = wes;
+    protected   BaseVariable(FrameStack fs) {
+        this.fs = fs;
     }       
     
     /**
@@ -27,10 +27,9 @@ public  class  BaseVariable {
      * @return 
      */
     protected WebDriver getWd() {
-        if(wes == null || wes.isEmpty()) throw new RuntimeException(
-                "Unexpected null or empty wes. Cannot dind current webdriver.");
-        return (WebDriver) wes.getFirst();
-    
+        if(fs == null ) throw new RuntimeException(
+                "Unexpected null  frameStack. Cannot find current webdriver.");
+        return (WebDriver) fs.getWd();    
     }   
     
 }

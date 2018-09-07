@@ -1,10 +1,7 @@
 package com.twiceagain.selescript.runtime;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -22,11 +19,8 @@ abstract public class Base implements Scrapper {
      * Symbol table.
      */
     final protected Map<String, String> symtab = new HashMap<>();
-    /**
-     * Stack(deque) holding current search context at the top, and wd at the
-     * bottom.
-     */
-    final protected Deque<SearchContext> wes = new ArrayDeque<>();
+
+    final protected FrameStack fs = new FrameStack();
 
     /**
      * Shared logger for all runtime classes.
@@ -38,19 +32,19 @@ abstract public class Base implements Scrapper {
      * static method from the final scrapper class.
      */
     public void main() {
-        
-        
-        final WebDriver wd = new RemoteWebDriver(DesiredCapabilities.firefox());
-         try {
-            wes.clear();
-            // Add the webdriver at the start of the wes deque.
-            wes.add(wd);
-            scrap(wd);
+
+        final WebDriver w = new RemoteWebDriver(DesiredCapabilities.firefox());
+        try {
+            // Add the webdriver to the FrameStack
+            fs.setWd(w);
+            scrap();
         } catch (Exception ex) {
             LOG.info(ex.getMessage());
         } finally {
-            wes.clear();
-            wd.quit();
+            if (fs.getWd() != null) {
+                fs.getWd().quit();
+            }
+
         }
     }
 

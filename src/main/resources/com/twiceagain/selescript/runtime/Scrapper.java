@@ -14,8 +14,7 @@ import org.openqa.selenium.WebDriver;
 public interface Scrapper {
     
     /**
-     * Launch the scrapping.
-     * @param wd
+     * Launch the scrapping.     * 
      */
-    public void scrap(WebDriver wd);
+    public void scrap();
 }
