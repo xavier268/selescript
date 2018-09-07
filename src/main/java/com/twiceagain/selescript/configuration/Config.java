@@ -7,6 +7,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
@@ -23,8 +25,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Configuration information and various tools.
@@ -66,11 +66,13 @@ public class Config {
 
     static final boolean ISWINDOWS = System.getProperty("os.name")
             .toLowerCase().startsWith("windows");
+    private final static String GRIDURL_DEFAULT = "http://localhost:4444/wd/hub";
+    private URL gridUrl;
 
     /**
      * List of required imports.
      */
-    private static final List<String> TARGETIMPORTS = Arrays.asList(            
+    private static final List<String> TARGETIMPORTS = Arrays.asList(
             "java.util.*",
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );
@@ -131,6 +133,29 @@ public class Config {
     public Config setExecuteFlag(boolean f) {
         EXECUTEFLAG = f;
         return this;
+    }
+
+    public Config setGridUrl(String url) {
+        try {
+            this.gridUrl = new URL(url);
+        } catch (MalformedURLException ex) {
+            throw new SSConfigurationException(
+                    "Malformed url : " + url
+                    + "It should look lie : " + GRIDURL_DEFAULT,
+                    ex);
+        }
+        return this;
+    }
+
+    public URL getGridUrl() {
+        if (gridUrl == null) {
+            try {
+                return new URL(GRIDURL_DEFAULT);
+            } catch (MalformedURLException ex) {
+                throw new SSConfigurationException("Could not convert GRIDURL_DEFAULT to URL ?!", ex);
+            }
+        }
+        return gridUrl;
     }
 
     public boolean getExecuteFlag() {
@@ -361,7 +386,7 @@ public class Config {
         Path to = Paths.get(getTargetDir(), target);
         Path from = Paths.get(source);
         try {
-            Files.copy(from, to,StandardCopyOption.REPLACE_EXISTING );
+            Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             throw new SSConfigurationException(
                     "Could not copy from " + from.toAbsolutePath()
@@ -685,6 +710,8 @@ public class Config {
         sb
                 .append("DEBUGMODE : ").append(DEBUGMODE).append(NL)
                 .append("DRYRUNFLAG : ").append(DRYRUNFLAG).append(NL)
+                .append("GRIDURL_DEFAULT : ").append(GRIDURL_DEFAULT).append(NL)
+                .append("gridUrl : ").append(gridUrl).append(NL)
                 .append("EXECUTEFLAG : ").append(EXECUTEFLAG).append(NL)
                 .append("FILESEPARATOR : ").append(FILESEPARATOR).append(NL)
                 .append("JavaClassName : ").append(JavaClassName).append(NL)
@@ -701,6 +728,7 @@ public class Config {
                 .append("TargetPackage : ").append(TargetPackage).append(NL)
                 .append("uid : ").append(uid).append(NL)
                 .append("getBuiltinsSet : ").append(getBuiltinsSet()).append(NL)
+                .append("getGridUrl : ").append(getGridUrl()).append(NL)
                 .append("getDebugMode : ").append(getDebugMode()).append(NL)
                 .append("getDryRunFlag : ").append(getDryRunFlag()).append(NL)
                 .append("getExecuteFlag : ").append(getExecuteFlag()).append(NL)
@@ -755,6 +783,9 @@ public class Config {
                 .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(NL)
                 .append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(NL)
                 .append("private final static Class CLASS = ").append(getTargetJavaClassName()).append(".class;").append(NL)
+                .append(NL)
+                .append("@Override").append(NL)
+                .append("public String getGridUrl() { return ").append(AP).append(getGridUrl()).append(AP).append(";}").append(NL)
                 .append(NL)
                 .toString();
 

@@ -132,6 +132,16 @@ public class CommandLine {
                     break;
                 }
 
+                case "-g":
+                case "--grid":
+                case "--grid-url":
+                case "--gridurl": {
+                    i++;
+                    String u = args[i];
+                    config.setGridUrl(u);
+                    break;
+                }
+
                 case "-v":
                 case "--version": {
                     printVersionInfo(config);
@@ -215,6 +225,12 @@ public class CommandLine {
                 "                      Default is not to run immediately.",
                 "                      Execute has no effect if in --dry-run mode",
                 "                      WARNING : this is LINUX specific",
+                "",
+                "     -g",
+                "     --grid",
+                "     --grid-url",
+                "     --gridurl      : specify the full url to the grid.",
+                "                      Default : http://localhost:4444/wd/hub",
                 "",
                 "     -c",
                 "     --class",

@@ -15,4 +15,6 @@ public interface Scrapper {
      * Launch the scrapping.     * 
      */
     public void scrap();
+    
+    public String getGridUrl();
 }

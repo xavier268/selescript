@@ -1,5 +1,6 @@
 package com.twiceagain.selescript.runtime;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +27,9 @@ abstract public class Base implements Scrapper {
      * Shared logger for all runtime classes.
      */
     static final Logger LOG = LoggerFactory.getLogger("Selescript runtime");
+    
+
+ 
 
     /**
      * The generix main method. It is non static, and will be called by the
@@ -33,8 +37,10 @@ abstract public class Base implements Scrapper {
      */
     public void main() {
 
-        final WebDriver w = new RemoteWebDriver(DesiredCapabilities.firefox());
+        final WebDriver w ;
         try {
+            w = new RemoteWebDriver(new URL(getGridUrl()), DesiredCapabilities.firefox());
+       
             // Add the webdriver to the FrameStack
             fs.setWd(w);
             scrap();
