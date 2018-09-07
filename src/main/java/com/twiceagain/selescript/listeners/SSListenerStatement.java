@@ -43,14 +43,12 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                 .append(NL);
 
         ctx.param().forEach((p) -> {
-            String s1 = (p.ID() == null) ? null : p.ID().getText();
+            String s1 = (p.ID() == null) ? null : AP + p.ID().getText() + AP;
             String s2 = prop.get(p.stringval()) ;
             sb
                     .append(puid)
                     .append(".put(")
-                    .append(AP)
                     .append(s1)
-                    .append(AP)
                     .append(",")
                     .append(s2)
                     .append(");")
@@ -69,7 +67,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
             sb.append(prop.get(s));
         });
         sb
-                .append("};")
+                .append("}")
                 .append(NL)
                 .append("fs.cleanup();")
                 .append(NL);

@@ -122,7 +122,9 @@ public class FrameStack {
                     break;
 
                 default:
-                    throw new RuntimeException("Unregognized command loop parameter " + k + " in " + params);
+                    if (k != null) {
+                        throw new RuntimeException("Unregognized command loop parameter " + k + " in " + params);
+                    }
 
             }
         }

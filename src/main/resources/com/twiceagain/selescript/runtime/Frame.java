@@ -112,7 +112,7 @@ class Frame {
         if (shouldStop) {
             return true;
         }
-        if (maxCount != 0 && count > maxCount) {
+        if (maxCount != 0 && count >= maxCount) {
             return true;
         }
         if (maxMillis != 0 && System.currentTimeMillis() > startMillis + maxMillis) {
