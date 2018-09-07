@@ -6,6 +6,7 @@ print "Opened page : " + $url ;
 
 print "title : " + $title ;
 print "$count = " + $count ;
+print "elapsed time = " + $elapsed ;
 
 
 go ".//body" {
@@ -18,6 +19,7 @@ go ".//body" {
         print "In the div loop" ;
         print "div count = "+$count ;
         print "time = " + $millis ;
+        print "elapsed time = " + $elapsed ;
         print "Getting the text of the current element, filtering on existing text" ;
         @ == "" ; /* filter on empty text */
         print @ ;

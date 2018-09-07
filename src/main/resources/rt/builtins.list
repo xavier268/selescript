@@ -7,4 +7,5 @@ $url                Get the current url, or set it (ie, go to the selected page)
 
 $title   READONLY   Get the title of the page. Setting it has no effect;
 $millis  READONLY   Time in milliseconds since 1/1/1970. Setting it has no effect.
+$elapsed READONLY   Elapsed time in millis.
 $count   READONLY   Counter inside a running loop, or 0 if outside.
