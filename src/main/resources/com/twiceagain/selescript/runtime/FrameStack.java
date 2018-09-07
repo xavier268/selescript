@@ -48,12 +48,23 @@ public class FrameStack {
      * of loops, ms for millis, s for seconds, h for hour, m for minutes ...
      */
     public void prepare(Map<String, String> params) {
-        Frame f = new Frame();
+        
+        Frame f;
+        if (frames.isEmpty()) {
+            f = new Frame(null);
+        } else {
+            f = new Frame(frames.getLast());
+        }
+        
+        
         for (String k : params.keySet()) {
-            if (k == null) {
-                k = "x";
-            }
             long l;
+            // Null key means as xpath.
+            if (k == null) {
+                f.setXpath(params.get(k));
+                continue;
+            }
+
             switch (k) {
                 case "x":
                 case "xpath":
@@ -149,9 +160,8 @@ public class FrameStack {
      * Frame contains all the data and context specific to a loop. Set maxMillis
      * or maxCount to 0 for unlimited loops.
      */
-    protected static class Frame {
+    protected class Frame {
 
-        private SearchContext sc;
         private String xpath;
         private final long startMillis = System.currentTimeMillis();
         private long maxMillis = 0L;
@@ -161,6 +171,11 @@ public class FrameStack {
         private final Set<WebElement> visited = new HashSet<>();
         private final Deque<WebElement> toVisit = new ArrayDeque<>();
         private WebElement current; // Last WebElement delivered by next().
+        private final Frame previous;
+
+        public Frame(Frame previous) {
+            this.previous = previous;
+        }
 
         /**
          * You set it only once. Further setting are ignored. Unset means 0.
@@ -199,6 +214,21 @@ public class FrameStack {
 
         public long getCount() {
             return count;
+        }
+
+        /**
+         * Return the serach context used internally by this Frame. It is the
+         * current WebElement of the enclosing frame, or the WebDriver if no
+         * enclosing frame.
+         *
+         * @return
+         */
+        public SearchContext getSc() {            
+            if (previous == null) {
+                return getWd();
+            } else {
+                return previous.getCurrent();
+            }
         }
 
         /**
@@ -247,7 +277,7 @@ public class FrameStack {
          * already got.
          */
         void refresh() {
-            sc.findElements(By.xpath(xpath)).forEach(
+            getSc().findElements(By.xpath(xpath)).forEach(
                     (WebElement w) -> {
                         if (!visited.contains(w)) {
                             toVisit.add(w);

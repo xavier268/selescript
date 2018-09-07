@@ -100,7 +100,7 @@ abstract public class Methods extends Base {
             // Default xpath is current element.
             if (s == null) {
                 s = ".";
-                if (fs.size() <= 1) { // If we are at the root, default to body.
+                if (fs.size() <= 1) { // If we are at the root, default is body.
                     s = ".//body";
                 }
             }
