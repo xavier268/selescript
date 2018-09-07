@@ -123,8 +123,13 @@ public class FrameStack {
     public boolean loop() {
         if (frames.getLast().shouldStop()) {
             return false;
+        }        
+        if(frames.getLast().hasNext()) {
+            frames.getLast().next();
+            return true;
+        } else {
+            return false;
         }
-        return frames.getLast().hasNext();
     }
 
     /**
