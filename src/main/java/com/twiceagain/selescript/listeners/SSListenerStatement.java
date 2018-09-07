@@ -25,28 +25,27 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         super(config, prop);
     }
 
-    @Override
-    public void exitGo(SelescriptParser.GoContext ctx) {
-
-        String uid = config.createUniqueId();
-        String puid = "p_" + uid;
-        String luid = "l_" + uid;
-
+    /**
+     * Creates a fragment of code that initialize a hashMap with the provided
+     * unique map id.
+     *
+     * @param uniqueMapId
+     * @param params
+     * @return
+     */
+    protected String parseParams(String uniqueMapId, List<SelescriptParser.ParamContext> params) {
         StringBuilder sb = new StringBuilder();
-
         sb
-                .append("/* loop */")
-                .append(NL)
                 .append("Map<String,String> ")
-                .append(puid)
+                .append(uniqueMapId)
                 .append("= new HashMap<>();")
                 .append(NL);
 
-        ctx.param().forEach((p) -> {
+        params.forEach((SelescriptParser.ParamContext p) -> {
             String s1 = (p.ID() == null) ? null : AP + p.ID().getText() + AP;
-            String s2 = prop.get(p.stringval()) ;
+            String s2 = prop.get(p.stringval());
             sb
-                    .append(puid)
+                    .append(uniqueMapId)
                     .append(".put(")
                     .append(s1)
                     .append(",")
@@ -54,8 +53,23 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                     .append(");")
                     .append(NL);
         });
+        return sb.toString();
+    }
+
+    @Override
+    public void exitGo(SelescriptParser.GoContext ctx) {
+
+        String uid = config.createUniqueId();
+        String puid = "p_" + uid;
+
+        StringBuilder sb = new StringBuilder();
 
         sb
+                .append("/* loop */")
+                .append(NL)
+                // Declare parameter map
+                .append(parseParams(puid, ctx.param()))
+                // start loop
                 .append("fs.prepare(")
                 .append(puid)
                 .append(");")
@@ -71,7 +85,6 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                 .append(NL)
                 .append("fs.cleanup();")
                 .append(NL);
-                
 
         prop.put(ctx, sb.toString());
 

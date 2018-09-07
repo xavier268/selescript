@@ -70,8 +70,7 @@ public class Config {
     /**
      * List of required imports.
      */
-    private static final List<String> TARGETIMPORTS = Arrays.asList(
-            "org.openqa.selenium.*",
+    private static final List<String> TARGETIMPORTS = Arrays.asList(            
             "java.util.*",
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );

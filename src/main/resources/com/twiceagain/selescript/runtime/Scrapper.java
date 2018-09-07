@@ -5,8 +5,6 @@
  */
 package com.twiceagain.selescript.runtime;
 
-import org.openqa.selenium.WebDriver;
-
 /**
  * Base interface for all scrappers.
  * @author xavier

@@ -1,7 +1,5 @@
 package com.twiceagain.selescript.runtime;
 
-import java.util.Deque;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 /*
@@ -9,27 +7,30 @@ import org.openqa.selenium.WebDriver;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  * Base class for all builtin-variables;
+ *
  * @author xavier
  */
-public  class  BaseVariable {
-    
-    public  FrameStack fs ;
+public class BaseVariable {
 
-    protected   BaseVariable(FrameStack fs) {
+    public FrameStack fs;
+
+    protected BaseVariable(FrameStack fs) {
         this.fs = fs;
-    }       
-    
+    }
+
     /**
      * Get the webdriver as the first element in the wes deque.
-     * @return 
+     *
+     * @return
      */
     protected WebDriver getWd() {
-        if(fs == null ) throw new RuntimeException(
-                "Unexpected null  frameStack. Cannot find current webdriver.");
-        return (WebDriver) fs.getWd();    
-    }   
-    
+        if (fs == null) {
+            throw new RuntimeException(
+                    "Unexpected null  frameStack. Cannot find current webdriver.");
+        }
+        return (WebDriver) fs.getWd();
+    }
+
 }

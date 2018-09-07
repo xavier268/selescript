@@ -14,8 +14,8 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 /**
- * Frame contains all the data and context specific to a loop. Set maxMillis
- * or maxCount to 0 for unlimited loops.
+ * Frame contains all the data and context specific to a loop. Set maxMillis or
+ * maxCount to 0 for unlimited loops.
  */
 class Frame {
 
@@ -31,7 +31,7 @@ class Frame {
     private final Frame previous;
     private final FrameStack parent;
 
-    public Frame(Frame previous, FrameStack parent) {        
+    public Frame(Frame previous, FrameStack parent) {
         this.previous = previous;
         this.parent = parent;
     }
@@ -115,10 +115,7 @@ class Frame {
         if (maxCount != 0 && count >= maxCount) {
             return true;
         }
-        if (maxMillis != 0 && System.currentTimeMillis() > startMillis + maxMillis) {
-            return true;
-        }
-        return false;
+        return (maxMillis != 0 && System.currentTimeMillis() > startMillis + maxMillis);
     }
 
     /**
@@ -132,8 +129,8 @@ class Frame {
     }
 
     /**
-     * Updates the list of WebElements to visit, excluding the ones we
-     * already got.
+     * Updates the list of WebElements to visit, excluding the ones we already
+     * got.
      */
     void refresh() {
         getSc().findElements(By.xpath(xpath)).forEach((WebElement w) -> {
@@ -171,5 +168,5 @@ class Frame {
         current = w;
         return w;
     }
-    
+
 }
