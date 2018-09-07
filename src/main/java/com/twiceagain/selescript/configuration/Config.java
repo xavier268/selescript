@@ -13,6 +13,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Configuration information and various tools.
@@ -88,7 +91,7 @@ public class Config {
      */
     private transient long uid = 0L;
 
-    private static final String SELESCRIPTVERSION = "0.4.1";
+    private static final String SELESCRIPTVERSION = "0.5.0";
     private static final String SELENIUMVERSION = "3.14.0";
     private static final String TARGETJAVAVERSION = "10";
 
@@ -354,6 +357,19 @@ public class Config {
                         getTargetJavaClassName() + ".java");
     }
 
+    protected void copyFromSourceDirToTargetDir(String source, String target) {
+        new File(getTargetDir()).mkdirs();
+        Path to = Paths.get(getTargetDir(), target);
+        Path from = Paths.get(source);
+        try {
+            Files.copy(from, to,StandardCopyOption.REPLACE_EXISTING );
+        } catch (IOException ex) {
+            throw new SSConfigurationException(
+                    "Could not copy from " + from.toAbsolutePath()
+                    + " to " + to.toAbsolutePath(), ex);
+        }
+    }
+
     /**
      * Copy the file from the ressources to the target directory.
      *
@@ -505,17 +521,20 @@ public class Config {
     protected void createAllRuntimeSupportFiles() {
 
         // Copy relevant resources
-        copyFromResourceToTargetDir("rt/selgrid.yaml", "selgrid.yaml");
-        copyFromResourceToTargetDir("rt/selgrid.start.sh", "selgrid.start.sh");
-        copyFromResourceToTargetDir("rt/selgrid.stop.sh", "selgrid.stop.sh");
         copyFromResourceToTargetDir("rt/README.txt", "README.txt");
         copyFromResourceToTargetDir("rt/LICENSE.txt", "LICENSE.txt");
+
+        // Copy useful scripts
+        copyFromSourceDirToTargetDir("selgrid.yaml", "selgrid.yaml");
+        copyFromSourceDirToTargetDir("selgrid.start.sh", "selgrid.start.sh");
+        copyFromSourceDirToTargetDir("selgrid.stop.sh", "selgrid.stop.sh");
 
         // Copy runtime librairy classes 
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("FrameStack");
+        copyRuntimeJavaClass("Frame");
 
         copyRuntimeJavaClass("BaseVariable");
         getBuiltinsSet().forEach((s) -> {
