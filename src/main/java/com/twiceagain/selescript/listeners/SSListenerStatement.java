@@ -26,52 +26,37 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     }
 
     /**
-     * Creates a fragment of code that initialize a hashMap with the provided
-     * unique map id.
+     * Creates a fragment of code with comma separated values, alternating
+     * between key, the value. Use when order matters, or when duplication is
+     * encourraged.
      *
-     * @param uniqueMapId
      * @param params
      * @return
      */
-    protected String parseParams(String uniqueMapId, List<SelescriptParser.ParamContext> params) {
-        StringBuilder sb = new StringBuilder();
-        sb
-                .append("Map<String,String> ")
-                .append(uniqueMapId)
-                .append("= new HashMap<>();")
-                .append(NL);
-
+    protected String parseParams(List<SelescriptParser.ParamContext> params) {
+        List<String> sl = new ArrayList<>();
         params.forEach((SelescriptParser.ParamContext p) -> {
             String s1 = (p.ID() == null) ? null : AP + p.ID().getText() + AP;
             String s2 = prop.get(p.stringval());
-            sb
-                    .append(uniqueMapId)
-                    .append(".put(")
-                    .append(s1)
-                    .append(",")
-                    .append(s2)
-                    .append(");")
-                    .append(NL);
+            sl.add(s1);
+            sl.add(s2);
         });
-        return sb.toString();
+        return String.join(",", sl);
     }
 
     @Override
     public void exitGo(SelescriptParser.GoContext ctx) {
 
         String uid = config.createUniqueId();
-        String puid = "p_" + uid;
 
         StringBuilder sb = new StringBuilder();
 
         sb
                 .append("/* loop */")
                 .append(NL)
-                // Declare parameter map
-                .append(parseParams(puid, ctx.param()))
                 // start loop
                 .append("fs.prepare(")
-                .append(puid)
+                .append(parseParams(ctx.param()))
                 .append(");")
                 .append(NL)
                 .append("while(fs.loop()){")
@@ -102,20 +87,8 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitEmit(SelescriptParser.EmitContext ctx) {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("emit(");
-        List<String> ls = new ArrayList<>();
-        ctx.param().forEach((pc) -> {
-            ls.add(prop.get(pc));
-        });
-        sb
-                .append(String.join(",", ls))
-                .append(" );")
-                .append(NL);
-
-        prop.put(ctx, sb.toString());
+        String s = "emit(" + parseParams(ctx.param()) + ")" + NL;
+        prop.put(ctx, s);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.twiceagain.selescript.runtime;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -38,13 +39,27 @@ public class FrameStack {
         return frames.size();
     }
 
+/**
+     * Prepare for a new loop, passing a list of alternating key, values.
+     *
+     * @param keyval The possible keys are : null or x for xpath, count for nbr
+     * of loops, ms for millis, s for seconds, h for hour, m for minutes ...
+     */
+    public void prepare(String... keyval) {
+        Map<String, String> h = new HashMap<>();
+        for (int i = 0; i < keyval.length; i += 2) {
+            h.put(keyval[i], keyval[i + 1]);
+        }
+        prepare(h);
+    }
+
     /**
-     * Prepare for a new loop.
+     * Prepare for a new loop, passing a map of options.
      *
      * @param params The possible keys are : null or x for xpath, count for nbr
      * of loops, ms for millis, s for seconds, h for hour, m for minutes ...
      */
-    public void prepare(Map<String, String> params) {
+    protected void prepare(Map<String, String> params) {
 
         Frame f;
         if (frames.isEmpty()) {
@@ -119,9 +134,7 @@ public class FrameStack {
                     break;
 
                 default:
-                    if (k != null) {
-                        throw new RuntimeException("Unregognized command loop parameter " + k + " in " + params);
-                    }
+                    throw new RuntimeException("Unregognized command loop parameter " + k + " in " + params);
 
             }
         }
