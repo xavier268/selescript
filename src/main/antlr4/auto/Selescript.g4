@@ -14,7 +14,7 @@ statement
     :   'go'  param ? ( ',' param )*  '{' statement * '}'    # go   // one-time loop
     |   ( ID | BIID ) '=' stringval ';'         # assign
     |   'emit' param ? ( ',' param )* ';'       # emit   // json format by default
-    |   'print' stringval ';'                   # print  //plain text
+    |   'print' stringval ? ';'                 # print  //plain text
     |   'click' stringval ';'                   # click  // on the specified xpath
     |   'clickw' stringval ';'                  # clickw // click and wait for page to start reloading
     |   stringval ';'                           # check  // break/continue on null value

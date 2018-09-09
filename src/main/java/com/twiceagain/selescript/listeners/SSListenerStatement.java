@@ -87,7 +87,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitEmit(SelescriptParser.EmitContext ctx) {
-        String s = "emit(" + parseParams(ctx.param()) + ")" + NL;
+        String s = "emit(" + parseParams(ctx.param()) + ");" + NL;
         prop.put(ctx, s);
     }
 
@@ -122,7 +122,11 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitPrint(SelescriptParser.PrintContext ctx) {
-        prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval()) + ");" + NL);
+        if (ctx.stringval() == null) {
+            prop.put(ctx, "System.out.println();" + NL);
+        } else {
+            prop.put(ctx, "System.out.println(" + prop.get(ctx.stringval()) + ");" + NL);
+        }
     }
 
 }

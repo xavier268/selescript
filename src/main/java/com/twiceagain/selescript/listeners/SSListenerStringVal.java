@@ -22,8 +22,6 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
     public SSListenerStringVal(Config config, ParseTreeProperty<String> prop) {
         super(config, prop);
     }
-    
-    
 
     @Override
     public void exitAt(SelescriptParser.AtContext ctx) {
@@ -129,7 +127,9 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
 
     @Override
     public void exitNull(SelescriptParser.NullContext ctx) {
-        prop.put(ctx, null);
+        // Use a null string constant, otherwise complier will complain 
+        // in situation such as println(null)
+        prop.put(ctx, "$$NULL");
     }
 
 }

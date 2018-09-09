@@ -92,7 +92,7 @@ public class Config {
      */
     private transient long uid = 0L;
 
-    private static final String SELESCRIPTVERSION = "0.5.0";
+    private static final String SELESCRIPTVERSION = "0.5.1";
     private static final String SELENIUMVERSION = "3.14.0";
     private static final String TARGETJAVAVERSION = "10";
 
@@ -786,6 +786,8 @@ public class Config {
                 .append(NL)
                 .append("@Override").append(NL)
                 .append("public String getGridUrl() { return ").append(AP).append(getGridUrl()).append(AP).append(";}").append(NL)
+                .append(NL)
+                .append("public static final String $$NULL = null;")
                 .append(NL)
                 .toString();
 
