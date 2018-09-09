@@ -44,6 +44,19 @@ services:
       - "4444:4444"
     environment:
       GRID_MAX_SESSION: 8
+      
+  mongo:
+    image: library/mongo:3.6
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongodata:/data/db"
+     
+     
+volumes:
+    mongodata:
+      
+      
 
 
 
