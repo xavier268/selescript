@@ -173,6 +173,14 @@ public class CommandLine {
                     System.exit(0);
                 }
 
+                case "--firefox":
+                    config.setFirefox();
+                    break;
+                    
+                case "--chrome":
+                    config.setChrome();
+                    break;
+
                 default: {
                     System.out.printf("%n : Unrecognized command line option : %s%n", command);
                     printHelp(config);
@@ -231,6 +239,9 @@ public class CommandLine {
                 "     --grid-url",
                 "     --gridurl      : specify the full url to the grid.",
                 "                      Default : http://localhost:4444/wd/hub",
+                "",
+                "      --firefox",
+                "      --chrome      : select browser type. Default is firefox.",
                 "",
                 "     -c",
                 "     --class",

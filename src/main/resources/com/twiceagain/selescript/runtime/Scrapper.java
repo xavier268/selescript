@@ -5,6 +5,8 @@
  */
 package com.twiceagain.selescript.runtime;
 
+import org.openqa.selenium.Capabilities;
+
 /**
  * Base interface for all scrappers.
  * @author xavier
@@ -17,4 +19,5 @@ public interface Scrapper {
     public void scrap();
     
     public String getGridUrl();
+    public Capabilities getBrowserCapabilities();
 }

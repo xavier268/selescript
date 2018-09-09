@@ -182,13 +182,13 @@ public final class SSCompiler {
     /**
      * Retun a hash of the generated code, excluding the variable properties
      * (time dependant, ...) so that this value is expected to stay the same
-     * accross successive compilations. in practice, anything happening BEFORE
-     * the first occurence of @Override is ignored.
+     * accross successive compilations. In practice, anything happening BEFORE
+     * the first occurence of 'public void scrap' is ignored.
      *
      * @return
      */
     public String getCodeHash() {
-        String c = getCode().split("@Override", 2)[1];
+        String c = getCode().split("public void scrap()", 2)[1];
         return config.getMd5Hash(c);
     }
 

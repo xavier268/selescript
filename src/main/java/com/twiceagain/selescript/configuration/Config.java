@@ -68,12 +68,17 @@ public class Config {
             .toLowerCase().startsWith("windows");
     private final static String GRIDURL_DEFAULT = "http://localhost:4444/wd/hub";
     private URL gridUrl;
+    
+    private String  BROWSER = "firefox";
 
     /**
      * List of required imports.
      */
     private static final List<String> TARGETIMPORTS = Arrays.asList(
             "java.util.*",
+            "org.openqa.selenium.*",
+            "org.openqa.selenium.firefox.*",
+            "org.openqa.selenium.chrome.*",            
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );
 
@@ -92,7 +97,7 @@ public class Config {
      */
     private transient long uid = 0L;
 
-    private static final String SELESCRIPTVERSION = "0.5.1";
+    private static final String SELESCRIPTVERSION = "0.5.2";
     private static final String SELENIUMVERSION = "3.14.0";
     private static final String TARGETJAVAVERSION = "10";
 
@@ -709,6 +714,7 @@ public class Config {
         StringBuilder sb = new StringBuilder();
         sb
                 .append("DEBUGMODE : ").append(DEBUGMODE).append(NL)
+                .append("BRWSER : ").append(BROWSER).append(NL)
                 .append("DRYRUNFLAG : ").append(DRYRUNFLAG).append(NL)
                 .append("GRIDURL_DEFAULT : ").append(GRIDURL_DEFAULT).append(NL)
                 .append("gridUrl : ").append(gridUrl).append(NL)
@@ -787,6 +793,7 @@ public class Config {
                 .append("@Override").append(NL)
                 .append("public String getGridUrl() { return ").append(AP).append(getGridUrl()).append(AP).append(";}").append(NL)
                 .append(NL)
+                .append(getBrowserCapabilitiesDeclaration()).append(NL)
                 .append("public static final String $$NULL = null;")
                 .append(NL)
                 .toString();
@@ -850,6 +857,29 @@ public class Config {
                     .append(NL);
         });
         return sb.append(NL).toString();
+    }
+    
+    public String getBrowserCapabilitiesDeclaration() {
+        StringBuilder sb = new StringBuilder("@Override")
+                .append(NL)
+                .append("public Capabilities getBrowserCapabilities() { return ");
+        switch(BROWSER) {
+            case "firefox" : sb.append("new FirefoxOptions()");break;
+            case "chrome" : sb.append("new ChromeOptions()"); break;
+            default : throw new SSConfigurationException("Unknown browser type : " + BROWSER);
+        }
+        sb.append(" ; }").append(NL);
+        return sb.toString();
+    }
+    
+    public Config setFirefox() {
+        BROWSER = "firefox";
+        return this;
+    }
+    
+    public Config setChrome() {
+        BROWSER = "chrome";
+        return this;
     }
 
 }

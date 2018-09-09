@@ -20,9 +20,12 @@ import org.junit.Test;
 public class StabilityTest {
     
     @Test
-    @Ignore
+    //@Ignore
     public void testSignatures() {
-    st("demos/demoHelloWorld.ss", "2F3250D51DE2D2E42B8949A9E8CABA9");
+    st("demos/demoHelloWorld.ss", "6A95E688F7D9FEBCF55EA5065D220AA");
+    st("demos/demoGoogle.ss", "4E803A242FD6D69711D1617994BE9B4");
+    st("demos/demoLoop.ss", "49A54033DE2851DD4A788658AB1E3");
+    st("demos/demoArithmetics.ss", "63EE25252C63CB7C3FBB8AC91825D5C");
     }
 
     
