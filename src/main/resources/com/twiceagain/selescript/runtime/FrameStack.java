@@ -39,7 +39,7 @@ public class FrameStack {
         return frames.size();
     }
 
-/**
+    /**
      * Prepare for a new loop, passing a list of alternating key, values.
      *
      * @param keyval The possible keys are : null or x for xpath, count for nbr
@@ -82,6 +82,8 @@ public class FrameStack {
                     f.setXpath(params.get(k));
                     break;
                 case "ms":
+                case "ml":
+                case "mls":
                 case "millis":
                 case "millisecond":
                 case "milliseconds":
@@ -101,8 +103,10 @@ public class FrameStack {
                     l = 1000 * Long.decode(params.get(k));
                     f.setMaxMillis(l + f.getMaxMillis());
                     break;
-                case "m":
+                case "mn":
+                case "mns":
                 case "min":
+                case "mins":
                 case "minute":
                 case "minutes":
                     if (params.get(k) == null) {
@@ -142,18 +146,26 @@ public class FrameStack {
     }
 
     /**
-     * Retrieve the next element, if available.
+     * Retrieve the next element, if available. If xpath is null, loop for ever,
+     * until time out or count limit is reached.
      *
      * @return false if we shouldStop.
      */
     public boolean loop() {
+        frames.getLast().incrementCount();
         if (frames.getLast().shouldStop()) {
             return false;
         }
+        // Loop forever if no xpath specified.
+        if (frames.getLast().getXpath() == null) {            
+            return true;
+        }
+        // Loop around xpath generated elements.
         if (frames.getLast().hasNext()) {
             frames.getLast().next();
             return true;
         } else {
+            // xpath was specified, but thare are no (more) elements.
             return false;
         }
     }

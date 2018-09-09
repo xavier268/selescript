@@ -116,7 +116,7 @@ abstract public class Methods extends Base {
                 return lwe.get(0).getAttribute(attr);
             }
         } catch (Exception ex) {
-            LOG.info("Error while dereferencing xpath : " + s + " with attribute " + attr, ex);
+            //LOG.info("Error while dereferencing xpath : " + s + " with attribute " + attr, ex);
             return null;
         }
     }

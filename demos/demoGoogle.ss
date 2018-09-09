@@ -14,8 +14,8 @@ go ".//body" {
     print "Getting the text of the current element" ;
     print @ ;    
     print "Body count = " + $count ;   
-    print "Now looking for first 20 divs" ;
-    go ".//div", c:10 {        
+    print "Now looking for first 6 divs" ;
+    go ".//div", c:6 {        
         print "In the div loop" ;
         print "div count = "+$count ;
         print "time = " + $millis ;
@@ -30,14 +30,8 @@ go ".//body" {
     go "//input" {
         print "Input value : " + @ value: + " , name : " + @ name: ;
         }
-    print ;
-    print "Looking for input, only those with a value other than empty string" ;
-    // It seems attributes name or value are never null.
-    go "//input" {
-        // Assume neither null nor empty string
-        (@ value : | "") != "" ;
-        print "Input value : " + @ value: + " , name : " + @ name: ;
-        }
+
+
     print ;
     print "Looking for input, only those with a value other than empty string" ;
     // It seems attributes name or value are never null.
@@ -58,11 +52,11 @@ go ".//body" {
         }
 
     print ;
-    print "Looking for input where there is no maxlength attribute" ;
+    print "Looking for input where there is no maxlength attribute ?" ;
     // It seems attributes name or value are never null.
     go "//input" {
         print "There is always one, as for name, value, ..., even a default one !";
-        // ! @ maxlength ;
+        ! @ maxlength ;
         print "Input value : " + @ value: + " , name : " + @ name: + " , maxlength :" + @ maxlength : ;
         }
 

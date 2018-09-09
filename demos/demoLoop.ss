@@ -1,23 +1,30 @@
 
-go {
+print "Here, there is no url initialization";
+print "Dereferencing current element gives :" ;
+print @ ;
 
-    print "inside loop" ;
+print ;
+print "Loop for 6 loops";
+go c:6 {
+
+    print "inside loop, elapsed time = " + $elapsed ;
+    print $count ;  
+
+    print ;
+    print "  Looping 3 times inside ";
+    go c:3 {
+        print "  inside loop : " + $count ;       
+    }     
+
+    print "if title cannot be found, stop here " ;
+    @ title: ;
+    print "title was found" ;
+    }
 
     
-    0 ;
-    @ title: ;
 
-    go ".//div" {
-        print "inside loop 1" ;
-        1 ;
-    }
-
-    go toto {
-        print "inside loop 2";
-        2 ;
-        @ href:  ;
-    }
-
-}
-
+print ;
+print "Text of current top webelement " ;
 @ ;
+
+print "End of demo" ;

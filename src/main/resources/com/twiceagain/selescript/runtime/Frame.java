@@ -27,7 +27,10 @@ class Frame {
     private boolean shouldStop = false;
     private final Set<WebElement> visited = new HashSet<>();
     private final Deque<WebElement> toVisit = new ArrayDeque<>();
-    private WebElement current; // Last WebElement delivered by next().
+    /**
+     * Last WebElement delivered by next(), or webElement from previous frame.
+     */
+    private WebElement current;
     private final Frame previous;
     private final FrameStack parent;
 
@@ -43,9 +46,7 @@ class Frame {
      * @return
      */
     public Frame setMaxMillis(long max) {
-        if (maxMillis == 0) {
-            maxMillis = max;
-        }
+        maxMillis = max;
         return this;
     }
 
@@ -54,9 +55,7 @@ class Frame {
     }
 
     public Frame setMaxCount(long max) {
-        if (maxCount == 0) {
-            maxCount = max;
-        }
+        maxCount = max;
         return this;
     }
 
@@ -64,14 +63,21 @@ class Frame {
         return maxCount;
     }
 
+    public String getXpath() {
+        return xpath;
+    }
+
     public Frame setXpath(String x) {
-        if (xpath == null) {
-            xpath = x;
-        }
+        xpath = x;
         return this;
     }
 
     public long getCount() {
+        return count;
+    }
+    
+    public long incrementCount() {
+        count++;
         return count;
     }
 
@@ -92,13 +98,13 @@ class Frame {
 
     /**
      * Try to get the current WebElement within an instantiated loop. Should
-     * normally never return within a while(xx.loop()){ ... }
+     * normally never return null within a while(xx.loop()){ ... }
      *
      * @return
      */
     public WebElement getCurrent() {
-        if (current == null) {
-            return next();
+        if (current == null && previous != null) {
+            current = previous.getCurrent();
         }
         return current;
     }
@@ -112,7 +118,7 @@ class Frame {
         if (shouldStop) {
             return true;
         }
-        if (maxCount != 0 && count >= maxCount) {
+        if (maxCount != 0 && count > maxCount) {
             return true;
         }
         return (maxMillis != 0 && System.currentTimeMillis() > startMillis + maxMillis);
@@ -130,9 +136,13 @@ class Frame {
 
     /**
      * Updates the list of WebElements to visit, excluding the ones we already
-     * got.
+     * got, base upon wd or the current searchcontext of the previous frame. If
+     * xpath is null, does nothing.
      */
     void refresh() {
+        if (xpath == null) {
+            return;
+        }
         getSc().findElements(By.xpath(xpath)).forEach((WebElement w) -> {
             if (!visited.contains(w)) {
                 toVisit.add(w);
@@ -164,7 +174,6 @@ class Frame {
         }
         WebElement w = toVisit.pop();
         visited.add(w);
-        count++;
         current = w;
         return w;
     }
