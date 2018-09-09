@@ -68,8 +68,8 @@ public class Config {
             .toLowerCase().startsWith("windows");
     private final static String GRIDURL_DEFAULT = "http://localhost:4444/wd/hub";
     private URL gridUrl;
-    
-    private String  BROWSER = "firefox";
+
+    private String BROWSER = "firefox";
 
     /**
      * List of required imports.
@@ -78,7 +78,7 @@ public class Config {
             "java.util.*",
             "org.openqa.selenium.*",
             "org.openqa.selenium.firefox.*",
-            "org.openqa.selenium.chrome.*",            
+            "org.openqa.selenium.chrome.*",
             String.join(".", RUNTIMEPACKAGE) + ".*"
     );
 
@@ -544,8 +544,8 @@ public class Config {
     }
 
     /**
-     * Will create all the files, execpt for the java code. Called by the
-     * saveCode method.
+     * Will create all the files, including java generic runtime classes, but
+     * excluding the generated java code. Called by the saveCode method.
      */
     protected void createAllRuntimeSupportFiles() {
 
@@ -558,13 +558,20 @@ public class Config {
         copyFromSourceDirToTargetDir("selgrid.start.sh", "selgrid.start.sh");
         copyFromSourceDirToTargetDir("selgrid.stop.sh", "selgrid.stop.sh");
 
+        //copy source file to tagert dir (for reference & debugging - not used)
+        if(getSourceFileName() != null){
+            String target = Paths.get(getSourceFileName()).getFileName().toString();
+            copyFromSourceDirToTargetDir(getSourceFileName(), target);
+        }
+        
         // Copy runtime librairy classes 
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("FrameStack");
         copyRuntimeJavaClass("Frame");
-
+        
+        // Builtins
         copyRuntimeJavaClass("BaseVariable");
         getBuiltinsSet().forEach((s) -> {
             copyRuntimeJavaClass(s);
@@ -858,25 +865,30 @@ public class Config {
         });
         return sb.append(NL).toString();
     }
-    
+
     public String getBrowserCapabilitiesDeclaration() {
         StringBuilder sb = new StringBuilder("@Override")
                 .append(NL)
                 .append("public Capabilities getBrowserCapabilities() { return ");
-        switch(BROWSER) {
-            case "firefox" : sb.append("new FirefoxOptions()");break;
-            case "chrome" : sb.append("new ChromeOptions()"); break;
-            default : throw new SSConfigurationException("Unknown browser type : " + BROWSER);
+        switch (BROWSER) {
+            case "firefox":
+                sb.append("new FirefoxOptions()");
+                break;
+            case "chrome":
+                sb.append("new ChromeOptions()");
+                break;
+            default:
+                throw new SSConfigurationException("Unknown browser type : " + BROWSER);
         }
         sb.append(" ; }").append(NL);
         return sb.toString();
     }
-    
+
     public Config setFirefox() {
         BROWSER = "firefox";
         return this;
     }
-    
+
     public Config setChrome() {
         BROWSER = "chrome";
         return this;
