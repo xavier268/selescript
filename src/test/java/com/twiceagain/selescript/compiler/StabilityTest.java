@@ -21,7 +21,7 @@ public class StabilityTest {
     @Test
     //@Ignore
     public void testSignatures() {
-    st("demos/demoHelloWorld.ss", "6A95E688F7D9FEBCF55EA5065D220AA");
+    st("demos/demoHelloWorld.ss", "206A3073E1ABAD48A8DA5E3E23FC32BA");
     st("demos/demoGoogle.ss", "4E803A242FD6D69711D1617994BE9B4");
     st("demos/demoLoop.ss", "49A54033DE2851DD4A788658AB1E3");
     st("demos/demoArithmetics.ss", "63EE25252C63CB7C3FBB8AC91825D5C");
