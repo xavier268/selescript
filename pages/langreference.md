@@ -14,7 +14,7 @@ Using variable, we can do :
 ````
 user = "Xavier" ;
 quotedstring = ' loves "Selescript" ! ' ;   // Notice how string can use single or double quotes.
-Print xavier + quotedstring ;
+Print user + quotedstring ;
 ````
 
 Okay, but we want to navigate the web, so this would make more sens :
