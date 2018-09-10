@@ -2,6 +2,31 @@
 
 ## General structure of the langage
 
+A minimum Hello World program could be :
+
+````
+// This is a comment
+/* This is also a comment */
+print "Hello World" ;
+````
+
+Using variable, we can do :
+````
+user = "Xavier" ;
+quotedstring = ' loves "Selescript" ! ' ;   // Notice how string can use single or double quotes.
+Print xavier + quotedstring ;
+````
+
+Okay, but we want to navigate the web, so this would make more sens :
+````
+print "Visiting google home page ..." ;
+$url = "www.google.com" ;
+
+print "title is : " + $title ;
+````
+
+
+
 ## Expressions
 
 ## Statements
