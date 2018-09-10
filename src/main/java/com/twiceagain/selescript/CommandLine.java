@@ -286,7 +286,7 @@ public class CommandLine {
 
         System.out.printf("%nSelescript compiler."
                 + "%n(c) Xavier Gandillot - 2018"
-                + "%nSee details on https://github.com/xavier268/selescript"
+                + "%nSee details on https://xavier268.github.io/selescript/"
                 + "%nSelescript version : %s"
                 + "%nUsing Selenium version : %s"
                 + "%nCompiling for java version : %s"

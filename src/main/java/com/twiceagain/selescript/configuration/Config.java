@@ -264,7 +264,7 @@ public class Config {
                 " by selescript version : " + getSelescriptVersion(),
                 " target selenium version : " + getSeleniumVersion(),
                 "",
-                " See https://github.com/xavier268/selescript for details",
+                " See https://xavier268.github.io/selescript/ for details",
                 "===================================================="
         );
         return "/*" + String.join(NL + "* ", content) + NL + "*/" + NL;
@@ -513,7 +513,7 @@ public class Config {
                 "<artifactId>" + getTargetProjectName() + "</artifactId>",
                 "<version>" + getTargetProjectVersion() + "</version>",
                 "<name>" + getTargetProjectName() + "</name>",
-                "<url>https://github.com/xavier268/selescript</url>",
+                "<url>https://xavier268.github.io/selescript/</url>",
                 "<packaging>jar</packaging>",
                 "<properties>",
                 "         <project.build.sourceEncoding> UTF-8</project.build.sourceEncoding>",
@@ -573,6 +573,7 @@ public class Config {
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("FrameStack");
         copyRuntimeJavaClass("Frame");
+        copyRuntimeJavaClass("package-info");
 
         // Builtins
         copyRuntimeJavaClass("BaseVariable");
@@ -585,7 +586,7 @@ public class Config {
         createRunFiles();
 
         // Copy logback configuration
-        copyFromResourceToTargetResource("log/logback.xml","logback.xml");
+        copyFromResourceToTargetResource("log/logback.xml", "logback.xml");
 
     }
 
@@ -927,17 +928,14 @@ public class Config {
         return this;
     }
 
-    
     protected void copyFromResourceToTargetResource(String s, String t) {
-        
-        Path tr = Paths.get(getTargetDir(),"src","main","resources");
+
+        Path tr = Paths.get(getTargetDir(), "src", "main", "resources");
         tr.toFile().mkdirs();
-        
-        String tt = "src"+FILESEPARATOR+"main"+FILESEPARATOR+"resources"+FILESEPARATOR+t;
+
+        String tt = "src" + FILESEPARATOR + "main" + FILESEPARATOR + "resources" + FILESEPARATOR + t;
         copyFromResourceToTargetDir(s, tt);
-        
-        
-        
+
     }
 
 }
