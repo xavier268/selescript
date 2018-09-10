@@ -22,4 +22,4 @@ The full documentation for the buitins variable is [here](../src/main/resources/
 
 ## Grammar reference 
 
-The reference grammar for the langage is [here](../src/amin/antlr4/auto/Selescript.g4)
+The reference grammar for the langage is [here](../src/main/antlr4/auto/Selescript.g4)
