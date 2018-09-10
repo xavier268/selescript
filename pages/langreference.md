@@ -17,7 +17,8 @@ quotedstring = ' loves "Selescript" ! ' ;   // Notice how string can use single 
 Print user + quotedstring ;
 ````
 
-Okay, but we want to navigate the web, so this would make more sens :
+Okay, but we want to navigate the web, so this would make more sense :
+
 ````
 print "Visiting google home page ..." ;
 $url = "www.google.com" ;
