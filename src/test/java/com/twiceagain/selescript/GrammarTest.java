@@ -98,6 +98,13 @@ public class GrammarTest {
     }
 
     @Test
+    public void testSingQuotes() {
+        ok("'lkjlkj';");
+        ok("'lkjlkj' + \"oiu\";");
+        ok("'lkj\"lkj';");
+    }
+
+    @Test
     public void tesStringValEq() {
 
         ok(" toto == tata ;         ");
@@ -149,7 +156,7 @@ public class GrammarTest {
         ok("  ! \"aaa\"    ;");
         ok("  \"aaa\"    ;");
         ok("  3 + \"aaa\"    ;");
-        
+
         ok("0;");
         nok("01 ;");
         nok("00 ;");

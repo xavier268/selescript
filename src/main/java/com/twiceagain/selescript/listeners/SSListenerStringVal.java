@@ -88,7 +88,8 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
 
     /**
      * Stringval and above are always quoted in their internel representation.
-     * Constants below are never quoted.
+     * Constants below are never quoted. Double-quotes are escaped when
+     * converting a constant to StringVal.
      *
      * @param ctx
      */
@@ -96,7 +97,7 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
     public void exitSstring(SelescriptParser.SstringContext ctx) {
         String x = prop.get(ctx.constantstring());
         if (x != null) {
-            x = Config.AP + x + Config.AP;
+            x = AP + x.replaceAll("\"", "\\\\\"") + AP;
         }
         prop.put(ctx, x);
     }

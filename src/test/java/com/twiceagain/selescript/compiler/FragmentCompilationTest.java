@@ -87,6 +87,11 @@ public class FragmentCompilationTest {
         ok("  ! \"aaa\"    ;");
         ok("  \"aaa\"    ;");
         ok("  3 + \"aaa\"    ;");
+        
+        ok("'iuy';");
+        ok("'i\"uy';");
+        ok("\"i'uy\";");
+        
 
     }
 

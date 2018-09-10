@@ -70,7 +70,7 @@ public  class SSBaseListener extends SelescriptBaseListener implements SSListene
 
       
     /**
-     * Remove first and last charactere
+     * Remove first and last character
      * @param s
      * @return 
      */

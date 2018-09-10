@@ -186,7 +186,7 @@ abstract public class Methods extends Base implements Scrapper {
         Document doc = new Document();
         for (int i = 0; i < par.length; i += 2) {
             if (par[i] == null) {
-                // TODO : ensure control at syntax/grammar level ?
+                // Should never happen, since check done at compile time.                
                 throw new RuntimeException("You must tag all fields when sending to db ");
             }
             if (par[i + 1] == null) {

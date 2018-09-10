@@ -72,9 +72,11 @@ constantnumber
 // Keywords should come first ...
 NULL : 'null' ;
 
-// There is no escape for double quote inside string, use single quotes !
+// There is no escape, but you can use single or double quotes strings.
 // Note the greedy *? 
-STRING : '"' .* ? '"' ; 
+STRING  :  '"'  .* ? '"' 
+        |  '\'' .* ? '\'' 
+        ; 
 
 // Numbers are not signed integer ( but unary minus exists )
 NUMBER  : '0' | NONZERODIGIT DIGIT* ;
