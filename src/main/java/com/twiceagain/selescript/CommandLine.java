@@ -262,7 +262,7 @@ public class CommandLine {
                 "                      Default : http://localhost:4444/wd/hub",
                 "",
                 "     --mongo-url    : mongo connexion string (host & port).",
-                "                      Default to localhost:27017",
+                "                      Default to mongodb://localhost:27017",
                 "     --mongo-db     : mongo database name. Default selescriptdb",
                 "     --mongo-col    : mongo collection. Default selescriptcol.",
                 "",

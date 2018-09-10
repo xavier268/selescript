@@ -183,10 +183,7 @@ abstract public class Methods extends Base implements Scrapper {
         System.out.printf("%n{%s}%n", String.join(",", ls));
     }
 
-    protected void mongo(String... par) {
-        System.out.println("DEBUG : sending to mongo ...");
-        System.out.println(Arrays.toString(par));
-
+    protected void mongo(String... par) {        
         Document doc = new Document();
         for (int i = 0; i < par.length; i += 2) {
             if (par[i] == null) {

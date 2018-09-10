@@ -70,7 +70,7 @@ public class Config {
     private URL gridUrl;
 
     private String BROWSER = "firefox";
-    private String MONGOCONNECTIONSTRING = "";
+    private String MONGOCONNECTIONSTRING = "mongodb://localhost:27017";
     private String MONGODBNAME = "selescriptdb";
     private String MONGOCOLNAME = "selescriptcol";
 
@@ -584,6 +584,9 @@ public class Config {
         createPomFile();
         createRunFiles();
 
+        // Copy logback configuration
+        copyFromResourceToTargetResource("log/logback.xml","logback.xml");
+
     }
 
     private void copyRuntimeJavaClass(String className
@@ -922,6 +925,19 @@ public class Config {
     public Config setMongoConnectionString(String u) {
         MONGOCONNECTIONSTRING = u;
         return this;
+    }
+
+    
+    protected void copyFromResourceToTargetResource(String s, String t) {
+        
+        Path tr = Paths.get(getTargetDir(),"src","main","resources");
+        tr.toFile().mkdirs();
+        
+        String tt = "src"+FILESEPARATOR+"main"+FILESEPARATOR+"resources"+FILESEPARATOR+t;
+        copyFromResourceToTargetDir(s, tt);
+        
+        
+        
     }
 
 }
