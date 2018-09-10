@@ -1,33 +1,32 @@
-# selescript
-
-_"Scrapping the web made easy"_
+# SELESCRIPT - "Scrapping the web made easy"
 
 ## What is **Selescript** ?
 
 **Selescript** is both a compiler/translator and a langage.
 
-From a small script, written in the Selecript langage, the Selescript compiler 
+From a small script, written in the **Selescript** langage, the **Selescript** compiler 
 will generate a complete java application, compile and package it as a 
-self-sustained, executable jar taht can run anywhere.
+self-sustained, executable jar that can run anywhere, as long and as often as you need.
 
-Running this executable jar will *scrap* the web, retrieving selecting 
-information, and automatically navigating from pages to pages. 
+Running this executable jar will *scrap* the web, selecting and retrieving  
+information, and automatically navigating from page to page. 
 
 The scrapped data can be easily retrieved in various formats, from csv files to 
 mongo database records.
 
-## Quickstart : enough talking, just show me !
+## Enough talking, just show me the code !
 
 ### Linux
 
-
+If you are already using Linux, follow the [quickstart](pages/quickstart.html) and you will be scrapping the web in minutes.
 
 ### Windows and OSX 
 
-*Should work with some changes needed to the utility scripts.*
-*Not tested yet. Anyone around wants to help ?*
+Not available yet. Anyone interested ?
 
 ## Selecript langage reference
+
+See the full [Selescript langage reference](pages/langreference.html).
 
 ## Javadoc APIs
 
