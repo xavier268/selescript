@@ -10,6 +10,7 @@ import com.twiceagain.selescript.configuration.Config;
 import static com.twiceagain.selescript.configuration.Config.AP;
 import static com.twiceagain.selescript.configuration.Config.NL;
 import com.twiceagain.selescript.configuration.SSListener;
+import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -25,17 +26,25 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         super(config, prop);
     }
 
+    
+
     /**
      * Creates a fragment of code with comma separated values, alternating
-     * between key, the value. Use when order matters, or when duplication is
+     * between key, the value.Use when order matters, or when duplication is
      * encourraged.
      *
      * @param params
+     * @param throwOnNull - should we throw on null keys ?
      * @return
      */
-    protected String parseParams(List<SelescriptParser.ParamContext> params) {
+    protected String parseParams(List<SelescriptParser.ParamContext> params, boolean throwOnNull) {
         List<String> sl = new ArrayList<>();
         params.forEach((SelescriptParser.ParamContext p) -> {
+            if (throwOnNull) {
+                if (p.ID() == null) {
+                    throw new SSSyntaxException("A tag is missing,when it is required");
+                }
+            }
             String s1 = (p.ID() == null) ? null : AP + p.ID().getText() + AP;
             String s2 = prop.get(p.stringval());
             sl.add(s1);
@@ -56,7 +65,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                 .append(NL)
                 // start loop
                 .append("fs.prepare(")
-                .append(parseParams(ctx.param()))
+                .append(parseParams(ctx.param(),false))
                 .append(");")
                 .append(NL)
                 .append("while(fs.loop()){")
@@ -87,13 +96,13 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitEmit(SelescriptParser.EmitContext ctx) {
-        String s = "emit(" + parseParams(ctx.param()) + ");" + NL;
+        String s = "emit(" + parseParams(ctx.param(),true) + ");" + NL;
         prop.put(ctx, s);
     }
-    
+
     @Override
     public void exitDb(SelescriptParser.DbContext ctx) {
-        String s = "mongo(" + parseParams(ctx.param()) + ");" + NL;
+        String s = "mongo(" + parseParams(ctx.param(),true) + ");" + NL;
         prop.put(ctx, s);
     }
 

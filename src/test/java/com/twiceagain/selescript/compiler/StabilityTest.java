@@ -7,7 +7,6 @@ package com.twiceagain.selescript.compiler;
 
 import com.twiceagain.selescript.configuration.Config;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
