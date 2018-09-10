@@ -90,6 +90,12 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         String s = "emit(" + parseParams(ctx.param()) + ");" + NL;
         prop.put(ctx, s);
     }
+    
+    @Override
+    public void exitDb(SelescriptParser.DbContext ctx) {
+        String s = "mongo(" + parseParams(ctx.param()) + ");" + NL;
+        prop.put(ctx, s);
+    }
 
     @Override
     public void exitAssign(SelescriptParser.AssignContext ctx) {

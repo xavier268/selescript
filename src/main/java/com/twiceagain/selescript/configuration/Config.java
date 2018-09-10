@@ -70,6 +70,9 @@ public class Config {
     private URL gridUrl;
 
     private String BROWSER = "firefox";
+    private String MONGOCONNECTIONSTRING = "";
+    private String MONGODBNAME = "selescriptdb";
+    private String MONGOCOLNAME = "selescriptcol";
 
     /**
      * List of required imports.
@@ -559,18 +562,18 @@ public class Config {
         copyFromSourceDirToTargetDir("selgrid.stop.sh", "selgrid.stop.sh");
 
         //copy source file to tagert dir (for reference & debugging - not used)
-        if(getSourceFileName() != null){
+        if (getSourceFileName() != null) {
             String target = Paths.get(getSourceFileName()).getFileName().toString();
             copyFromSourceDirToTargetDir(getSourceFileName(), target);
         }
-        
+
         // Copy runtime librairy classes 
         copyRuntimeJavaClass("Base");
         copyRuntimeJavaClass("Methods");
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("FrameStack");
         copyRuntimeJavaClass("Frame");
-        
+
         // Builtins
         copyRuntimeJavaClass("BaseVariable");
         getBuiltinsSet().forEach((s) -> {
@@ -721,7 +724,10 @@ public class Config {
         StringBuilder sb = new StringBuilder();
         sb
                 .append("DEBUGMODE : ").append(DEBUGMODE).append(NL)
-                .append("BRWSER : ").append(BROWSER).append(NL)
+                .append("BROWSER : ").append(BROWSER).append(NL)
+                .append("MONGOCONNECTIONSTRING : ").append(MONGOCONNECTIONSTRING).append(NL)
+                .append("MONGODBNAME : ").append(MONGODBNAME).append(NL)
+                .append("MONGOCOLNAME : ").append(MONGOCOLNAME).append(NL)
                 .append("DRYRUNFLAG : ").append(DRYRUNFLAG).append(NL)
                 .append("GRIDURL_DEFAULT : ").append(GRIDURL_DEFAULT).append(NL)
                 .append("gridUrl : ").append(gridUrl).append(NL)
@@ -799,6 +805,15 @@ public class Config {
                 .append(NL)
                 .append("@Override").append(NL)
                 .append("public String getGridUrl() { return ").append(AP).append(getGridUrl()).append(AP).append(";}").append(NL)
+                .append(NL)
+                .append("@Override").append(NL)
+                .append("public String getMongoConnectionString() { return ").append(AP).append(MONGOCONNECTIONSTRING).append(AP).append(";}").append(NL)
+                .append(NL)
+                .append("@Override").append(NL)
+                .append("public String getMongoDbName() { return ").append(AP).append(MONGODBNAME).append(AP).append(";}").append(NL)
+                .append(NL)
+                .append("@Override").append(NL)
+                .append("public String getMongoColName() { return ").append(AP).append(MONGOCOLNAME).append(AP).append(";}").append(NL)
                 .append(NL)
                 .append(getBrowserCapabilitiesDeclaration()).append(NL)
                 .append("public static final String $$NULL = null;")
@@ -891,6 +906,21 @@ public class Config {
 
     public Config setChrome() {
         BROWSER = "chrome";
+        return this;
+    }
+
+    public Config setMongoColName(String u) {
+        MONGOCOLNAME = u;
+        return this;
+    }
+
+    public Config setMongoDbName(String u) {
+        MONGODBNAME = u;
+        return this;
+    }
+
+    public Config setMongoConnectionString(String u) {
+        MONGOCONNECTIONSTRING = u;
         return this;
     }
 

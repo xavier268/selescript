@@ -142,6 +142,27 @@ public class CommandLine {
                     break;
                 }
 
+                case "mongo-url": {
+                    i++;
+                    String u = args[i];
+                    config.setMongoConnectionString(u);
+                    break;
+                }
+
+                case "mongo-db": {
+                    i++;
+                    String u = args[i];
+                    config.setMongoDbName(u);
+                    break;
+                }
+
+                case "mongo-col": {
+                    i++;
+                    String u = args[i];
+                    config.setMongoColName(u);
+                    break;
+                }
+
                 case "-v":
                 case "--version": {
                     printVersionInfo(config);
@@ -176,7 +197,7 @@ public class CommandLine {
                 case "--firefox":
                     config.setFirefox();
                     break;
-                    
+
                 case "--chrome":
                     config.setChrome();
                     break;
@@ -239,6 +260,11 @@ public class CommandLine {
                 "     --grid-url",
                 "     --gridurl      : specify the full url to the grid.",
                 "                      Default : http://localhost:4444/wd/hub",
+                "",
+                "     --mongo-url    : mongo connexion string (host & port).",
+                "                      Default to localhost:27017",
+                "     --mongo-db     : mongo database name. Default selescriptdb",
+                "     --mongo-col    : mongo collection. Default selescriptcol.",
                 "",
                 "      --firefox",
                 "      --chrome      : select browser type. Default is firefox.",

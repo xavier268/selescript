@@ -20,4 +20,8 @@ public interface Scrapper {
     
     public String getGridUrl();
     public Capabilities getBrowserCapabilities();
+    
+    public String getMongoConnectionString();
+    public String getMongoDbName();
+    public String getMongoColName();
 }

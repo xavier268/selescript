@@ -1,7 +1,9 @@
 package com.twiceagain.selescript.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.bson.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author xavier
  */
-abstract public class Methods extends Base {
+abstract public class Methods extends Base implements Scrapper {
 
     /*--------------------------------------------------
      * A dedicated equal that behave well with null values.
@@ -157,14 +159,14 @@ abstract public class Methods extends Base {
         }
     }
 
-    protected void clickw( String xpath) {
+    protected void clickw(String xpath) {
         click(xpath, true);
     }
 
     /*----------------------------------------------------
      * Emits the provided fields to stout.
      **/
-    public void emit(String... par) {
+    protected void emit(String... par) {
         Integer count = 0;
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < par.length; i += 2) {
@@ -179,6 +181,33 @@ abstract public class Methods extends Base {
             ls.add(sb.toString());
         }
         System.out.printf("%n{%s}%n", String.join(",", ls));
+    }
+
+    protected void mongo(String... par) {
+        System.out.println("DEBUG : sending to mongo ...");
+        System.out.println(Arrays.toString(par));
+
+        Document doc = new Document();
+        for (int i = 0; i < par.length; i += 2) {
+            if (par[i] == null) {
+                // TODO : ensure control at syntax/grammar level ?
+                throw new RuntimeException("You must tag all fields when sending to db ");
+            }
+            if (par[i + 1] == null) {
+                continue;
+            }
+            doc.append(par[i], par[i + 1]);
+        }
+        Document dd = new Document("SSRecord", doc);
+
+        COLLECTION.insertOne(dd, (Void t, Throwable ex) -> {
+            if (ex != null) {
+                throw new RuntimeException(
+                        "Error after insertiing a document in mongo db",
+                        ex);
+            }
+        });
+
     }
 
     /*---------------------------------------------------
@@ -206,6 +235,5 @@ abstract public class Methods extends Base {
         }
         return s1 + s2;
     }
-    
-   
+
 }
