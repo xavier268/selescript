@@ -142,21 +142,21 @@ public class CommandLine {
                     break;
                 }
 
-                case "mongo-url": {
+                case "--mongo-url": {
                     i++;
                     String u = args[i];
                     config.setMongoConnectionString(u);
                     break;
                 }
 
-                case "mongo-db": {
+                case "--mongo-db": {
                     i++;
                     String u = args[i];
                     config.setMongoDbName(u);
                     break;
                 }
 
-                case "mongo-col": {
+                case "--mongo-col": {
                     i++;
                     String u = args[i];
                     config.setMongoColName(u);
