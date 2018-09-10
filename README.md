@@ -1,4 +1,4 @@
-# SELESCRIPT - "Scrapping the web made easy"
+# Scrapping the web made easy
 
 ## What is **Selescript** ?
 
