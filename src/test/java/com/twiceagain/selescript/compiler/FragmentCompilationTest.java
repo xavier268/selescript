@@ -19,7 +19,7 @@ public class FragmentCompilationTest {
 
     @Test
     public void basic() {
-        System.out.println("\n********* Basic Arithmetic and concatenation");
+        t("Basic Arithmetic");
         ok("          123;");
         ok("      \"abc\";");
         ok("        1 + 3;");
@@ -29,7 +29,7 @@ public class FragmentCompilationTest {
 
     @Test
     public void testAt() {
-        System.out.println("\n********* Dereferencing");
+        t("Dereferencing");
         ok("@       two ;");
         ok("@     : two ;");
         ok("@ one : two ;");
@@ -39,7 +39,7 @@ public class FragmentCompilationTest {
 
     @Test
     public void testComments1() {
-        System.out.println("\n********* Comments /**/ style");
+        t("Comments /**/ style");
         ok("go  { }                      ");
         ok("go  { /* khjkhk kjhk j  */ } ");
         ok("go /* hh */  { }             ");
@@ -48,7 +48,7 @@ public class FragmentCompilationTest {
 
     @Test
     public void testComment2() {
-        System.out.println("\n********* Comments // style");
+        t("Comments // style");
         ok("45 ; // comment ; \n 11 ;                               ");
         ok("46 ; \"// not a comment\" ; // comment ; \n 11 ;        ");
         ok("47 ; \"// not a \n \r comment\" ; // comment ; \n 11 ;  ");
@@ -59,7 +59,7 @@ public class FragmentCompilationTest {
 
     @Test
     public void testConstants() {
-        System.out.println("\n********* Constants");
+        t("Constants");
 
         ok("5;");
         ok("1+2;");
@@ -80,54 +80,76 @@ public class FragmentCompilationTest {
         ok("-16/-7;");
         ok("8+-9;");
 
-        ok("  \"aaa\"           ;");
-        ok("  \"aaa\" +2   ;");
-        ok("  \"aaa\" + 2 + 1   ;");
-        ok("  \"aaa\" + 2 * 3  ;");
-        ok("  ! \"aaa\"    ;");
-        ok("  \"aaa\"    ;");
-        ok("  3 + \"aaa\"    ;");
-        
+        ok("\"aaa\"           ;");
+        ok("\"aaa\" +2   ;");
+        ok("\"aaa\" + 2 + 1   ;");
+        ok("\"aaa\" + 2 * 3  ;");
+        ok("! \"aaa\"    ;");
+        ok("\"aaa\"    ;");
+        ok("3 + \"aaa\"    ;");
+
         ok("'iuy';");
         ok("'i\"uy';");
         ok("\"i'uy\";");
-        
 
     }
 
     @Test
     public void tesStringValEq() {
-        System.out.println("\n********* Equals - not equal");
+        t("Equals - not equal");
 
-        ok(" toto == tata ;         ");
-        ok(" toto == 22 ;           ");
-        ok(" 22 == tata ;           ");
-        ok(" 23 == -22 ;            ");
-        ok(" 12 == 12 ;             ");
+        ok("toto == tata ;         ");
+        ok("toto == 22 ;           ");
+        ok("22 == tata ;           ");
+        ok("23 == -22 ;            ");
+        ok("12 == 12 ;             ");
 
-        ok(" toto != tata ;         ");
-        ok(" toto != 22 ;           ");
-        ok(" 22 != tata ;           ");
-        ok(" 23 != -22 ;            ");
-        ok(" 12 != 12 ;             ");
+        ok("toto != tata ;         ");
+        ok("toto != 22 ;           ");
+        ok("22 != tata ;           ");
+        ok("23 != -22 ;            ");
+        ok("12 != 12 ;             ");
 
-        ok(" titi = 45 == 45 ;      ");
-        ok(" titi = (45 == 45) ;    ");
-        ok(" titi = !(45 == 45) ;   ");
+        ok("titi = 45 == 45 ;      ");
+        ok("titi = (45 == 45) ;    ");
+        ok("titi = !(45 == 45) ;   ");
 
-        ok(" titi = 46 == 45 ;      ");
-        ok(" titi = (46 == 45) ;    ");
-        ok(" titi = !(46 == 45) ;   ");
+        ok("titi = 46 == 45 ;      ");
+        ok("titi = (46 == 45) ;    ");
+        ok("titi = !(46 == 45) ;   ");
 
     }
     
-     @Test
-    public void tesStringValNull() {
-        System.out.println("\n********* null constant ");
+    @Test
+    public void testAssign() {
+        t("Assignements");
+        
+        ok("toto = tata;");
+        ok("toto = $url ;");
+        ok("$url = null ;");
+        ok("$url = titi ;");
+        ok("$url = @  ;");
+    }
 
-        ok(" null ;             ");
-        ok(" null + \"aaa\" ;   ");
-  
+    @Test
+    public void testStringValNull() {
+        t("null constant ");
+
+        ok("null ;             ");
+        ok("null + \"aaa\" ;   ");
+
+    }
+
+    @Test
+    public void testPattern() {
+        t("Patterns");
+
+        ok("null ~ null ;");
+        ok("null ~ null : null ;");
+        ok("'kjhoiulkj' ~ 'oiu' ;");
+        ok("'kjhoiulkj' ~ 'oiu' : 'poioo' ;");
+        ok("toto ~ titi ;");
+        ok("toto ~ titi : tata ;");
     }
 
     /**
@@ -143,17 +165,24 @@ public class FragmentCompilationTest {
         c = c.replaceAll("\n\r", " ").trim(); // remove new lines
         System.out.printf("%s\t===>\t%s\t<===%n", pad(s), pad(c));
     }
+
     /**
      * Padd if short string.
+     *
      * @param s
-     * @return 
+     * @return
      */
     public String pad(String s) {
-        if(s==null || s.length() > 59 )return s;
+        if (s == null || s.length() > 59) {
+            return s;
+        }
         String p = "                                           ";
-        p = p + p + p ;
-        s = s+p;
-        return s.substring(0, 60);        
+        p = p + p + p;
+        s = s + p;
+        return s.substring(0, 60);
     }
 
+    private void t(String s) {
+        System.out.printf("%n%n========Compiled : %s==========%n", s);
+    }
 }

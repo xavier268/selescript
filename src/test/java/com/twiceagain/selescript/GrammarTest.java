@@ -36,7 +36,7 @@ public class GrammarTest {
 
     @AfterClass
     public static void tearDownClass() {
-        System.out.println("\n---------\n");
+        
     }
 
     @Before
@@ -49,7 +49,7 @@ public class GrammarTest {
 
     @Test
     public void testOk() {
-        ok("go { } ");
+        ok("2; ");
     }
 
     @Test
@@ -58,16 +58,14 @@ public class GrammarTest {
     }
 
     @Test
-    public void testComments1() {
+    public void testComments() {
+        t("Comments");
+
         ok("go  { } ");
         nok("go { /* khjkhk kjhk j /* } ");
         ok("go  { /* khjkhk kjhk j  */ } ");
         ok("go /* hh */  { } ");
-        ok("/* ////***/go  {}");
-    }
 
-    @Test
-    public void testComment2() {
         ok("45 ; // comment ; \n 11 ;  ");
         ok("46 ; \"// not a comment\" ; // comment ; \n 11 ;  ");
         ok("47 ; \"// not a \n \r comment\" ; // comment ; \n 11 ;  ");
@@ -78,6 +76,9 @@ public class GrammarTest {
 
     @Test
     public void testStringval() {
+
+        t("Stringval");
+
         ok("TOTO + 2 + 3 ;");
         ok("TOTO + 5 + ! 6 ;");
         ok("TOTO + 1 + 5 + ! 6 ;");
@@ -99,6 +100,9 @@ public class GrammarTest {
 
     @Test
     public void testSingQuotes() {
+
+        t("Quotes");
+
         ok("'lkjlkj';");
         ok("'lkjlkj' + \"oiu\";");
         ok("'lkj\"lkj';");
@@ -106,6 +110,7 @@ public class GrammarTest {
 
     @Test
     public void tesStringValEq() {
+        t("Stringval equalities");
 
         ok(" toto == tata ;         ");
         ok(" toto == 22 ;           ");
@@ -131,7 +136,7 @@ public class GrammarTest {
 
     @Test
     public void testConstants() {
-        System.out.println("\n********* Constants");
+        t("Constants");
 
         ok("50;");
         ok("1+2;");
@@ -165,8 +170,25 @@ public class GrammarTest {
 
     @Test
     public void testLiteralString() {
+        t("Literal strings");
+
         ok(" \"normal string\" ; ");
-        // ok(" \"one escape \\\" string\" ; ");    
+        ok(" 'one escape \" string' ; ");
+        nok(" \"one escape \\\" string\" ; ");
+        nok(" \"one escape \" string\" ; ");
+
+    }
+
+    @Test
+    public void testPattern() {
+        t("Patterns");
+
+        ok(" null ~ null ;");
+        ok(" null ~ null : null ;");
+        nok(" null ~ null :  ;");
+        nok(" null ~ : null   ;");
+        ok(" 'kjhoiulkj' ~ 'oiu' ;");
+        ok(" 'kjhoiulkj' ~ 'oiu' : 'poioo' ;");
     }
 
     /**
@@ -201,5 +223,9 @@ public class GrammarTest {
         fail("\nAn error was expected compiling : "
                 + s
                 + "\nThe code above should not have compiled successfully ... but it did !\n");
+    }
+    
+    private void t(String s) {
+        System.out.printf("%n%n========Grammar : %s==========%n", s);
     }
 }

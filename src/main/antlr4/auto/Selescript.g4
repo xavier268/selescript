@@ -30,8 +30,8 @@ stringval
     :   constantstring                          # sstring
     |   stringval '==' stringval                # eq    // Not null means true
     |   stringval '!=' stringval                # neq
-    |   stringval '~' stringval                 # match // true if provided pattern is matched.
-    |   stringval '!~' stringval                # nomatch // true if provided pattern does not match.
+    |   stringval '~' stringval                 # find // null if not found
+    |   stringval '~' stringval ':' stringval   # replace // find and replace all, null if not found
     |   '(' stringval ')'                       # par
     |   '@' (ID ? ':' )? ( stringval ) ?        # at    // derefence based on current search context
     |   '!' stringval                           # not   // Not null means true
@@ -73,7 +73,7 @@ constantnumber
 NULL : 'null' ;
 
 // There is no escape, but you can use single or double quotes strings.
-// Note the greedy *? 
+// Note the reluctant *? 
 STRING  :  '"'  .* ? '"' 
         |  '\'' .* ? '\'' 
         ; 
@@ -95,7 +95,7 @@ fragment LETTER : [a-zA-Z_] ;
 // Skip white spaces
 WS :  [ \t\r\n\u000C]+ -> skip ;
 
-// Note the greedy *? ...
+// Note the reluctant *? ...
 COMMENT : '/*' .*?  '*/' -> skip ;
 
 LCOMMENT : '//' .*? [\r\n] -> skip ;

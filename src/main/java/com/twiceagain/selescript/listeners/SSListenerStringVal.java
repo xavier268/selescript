@@ -103,18 +103,6 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
     }
 
     @Override
-    public void exitMatch(SelescriptParser.MatchContext ctx) {
-        String s = "match(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
-        prop.put(ctx, s);
-    }
-
-    @Override
-    public void exitNomatch(SelescriptParser.NomatchContext ctx) {
-        String s = "nomatch(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
-        prop.put(ctx, s);
-    }
-
-    @Override
     public void exitOr(SelescriptParser.OrContext ctx) {
         String s = "or(" + prop.get(ctx.stringval(0)) + "," + prop.get(ctx.stringval(1)) + ")";
         prop.put(ctx, s);
@@ -131,6 +119,28 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
         // Use a null string constant, otherwise complier will complain 
         // in situation such as println(null)
         prop.put(ctx, "$$NULL");
+    }
+
+    @Override
+    public void exitFind(SelescriptParser.FindContext ctx) {
+        String s = "find("
+                + prop.get(ctx.stringval(0))
+                + ","
+                + prop.get(ctx.stringval(1))
+                + ")";
+        prop.put(ctx, s);
+    }
+
+    @Override
+    public void exitReplace(SelescriptParser.ReplaceContext ctx) {
+        String s = "replace("
+                + prop.get(ctx.stringval(0))
+                + ","
+                + prop.get(ctx.stringval(1))
+                + ","
+                + prop.get(ctx.stringval(2))
+                + ")";
+        prop.put(ctx, s);
     }
 
 }

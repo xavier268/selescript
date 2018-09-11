@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "This script is provided as a convenience script to test the selescript langage"
-echo "It will launch a docker swarm/stack with a few headless browsers"
+echo "It will launch a docker swarm/stack with a few headless browsers and a mongodb instance"
 echo "You may need to launch this as root, depending of your configuration details"
 echo ""
 

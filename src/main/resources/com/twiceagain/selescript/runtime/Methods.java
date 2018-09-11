@@ -2,6 +2,8 @@ package com.twiceagain.selescript.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bson.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -44,31 +46,6 @@ abstract public class Methods extends Base implements Scrapper {
      */
     protected String neq(String s1, String s2) {
         return not(eq(s1, s2));
-    }
-
-    /*     
-     * null ~ null -> null.
-     * null ~ p -> null. 
-     * s ~ p -> s if matched, null if no match.
-     */
-    /**
-     * Test pattern matching.
-     *
-     * @param s
-     * @param pattern
-     * @return
-     */
-    protected String match(String s, String pattern) {
-
-        if (s == null) {
-            return null;
-        }
-        return (s.matches(pattern)) ? "" : null;
-
-    }
-
-    protected String nomatch(String s1, String s2) {
-        return not(match(s1, s2));
     }
 
     protected String or(String s1, String s2) {
@@ -182,7 +159,7 @@ abstract public class Methods extends Base implements Scrapper {
         System.out.printf("%n{%s}%n", String.join(",", ls));
     }
 
-    protected void mongo(String... par) {        
+    protected void mongo(String... par) {
         Document doc = new Document();
         for (int i = 0; i < par.length; i += 2) {
             if (par[i] == null) {
@@ -230,6 +207,62 @@ abstract public class Methods extends Base implements Scrapper {
             return s1;
         }
         return s1 + s2;
+    }
+
+    /**
+     * Check if pattern can be found. By convention, found(null,xx) is always
+     * null, found (xx,null) is always true and found (null,null) is null.
+     *
+     * @param s
+     * @param pattern
+     * @return - found text, or null if not found.
+     */
+    protected String find(String s, String pattern) {
+
+        if (s == null) {
+            return null;
+        }
+        if (pattern == null) {
+            return s;
+        }
+
+        Matcher m = Pattern.compile(pattern).matcher(s);
+        if (m.find()) {
+            return m.group();
+        } else {
+            return null;
+        }
+
+    }
+
+    /**
+     * Replace ALL pattern occurences with replacement string.
+     *
+     * r(null,p,r) is null, r(s,null,r) is s, r(s,p,null) is r(s,p,"").
+     * r(null,null,_) is null.
+     *
+     * @param s
+     * @param pattern
+     * @param replacement
+     * @return see above
+     */
+    protected String replace(String s, String pattern, String replacement) {
+
+        if (s == null) {
+            return null;
+        }
+        if (pattern == null) {
+            return s;
+        }
+        String r = (replacement == null) ? "" : replacement;
+
+        Matcher m = Pattern.compile(pattern).matcher(s);
+        if (m.find()) {
+            return m.replaceAll(replacement);
+        } else {
+            return null;
+        }
+
     }
 
 }
