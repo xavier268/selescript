@@ -10,18 +10,31 @@ emit comment:"'emit' can also be used to print, but is far less readeable in jso
 print "Printing some null values : null, then null + null";
 print null ;
 print null + null ;
+
+print ;
 print "Printing null concatenated with empty string : null + '' then '' + null" ; 
 print null + "";
 print "" + null ;
 
 print ;
-print "Print some basic caluculus" ;
-print 1 + 2 * 3 ;
-print "1 + 2 * 3 = " +  1 + 2 * 3 ; /* numbers will be added correctly, then concateneted */
-print "1 + 2 * 3 = " +  (1 + 2 * 3) ; /* the right/safer way to do it */
-print "(1 + 2) * 3 = " + ( 1 + 2) * 3  ;
+print "Print some basic calculus, testing precedence" ;
+print "1 + 2 * 3 = 7 ? " +  1 + 2 * 3 ;   /* numbers will be added correctly, then concateneted */
+print "(1 + 2 * 3) = 7 ? " +  (1 + 2 * 3) ; /* the right/safer way to do it */
+print "(1 + 2) * 3 = 9 ? " + ( 1 + 2) * 3  ;
 
-print "first " + "second" ;
+print ;
+print "Testing precedence between operators" ;
+print "'1' + 2 ~ 2 = 2 ?" + ('1' + 2 ~ 2 ) ;
+print "1 + 2 ~ 3 = 3 ?" + (1 + 2 ~ 3 ) ;
+print "1 + null | 2 = 1 ?" + (1 + null | 2 ) ;
+print "'bla' ~ 'a' != null : expecting empty string ? " + (('bla' ~ 'a' != null)!="")|"empty string" ;
+
+
+
+print ;
+print "Concaneted  " + "string" ;
+print "Concaneted  " + null + "string" ;
+print "Concaneted  " + 'string' ;
 
 
 print;

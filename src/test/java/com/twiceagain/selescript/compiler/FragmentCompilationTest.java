@@ -150,7 +150,12 @@ public class FragmentCompilationTest {
         ok("'kjhoiulkj' ~ 'oiu' : 'poioo' ;");
         ok("toto ~ titi ;");
         ok("toto ~ titi : tata ;");
+        
+        ok("toto ~ pattern == comp;");
+        ok("toto ~ pattern != comp;");
     }
+    
+    
 
     /**
      * Generic test utility.

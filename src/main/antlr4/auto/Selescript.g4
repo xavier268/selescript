@@ -28,14 +28,14 @@ param
 stringval 
     
     :   constantstring                          # sstring
+    |   '!' stringval                           # not   // Not null means true
+    |   stringval '+' stringval                 # concat    
+    |   stringval '~' stringval                 # find // null if not found
+    |   stringval '~' stringval ':' stringval   # replace // find and replace all, null if not found   
     |   stringval '==' stringval                # eq    // Not null means true
     |   stringval '!=' stringval                # neq
-    |   stringval '~' stringval                 # find // null if not found
-    |   stringval '~' stringval ':' stringval   # replace // find and replace all, null if not found
     |   '(' stringval ')'                       # par
     |   '@' (ID ? ':' )? ( stringval ) ?        # at    // derefence based on current search context
-    |   '!' stringval                           # not   // Not null means true
-    |   stringval '+' stringval                 # concat
     |   stringval '|' stringval                 # or    // logical or
     |   stringval '&' stringval                 # and   // logical and
     |   NULL                                    # null
