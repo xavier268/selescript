@@ -65,7 +65,9 @@ public final class SSCompiler {
      * The parser created from the grammar of the selescript langage.
      */
     private SelescriptParser parser;
-
+    /**
+     * The configuration object defining the compilation context.
+     */
     protected Config config;
 
     /**

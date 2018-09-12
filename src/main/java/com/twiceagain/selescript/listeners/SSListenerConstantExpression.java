@@ -6,10 +6,10 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import com.twiceagain.selescript.configuration.SSListener;
 import com.twiceagain.selescript.exceptions.SSNumberFormatException;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * Constant Strings or numbers are stored internally as unquoted strings. Quotes
@@ -21,7 +21,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class SSListenerConstantExpression extends SSBaseListener implements SSListener {
 
-    public SSListenerConstantExpression(Config config, ParseTreeProperty<String> prop) {
+    public SSListenerConstantExpression(Config config, SSProperties prop) {
         super(config, prop);
     }
 

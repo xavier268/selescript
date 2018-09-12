@@ -6,11 +6,11 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptBaseListener;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import com.twiceagain.selescript.configuration.SSListener;
 import com.twiceagain.selescript.exceptions.SSException;
 import com.twiceagain.selescript.exceptions.SSUndefinedBuiltinException;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * Various utilities used by the listener implementation. Handles all the
@@ -28,7 +28,7 @@ public  class SSBaseListener extends SelescriptBaseListener implements SSListene
     /**
      * The annotated tree to store the code as we compile the tree.
      */
-    protected final ParseTreeProperty<String> prop ;  
+    protected final SSProperties prop ;  
     
 
     /**
@@ -36,7 +36,7 @@ public  class SSBaseListener extends SelescriptBaseListener implements SSListene
      */
     protected Config config ;
 
-    protected SSBaseListener(Config config, ParseTreeProperty<String> prop) {
+    protected SSBaseListener(Config config, SSProperties prop) {
         this.prop = prop;
         this.config = config;
     }

@@ -6,10 +6,10 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import static com.twiceagain.selescript.configuration.Config.AP;
 import com.twiceagain.selescript.configuration.SSListener;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * Handles parameters for functions. Parameters are stored in the prop as a
@@ -20,7 +20,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public  class SSListenerParam extends SSBaseListener implements SSListener {
 
-    public SSListenerParam(Config config, ParseTreeProperty<String> prop) {
+    public SSListenerParam(Config config, SSProperties prop) {
         super(config, prop);
     }
 

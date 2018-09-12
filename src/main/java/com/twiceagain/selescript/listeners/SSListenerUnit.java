@@ -6,10 +6,10 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import static com.twiceagain.selescript.configuration.Config.NL;
 import com.twiceagain.selescript.configuration.SSListener;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  *
@@ -17,16 +17,14 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class SSListenerUnit extends SSBaseListener implements SSListener {
 
-    public SSListenerUnit(Config config, ParseTreeProperty<String> prop) {
+    public SSListenerUnit(Config config, SSProperties prop) {
         super(config, prop);
     }
 
-    
-   
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
-        
+
         sb
                 .append(config.getFileHeader())
                 .append(config.getPackageDeclaration())
@@ -40,21 +38,25 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
                 .append(" extends Methods implements Scrapper {")
                 .append(NL)
                 .append(NL);
-        
+
         // Add useful constants and create builtins
         sb
                 .append(config.getConstantDeclarations())
                 .append(config.getBuiltinsDeclarations())
                 .append(NL);
 
-        // create a basic main method calling predefined non-static main
+// create a basic main method calling predefined non-static main
+// Call specifies if webdriver or mongo are needed.
         sb
                 .append("public static void main(String ... args ) {")
                 .append(NL)
                 .append("new ")
-                .append(config.getTargetJavaClassName()).append("().main() ;}")
+                .append(config.getTargetJavaClassName())
+                .append("().main(")
+                .append(prop.needsWebdriver)
+                .append(",")
+                .append(prop.needsMongo).append(") ;}")
                 .append(Config.NL);
-        
 
         // Create the scrap method
         sb
@@ -78,6 +80,5 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
         // Annotate tree
         prop.put(ctx, sb.toString());
     }
-
 
 }

@@ -24,6 +24,9 @@ abstract public class Base implements Scrapper {
      * Symbol table.
      */
     final protected Map<String, String> symtab = new HashMap<>();
+    /**
+     * Stack frame for the loops.
+     */
 
     final protected FrameStack fs = new FrameStack();
 
@@ -36,41 +39,49 @@ abstract public class Base implements Scrapper {
      * The client object to connect to Mongo. The getMongoConnectionString
      * should be defined in the generated class
      */
-    final protected MongoClient CLIENT = MongoClients.create(getMongoConnectionString());
+    protected MongoClient CLIENT = null;
     protected MongoCollection<Document> COLLECTION;
-    
 
     /**
-     * The generix main method. It is non static, and will be called by the
+     * The generix main method.It is non static, and will be called by the
      * static method from the final scrapper class.
+     *
+     * @param initWebdriver - do we need to init WebDriver ?
+     * @param initMongo - do we need to init mongo ?
      */
-    public void main() {       
-               
-        
+    public void main(boolean initWebdriver, boolean initMongo) {
+
         final WebDriver w;
         try {
-            w = new RemoteWebDriver(new URL(getGridUrl()), DesiredCapabilities.firefox());
-            
-            // Add the webdriver to the FrameStack
-            fs.setWd(w);
+            if (initWebdriver) {
+                w = new RemoteWebDriver(new URL(getGridUrl()), getBrowserCapabilities());
+
+                // Add the webdriver to the FrameStack
+                fs.setWd(w);
+            }
             // init the database
-            initDb();
-            
+            if (initMongo) {
+                initDb();
+            }
+
             scrap();
         } catch (Exception ex) {
             LOG.info(ex.getMessage());
         } finally {
-            if (fs.getWd() != null) {
-                fs.getWd().quit();
+            if (initWebdriver) {
+                if (fs.getWd() != null) {
+                    fs.getWd().quit();
+                }
             }
 
         }
     }
 
     protected void initDb() {
+        if (CLIENT == null) {
+            CLIENT = MongoClients.create(getMongoConnectionString());
+        }
         COLLECTION = CLIENT.getDatabase(getMongoDbName()).getCollection(getMongoColName());
     }
-    
-    
 
 }

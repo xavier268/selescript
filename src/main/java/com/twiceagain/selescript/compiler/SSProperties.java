@@ -10,11 +10,22 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
- * Annoteted Tree. Will refuse to store/retrieve from null key.
+ * Annoteted Tree. Will refuse to store/retrieve from null key. Stores the
+ * compilation context such as weather Mongo or WebDriver need to be initialized. 
  *
  * @author xavier
  */
 public class SSProperties extends ParseTreeProperty<String> {
+
+    /**
+     * Mark the code as using mongo.
+     */
+    public boolean needsMongo = false;
+
+    /**
+     * Mark the code as using WebDriver.
+     */
+    public boolean needsWebdriver = false;
 
     @Override
     public String get(ParseTree node) {
@@ -23,7 +34,7 @@ public class SSProperties extends ParseTreeProperty<String> {
         }
         return super.get(node);
     }
-    
+
     @Override
     public String removeFrom(ParseTree node) {
         if (node == null) {
@@ -31,7 +42,7 @@ public class SSProperties extends ParseTreeProperty<String> {
         }
         return super.removeFrom(node);
     }
-   
+
     @Override
     public void put(ParseTree node, String s) {
         if (node == null) {

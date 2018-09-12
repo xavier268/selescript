@@ -24,4 +24,5 @@ public interface Scrapper {
     public String getMongoConnectionString();
     public String getMongoDbName();
     public String getMongoColName();
+    
 }

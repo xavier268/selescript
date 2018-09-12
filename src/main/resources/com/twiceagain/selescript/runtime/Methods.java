@@ -17,6 +17,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 abstract public class Methods extends Base implements Scrapper {
 
+ 
+
+    
     /*--------------------------------------------------
      * A dedicated equal that behave well with null values.
      * null eq null = ""

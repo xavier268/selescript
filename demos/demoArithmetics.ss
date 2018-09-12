@@ -44,11 +44,7 @@ print "Concaneted  " + null + "string" ;
 print "Concaneted  " + 'string' ;
 
 
-print;
-print "A non existing xpath will fail the condition check and quit ..." ;
-@ "this-xpath-does-not-exist" ;
-
-print  "This message should never appear !!" ;
+print  "End of demo." ;
 
 
 

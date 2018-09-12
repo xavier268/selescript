@@ -6,6 +6,7 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import static com.twiceagain.selescript.configuration.Config.AP;
 import static com.twiceagain.selescript.configuration.Config.NL;
@@ -13,7 +14,6 @@ import com.twiceagain.selescript.configuration.SSListener;
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * Handles the statements events.
@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class SSListenerStatement extends SSListenerParam implements SSListener {
 
-    public SSListenerStatement(Config config, ParseTreeProperty<String> prop) {
+    public SSListenerStatement(Config config, SSProperties prop) {
         super(config, prop);
     }
 
@@ -56,6 +56,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     @Override
     public void exitGo(SelescriptParser.GoContext ctx) {
 
+        prop.needsWebdriver = true;
         String uid = config.createUniqueId();
 
         StringBuilder sb = new StringBuilder();
@@ -102,6 +103,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitDb(SelescriptParser.DbContext ctx) {
+        prop.needsMongo = true;
         String s = "mongo(" + parseParams(ctx.param(),true) + ");" + NL;
         prop.put(ctx, s);
     }
@@ -125,12 +127,14 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitClick(SelescriptParser.ClickContext ctx) {
+        prop.needsWebdriver = true;
         String s = "click(wd," + prop.get(ctx.stringval()) + ");" + NL;
         prop.put(ctx, s);
     }
 
     @Override
     public void exitClickw(SelescriptParser.ClickwContext ctx) {
+                prop.needsWebdriver = true;
         String s = "clickw(wd," + prop.get(ctx.stringval()) + ");" + NL;
         prop.put(ctx, s);
     }

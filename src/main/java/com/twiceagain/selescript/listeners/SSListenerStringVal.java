@@ -6,10 +6,10 @@
 package com.twiceagain.selescript.listeners;
 
 import auto.SelescriptParser;
+import com.twiceagain.selescript.compiler.SSProperties;
 import com.twiceagain.selescript.configuration.Config;
 import static com.twiceagain.selescript.configuration.Config.AP;
 import com.twiceagain.selescript.configuration.SSListener;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
  * StringVal are string values (possibly null). They are stored internally as
@@ -19,12 +19,13 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class SSListenerStringVal extends SSBaseListener implements SSListener {
 
-    public SSListenerStringVal(Config config, ParseTreeProperty<String> prop) {
+    public SSListenerStringVal(Config config, SSProperties prop) {
         super(config, prop);
     }
 
     @Override
     public void exitAt(SelescriptParser.AtContext ctx) {
+        prop.needsWebdriver = true;
         StringBuilder sb = new StringBuilder();
         sb.append("at(");
         if (ctx.ID() == null) {
