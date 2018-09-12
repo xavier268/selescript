@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
