@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"auto"},{"l":"com.twiceagain.selescript"},{"l":"com.twiceagain.selescript.compiler"},{"l":"com.twiceagain.selescript.configuration"},{"l":"com.twiceagain.selescript.exceptions"},{"l":"com.twiceagain.selescript.listeners"}]

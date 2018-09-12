@@ -5,6 +5,7 @@
     <artifactId>selescript</artifactId>
     <version>0.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>selescript</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,9 +64,19 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>        
+            </plugin>  
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <destDir>../../../pages/selescript-api</destDir>
+                </configuration>
+            </plugin>      
         </plugins>
     </build>
+    
+    
     
     
     <dependencies>
@@ -86,8 +97,9 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
-        <!-- not really needed, but a convenience for the IDE to edit the java
-        runtime librairy in the resources. Scope is provided for that reason -->
+        <!-- Plugins below are not really needed, but a convenience for the IDE 
+        to edit the java runtime library in the resources. Scope is provided 
+        for that reason -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -107,5 +119,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <name>selescript</name>
+   
 </project>

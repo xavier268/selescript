@@ -32,5 +32,5 @@ See the full [Selescript langage reference](pages/langreference.html).
 
 There are two javadoc APIs :
 
-* the API for Selescript itself
-* the API for the runtime package that is used by the gererated class.
+* the [API for Selescript](pages/selescript-api) itself
+* the [API for the runtime](pages/runtime-api) itself, as used by a demo file.
