@@ -40,6 +40,8 @@ Statements can use expressions.
 
 In Selescript, all xpath are expected to be relative, ie start with a '.'.
 
+For a quick Xpath tutorial, see [here](https://www.w3schools.com/xml/xpath_intro.asp)
+
 ## Built_in variables
 
 The langage provides builtins variables. They all start with a $ signi, and can be read and/or written.
