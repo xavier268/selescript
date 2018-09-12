@@ -44,7 +44,7 @@ For a quick Xpath tutorial, see [here](https://www.w3schools.com/xml/xpath_intro
 
 ## Built_in variables
 
-The langage provides builtins variables. They all start with a $ signi, and can be read and/or written.
+The langage provides builtins variables. They all start with a $ sign, and can be read and/or written.
 
 The full documentation for the buitins variable is [here](../src/main/resources/rt/builtins.html).
 
