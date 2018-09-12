@@ -44,7 +44,7 @@ In Selescript, all xpath are expected to be relative, ie start with a '.'.
 
 The langage provides builtins variables. They all start with a $ signi, and can be read and/or written.
 
-The full documentation for the buitins variable is [here](../src/main/resources/rt/builtins.list).
+The full documentation for the buitins variable is [here](../src/main/resources/rt/builtins.html).
 
 ## Grammar reference 
 

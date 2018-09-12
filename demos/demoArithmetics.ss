@@ -6,7 +6,11 @@
 print "This was written using print"  ;
 
 emit comment:"'emit' can also be used to print, but is far less readeable in json format" ;
+print $JAVA ;
+print $OS ;
 
+
+print ;
 print "Printing some null values : null, then null + null";
 print null ;
 print null + null ;

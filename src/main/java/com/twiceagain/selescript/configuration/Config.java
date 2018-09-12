@@ -308,7 +308,7 @@ public class Config {
         if (builtinSetCached == null) {
             builtinSetCached = new TreeSet<>();
             new Scanner(Config.class.getClassLoader()
-                    .getResourceAsStream("rt/builtins.list"), "UTF-8")
+                    .getResourceAsStream("rt/builtins.md"), "UTF-8")
                     .tokens()
                     .filter((String x) -> {
                         return x.startsWith("$");
