@@ -21,8 +21,9 @@ echo "Log for the run.sh sript on : " > "$LOG"
 date >> "$LOG"
 
 if [ ! -f target/$JAR ]; then   
-    echo "Compilation is needed. Please wait ..."
+    echo "Compilation is needed."
     echo "Preparing to compile target/$JAR"
+    echo "Please wait ..."
     mvn -version >> "$LOG"
     if [ $? -ne 0 ] ; then 
         echo "Cannot compile because could not find maven !"
@@ -30,7 +31,7 @@ if [ ! -f target/$JAR ]; then
 	cat "$LOG"
         exit 1
     fi
-    mvn clean package -e
+    mvn clean package -e -q
     if [ $? -ne 0 ] ; then
         echo "Could not compile, somiting is wrong."
         echo "Go check the messages above and try again ..."

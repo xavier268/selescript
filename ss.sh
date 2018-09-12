@@ -14,7 +14,7 @@ if [ $? -ne 0 ] ; then
    exit 1
 fi
 
-mvn package -DskipTests # Caution : tests are skipped ...
+mvn package -DskipTests -q # Caution : tests are skipped ...
 
 # Capturing the new generated jar
 JAR="target/$( ls -1 target | grep "jar-with-dependencies" | sort -r | head -n 1 )"
