@@ -151,7 +151,13 @@ You can get the command line arguments from ss.sh by typing :
 ````
 $ ./ss.sh -h
 
-[ ... stuff ...]
+Apache Maven 3.5.2 (Red Hat 3.5.2-5)
+Maven home: /usr/share/maven
+Java version: 10.0.2, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-10-openjdk-10.0.2.13-1.fc28.x86_64
+Default locale: fr_FR, platform encoding: UTF-8
+OS name: "linux", version: "4.18.5-200.fc28.x86_64", arch: "amd64", family: "unix"
+Using <target/selescript-0.5.2-SNAPSHOT-jar-with-dependencies.jar> with arguments : -h
 
 Selescript compiler.
 (c) Xavier Gandillot - 2018
@@ -159,7 +165,7 @@ See details on https://xavier268.github.io/selescript/
 Selescript version : 0.5.2
 Using Selenium version : 3.14.0
 Compiling for java version : 10
-Generated files will be saved in : /home/xavier/Bureau/bidon/selescript/target/dist-NoName
+Generated files will be saved in : /home/xavier/Bureau/selescript/target/dist-NoName
 
 Available commands : 
 
@@ -207,7 +213,6 @@ Available commands :
      --classname CLASSNAME : generated scrapper will be named CLASSNAME.
                              Default will be derived from source file if
                              available, or 'NoName' if reading from stdin.
-
 
 ````
 
