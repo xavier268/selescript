@@ -2,7 +2,7 @@
 
 ## General structure of the langage
 
-A minimum Hello World program could be :
+A minimum Hello World program :
 
 ````
 // This is a comment
@@ -10,14 +10,14 @@ A minimum Hello World program could be :
 print "Hello World" ;
 ````
 
-Using variable, we can do :
+Using variable :
 ````
 user = "Xavier" ;
 quotedstring = ' loves "Selescript" ! ' ;   // Notice how string can use single or double quotes.
-Print user + quotedstring ;
+print user + quotedstring ;
 ````
 
-Okay, but we want to navigate the web, so this would make more sense :
+Navigating the web :
 
 ````
 print "Visiting google home page ..." ;
