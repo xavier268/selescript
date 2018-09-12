@@ -24,10 +24,13 @@ print "(1 + 2) * 3 = 9 ? " + ( 1 + 2) * 3  ;
 
 print ;
 print "Testing precedence between operators" ;
-print "'1' + 2 ~ 2 = 2 ?" + ('1' + 2 ~ 2 ) ;
-print "1 + 2 ~ 3 = 3 ?" + (1 + 2 ~ 3 ) ;
-print "1 + null | 2 = 1 ?" + (1 + null | 2 ) ;
-print "'bla' ~ 'a' != null : expecting empty string ? " + (('bla' ~ 'a' != null)!="")|"empty string" ;
+print "'1' + 2 ~ 2 => 2 ?" + ('1' + 2 ~ 2 ) ;
+print "1 + 2 ~ 3 => 3 ?" + (1 + 2 ~ 3 ) ;
+print "1 + null | 2 => 1 ?" + (1 + null | 2 ) ;
+print "'bla' ~ 'a' != > a ?" ; print ('bla' ~ 'a' ) ;
+print "'bla' ~ 'a' == 'b' != > null ?" ; print ('bla' ~ 'a' == 'b') ;
+print "'bla' ~ ( 'a' == 'b') != > bla ?" ; print ('bla' ~ ('a' == 'b')) ;
+print "('bla' ~ 'a') == 'b' != > null ?" ; print (('bla' ~ 'a' ) == 'b') ;
 
 
 
