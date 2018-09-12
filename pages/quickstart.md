@@ -2,7 +2,7 @@
 # Quickstart - Linux
 
 
-## Make sure you have the required tools installed
+## Make sure you have the required tools installed !
 
 You will need : 
 
@@ -121,7 +121,7 @@ p54fgqoctw7q        selgrid_chrome      replicated          1/1                 
 wxcf7fu4c488        selgrid_mongo       replicated          1/1                 mongo:3.6                    *:27017->27017/tcp
 ````
 
-Okay, everything up and running, we can compile our first demo script.
+Okay, everything up and running, we can compile and run our first demo script.
 
 ## Running a demo file
 
@@ -133,8 +133,8 @@ $ chmod +x ss.sh
 ````
 
 We can now use Selescript to run a demo on Google.
-Since it is the first time we run it, it is going to be comiled, will load a few things, and that may take some time.
-Once it has compile everything, it will start the scrapper (because we specified -x on the command line).
+Since it is the first time we run it, it is going to be compiled, will load a few things, and that may take some time.
+Once compiled, it will start the scrapper (because we specified -x for "eXecute" on the command line).
 
 ````
 $ ./ss.sh -x -s demos/demoGoogle.ss
