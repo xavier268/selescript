@@ -1,10 +1,10 @@
 
-$url = "www.google.com";
+$url = "https://www.google.com";
 print "Now on page " + $url ;
 
 print;
-print "Looping dor 30 seconds";
-go s:30 {
+print "Looping for 5 minutes";
+go mn:5 {
     
 
     print "BODY = " + @ ".//body";
