@@ -29,7 +29,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     /**
      * Creates a fragment of code with comma separated values, alternating
      * between key, the value.Use when order matters, or when duplication is
-     * encourraged.
+     * encouraged. StaleElementException are captured and exit the current loop.
      *
      * @param params
      * @param throwOnNull - should we throw on null keys ?
@@ -67,6 +67,8 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                 .append(parseParams(ctx.param(), false))
                 .append(");")
                 .append(NL)
+                .append("try {")
+                .append(NL)
                 .append("while(fs.loop()){")
                 .append(NL);
 
@@ -75,6 +77,8 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         });
         sb
                 .append("}")
+                .append(NL)
+                .append("} catch(StaleElementReferenceException ex) { /* do nothing */ }")
                 .append(NL)
                 .append("fs.cleanup();")
                 .append(NL);

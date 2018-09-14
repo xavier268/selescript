@@ -65,7 +65,7 @@ abstract public class Base implements Scrapper {
 
             scrap();
         } catch (Exception ex) {
-            LOG.info(ex.getMessage());
+            LOG.info(ex.getMessage(),ex);
         } finally {
             if (initWebdriver) {
                 if (fs.getWd() != null) {

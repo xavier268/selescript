@@ -1,6 +1,6 @@
 
 print "Here, there is no url initialization";
-print "Dereferencing current element gives :" ;
+print "Dereferencing current element gives empty string : " ;
 print @ ;
 
 print ;
