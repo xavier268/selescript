@@ -75,16 +75,16 @@ class Frame {
     public long getCount() {
         return count;
     }
-    
+
     public long incrementCount() {
         count++;
         return count;
     }
 
     /**
-     * Return the serach context used internally by this Frame. It is the
+     * Return the search context used internally by this Frame. It is the
      * current WebElement of the enclosing frame, or the WebDriver if no
-     * enclosing frame.
+     * enclosing frame. Should never be null.
      *
      * @return
      */
@@ -92,13 +92,19 @@ class Frame {
         if (previous == null) {
             return parent.getWd();
         } else {
-            return previous.getCurrent();
+            SearchContext s = previous.getCurrent();
+            if (s == null) {
+                return parent.getWd();
+            } else {
+                return s;
+            }
         }
     }
 
     /**
      * Try to get the current WebElement within an instantiated loop. Should
-     * normally never return null within a while(xx.loop()){ ... }
+     * normally never return null within a while(xx.loop()){ ... }. Could be
+     * null if no xpath loops above.
      *
      * @return
      */
@@ -137,7 +143,7 @@ class Frame {
     /**
      * Updates the list of WebElements to visit, excluding the ones we already
      * got, base upon wd or the current searchcontext of the previous frame. If
-     * xpath is null, does nothing.
+     * xpath is null does nothing.
      */
     void refresh() {
         if (xpath == null) {

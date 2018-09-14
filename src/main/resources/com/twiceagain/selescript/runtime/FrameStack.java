@@ -157,7 +157,7 @@ public class FrameStack {
             return false;
         }
         // Loop forever if no xpath specified.
-        if (frames.getLast().getXpath() == null) {            
+        if (frames.getLast().getXpath() == null) {
             return true;
         }
         // Loop around xpath generated elements.
@@ -192,15 +192,19 @@ public class FrameStack {
     }
 
     /**
-     * Get current search context. Can be called outside a loop.
+     * Get current search context. Can be called outside a loop. Should never
+     * return null. If no search context can be found, return wd.
      *
      * @return
      */
     public SearchContext getSc() {
-        if (frames.isEmpty()) {
+        WebElement w = getWe();
+
+        if (w == null) {
             return getWd();
+        } else {
+            return w;
         }
-        return getWe();
     }
 
     public void cleanup() {
