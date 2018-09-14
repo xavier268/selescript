@@ -10,7 +10,7 @@ go  c:5 {
     print "Before selecting any xpath :" + @;
     print "Page title = " + $title ;
 
-    go "//body" { 
+    go ".//body" { 
         print "Entered body loop" ;
         print "Selected BODY = " + @ ;
 
