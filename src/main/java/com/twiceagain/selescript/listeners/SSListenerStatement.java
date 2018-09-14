@@ -26,8 +26,6 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         super(config, prop);
     }
 
-    
-
     /**
      * Creates a fragment of code with comma separated values, alternating
      * between key, the value.Use when order matters, or when duplication is
@@ -66,7 +64,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
                 .append(NL)
                 // start loop
                 .append("fs.prepare(")
-                .append(parseParams(ctx.param(),false))
+                .append(parseParams(ctx.param(), false))
                 .append(");")
                 .append(NL)
                 .append("while(fs.loop()){")
@@ -97,14 +95,14 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitEmit(SelescriptParser.EmitContext ctx) {
-        String s = "emit(" + parseParams(ctx.param(),true) + ");" + NL;
+        String s = "emit(" + parseParams(ctx.param(), true) + ");" + NL;
         prop.put(ctx, s);
     }
 
     @Override
     public void exitDb(SelescriptParser.DbContext ctx) {
         prop.needsMongo = true;
-        String s = "mongo(" + parseParams(ctx.param(),true) + ");" + NL;
+        String s = "mongo(" + parseParams(ctx.param(), true) + ");" + NL;
         prop.put(ctx, s);
     }
 
@@ -128,15 +126,17 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     @Override
     public void exitClick(SelescriptParser.ClickContext ctx) {
         prop.needsWebdriver = true;
-        String s = "click(wd," + prop.get(ctx.stringval()) + ");" + NL;
-        prop.put(ctx, s);
+        String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
+        String ss = "click(" + s + ");" + NL;
+        prop.put(ctx, ss);
     }
 
     @Override
     public void exitClickw(SelescriptParser.ClickwContext ctx) {
-                prop.needsWebdriver = true;
-        String s = "clickw(wd," + prop.get(ctx.stringval()) + ");" + NL;
-        prop.put(ctx, s);
+        prop.needsWebdriver = true;
+        String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
+        String ss = "clickw(" + s + ");" + NL;
+        prop.put(ctx, ss);
     }
 
     @Override

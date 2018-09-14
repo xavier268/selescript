@@ -17,9 +17,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 abstract public class Methods extends Base implements Scrapper {
 
- 
-
-    
     /*--------------------------------------------------
      * A dedicated equal that behave well with null values.
      * null eq null = ""
@@ -117,6 +114,7 @@ abstract public class Methods extends Base implements Scrapper {
      * --------------------------------------------------------------
      *
      * Click on the first WebElement that matches the provided xpath.
+     * No path means using current context (error if current context is not a WebElement ).
      *
      * @param xpath
      * @param linkShouldGo - Set to true if the link we click is expected to
@@ -124,17 +122,24 @@ abstract public class Methods extends Base implements Scrapper {
      *
      */
     protected void click(String xpath, boolean linkShouldGo) {
-        if (xpath == null) {
-            return;
+        WebElement link;
+
+        if (xpath != null) {
+            List<WebElement> lwe = fs.getSc().findElements(By.xpath(xpath));
+            if (lwe.isEmpty()) {
+                return;
+            } else {
+                link = lwe.get(0);
+            }
+        } else {
+            link = (WebElement) fs.getSc();
         }
-        List<WebElement> lwe = fs.getSc().findElements(By.xpath(xpath));
-        if (lwe.isEmpty()) {
-            return;
-        }
-        lwe.get(0).click();
+
+        link.click();
+        
         if (linkShouldGo) {
-            // Wait up to 5 seconds for the page to disappear.
-            (new WebDriverWait(fs.getWd(), 5)).until(ExpectedConditions.stalenessOf(lwe.get(0)));
+            // Wait up to 2 seconds for the page to disappear.
+            (new WebDriverWait(fs.getWd(), 2)).until(ExpectedConditions.stalenessOf(link));
         }
     }
 

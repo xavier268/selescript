@@ -23,8 +23,8 @@ services:
     environment:
       HUB_HOST: hub
       REMOTE_HOST: "http://firefox:5555"
-      NODE_MAX_INSTANCES: 5
-      NODE_MAX_SESSION: 5
+      NODE_MAX_INSTANCES: 2
+      NODE_MAX_SESSION: 2
 
   chrome:
     image: selenium/node-chrome:3.14
@@ -35,15 +35,15 @@ services:
     environment:
       HUB_HOST: hub
       REMOTE_HOST: "http://chrome:5555"
-      NODE_MAX_INSTANCES: 5
-      NODE_MAX_SESSION: 5
+      NODE_MAX_INSTANCES: 2
+      NODE_MAX_SESSION: 2
 
   hub:
     image: selenium/hub:3.14
     ports:
       - "4444:4444"
     environment:
-      GRID_MAX_SESSION: 8
+      GRID_MAX_SESSION: 4
       
   mongo:
     image: library/mongo:3.6
