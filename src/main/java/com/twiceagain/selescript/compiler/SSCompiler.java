@@ -75,7 +75,7 @@ public final class SSCompiler {
      * prefered way to go. The code is generated, but not saved, until the
      * compiler is requested to do so.
      *
-     * @param conf
+     * @param conf - configuration
      */
     public SSCompiler(Config conf) {
         CharStream in;
@@ -108,7 +108,7 @@ public final class SSCompiler {
      * Compile from String, mainly for debugging purpose. Creates its own
      * debug-friendly configuration : dryrun, debugmode.
      *
-     * @param scriptCode
+     * @param scriptCode - the source script in selescript
      */
     public SSCompiler(String scriptCode) {
 
@@ -119,8 +119,8 @@ public final class SSCompiler {
      * Compile from string, using the provide configuration. Dryrun will be
      * forced. If config is null, a debug/dryrun config is created.
      *
-     * @param conf
-     * @param scriptCode
+     * @param conf - configuration to use, optionnal (use null)
+     * @param scriptCode - a string with the code to compile
      */
     public SSCompiler(Config conf, String scriptCode) {
         if (conf == null) {
@@ -135,7 +135,7 @@ public final class SSCompiler {
     /**
      * Do the actual compilation.
      *
-     * @param in
+     * @param in - the stream to read the script from
      */
     protected final void compile(CharStream in) {
 
@@ -172,7 +172,7 @@ public final class SSCompiler {
     /**
      * The final code will be found as the attribute of the tree root.
      *
-     * @return
+     * @return - the generated java code.
      */
     public String getCode() {
         if (rootNode == null) {
@@ -187,7 +187,7 @@ public final class SSCompiler {
      * accross successive compilations. In practice, anything happening BEFORE
      * the first occurence of 'public void scrap' is ignored.
      *
-     * @return
+     * @return - the hash as a string of hex digits.
      */
     public String getCodeHash() {
         String c = getCode().split("public void scrap()", 2)[1];
@@ -204,7 +204,7 @@ public final class SSCompiler {
     /**
      * Check if a syntax error was detected during compilation.
      *
-     * @return
+     * @return - true if error
      */
     public boolean hasSyntaxError() {
         return errorListener.isSyntaxError();
@@ -213,7 +213,7 @@ public final class SSCompiler {
     /**
      * Get the first (there can be more) error message.
      *
-     * @return
+     * @return - error message
      */
     public String getErrorMessage() {
         if (!hasSyntaxError()) {
@@ -229,7 +229,7 @@ public final class SSCompiler {
     /**
      * Get the parsed tree (for debugging).
      *
-     * @return
+     * @return - the parse tree.
      */
     public String getTreeString() {
         return rootNode.toStringTree(parser);
@@ -246,7 +246,7 @@ public final class SSCompiler {
     /**
      * Dumps the annotated tree or sub-tree.
      *
-     * @param node
+     * @param node - the tree or subtree to dump.
      */
     public void dump(ParseTree node) {
 

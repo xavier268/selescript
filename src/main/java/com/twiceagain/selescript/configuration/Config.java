@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Configuration information and various tools.
+ * Configuration information and related utilities.
  *
  * @author xavier
  */
@@ -54,21 +54,42 @@ public class Config {
      */
     private static final String JAVACLASSNAME_DEFAULT = "NoName";
     /**
-     * Tghe configurated class name.
+     * The configurated class name.
      */
     private String JavaClassName = JAVACLASSNAME_DEFAULT;
+    /**
+     * The source file name of the script. Null if not using a file input for
+     * script.
+     */
 
     private String SOURCEFILENAME = null;
+    /**
+     * File to read parameters from.
+     */
 
     private String PARAMETERFILENAME = null;
+    /**
+     * debug mode flag.
+     */
 
     private boolean DEBUGMODE = false;
+    /**
+     * Are we running comiler on windows ?
+     */
 
     static final boolean ISWINDOWS = System.getProperty("os.name")
             .toLowerCase().startsWith("windows");
+    /**
+     * Default url to reach the selenium grid hub.
+     */
     private final static String GRIDURL_DEFAULT = "http://localhost:4444/wd/hub";
+    /**
+     * Configurded url to the selenium grid hub.
+     */
     private URL gridUrl;
-
+    /**
+     * What browser is required. Choice of "firefox" or "chrome".
+     */
     private String BROWSER = "firefox";
     private String MONGOCONNECTIONSTRING = "mongodb://localhost:27017";
     private String MONGODBNAME = "selescriptdb";
@@ -93,6 +114,9 @@ public class Config {
      * New line separator used
      */
     public static final String NL = System.lineSeparator();
+    /**
+     * One double quote as a constant string, for convenience.
+     */
     public static final String AP = "\"";
 
     /**
@@ -122,16 +146,29 @@ public class Config {
      */
     private Set<String> builtinSetCached;
 
+    /**
+     * Constructor sets a new project version.
+     */
     public Config() {
         incTargetProjectVersion();
 
     }
 
+    /**
+     *
+     * @param className - class name to generate
+     */
     public Config(String className) {
         this.JavaClassName = className;
         incTargetProjectVersion();
     }
 
+    /**
+     * Set target class name, fluent syntax.
+     *
+     * @param className - the name to use.
+     * @return - this
+     */
     public Config setTargetJavaClassName(String className) {
         this.JavaClassName = className;
         incTargetProjectVersion();

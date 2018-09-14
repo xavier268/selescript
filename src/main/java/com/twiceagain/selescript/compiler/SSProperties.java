@@ -27,6 +27,11 @@ public class SSProperties extends ParseTreeProperty<String> {
      */
     public boolean needsWebdriver = false;
 
+    /**
+     * Retrieves a code fragment.
+     * @param node - the node to use
+     * @return - the code fragment
+     */
     @Override
     public String get(ParseTree node) {
         if (node == null) {
@@ -35,6 +40,11 @@ public class SSProperties extends ParseTreeProperty<String> {
         return super.get(node);
     }
 
+    /**
+     * Remove attachements to this subtree/node.
+     * @param node - subtree/node
+     * @return What was removed.
+     */
     @Override
     public String removeFrom(ParseTree node) {
         if (node == null) {
@@ -43,6 +53,11 @@ public class SSProperties extends ParseTreeProperty<String> {
         return super.removeFrom(node);
     }
 
+    /**
+     * Attach a code fragment to a subtree/node.
+     * @param node - subtree/node
+     * @param s - code fragment to attach
+     */
     @Override
     public void put(ParseTree node, String s) {
         if (node == null) {

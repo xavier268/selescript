@@ -13,8 +13,8 @@ import java.util.List;
 public class BuildDemos {
     /**
      * Main class for building demos.
-     * @param args
-     * @throws IOException 
+     * @param args - ignored
+     * @throws IOException frm CommanLine
      */
     public static void main(String ... args) throws IOException {
 

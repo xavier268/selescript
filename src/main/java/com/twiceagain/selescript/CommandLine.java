@@ -19,13 +19,12 @@ import java.util.List;
 public class CommandLine {
 
     /**
-     * Compile a selecript source.
+     * Compile a selecript source.See #parseArgs(String[]) code for commandline
+     * parameters and configuration.
      *
-     * @throws java.io.IOException
-     * @See #parseArgs(String[]) code for commandline parameters and
-     * configuration.
      *
      * @param args the command line arguments
+     * @throws java.io.IOException configuration errors
      */
     public static void main(String... args) throws IOException {
 
@@ -72,7 +71,7 @@ public class CommandLine {
      * Ask bash to run the command provided.Warning, this is lWarning, this is
      * linux specific.
      *
-     * @param config
+     * @param config - configuration object
      */
     public static void run(Config config) {
         if (config != null && !config.isLinux()) {
@@ -104,7 +103,7 @@ public class CommandLine {
      * Parse the command line arguments.
      *
      * @param args
-     * @return
+     * @return a Configuration object
      */
     protected static Config parseArgs(String[] args) {
 
@@ -226,6 +225,10 @@ public class CommandLine {
 
     }
 
+    /**
+     * Print help for cli options.
+     * @param config - needed to print detailled version header.
+     */
     public static void printHelp(Config config) {
         printVersionInfo(config);
         List<String> h = Arrays.asList(
@@ -282,6 +285,10 @@ public class CommandLine {
 
     }
 
+    /**
+     * Print a few lines of  version and copyright  configuration info.
+     * @param config - the configuration object
+     */
     public static void printVersionInfo(Config config) {
 
         System.out.printf("%nSelescript compiler."
