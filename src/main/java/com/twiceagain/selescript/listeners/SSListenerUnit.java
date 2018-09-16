@@ -25,8 +25,7 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
         
-        config.setInitWebdriver(prop.needsWebdriver);
-        config.setInitMongoDb (prop.needsMongo);
+        
 
         sb
                 .append(config.getFileHeader())

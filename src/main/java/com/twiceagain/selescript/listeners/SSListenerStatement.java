@@ -54,7 +54,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     @Override
     public void exitGo(SelescriptParser.GoContext ctx) {
 
-        prop.needsWebdriver = true;
+        config.setInitWebdriver(true);
         String uid = config.createUniqueId();
 
         StringBuilder sb = new StringBuilder();
@@ -105,7 +105,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitDb(SelescriptParser.DbContext ctx) {
-        prop.needsMongo = true;
+        config.setInitMongoDb(true);
         String s = "mongo(" + parseParams(ctx.param(), true) + ");" + NL;
         prop.put(ctx, s);
     }
@@ -129,7 +129,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitClick(SelescriptParser.ClickContext ctx) {
-        prop.needsWebdriver = true;
+        config.setInitWebdriver(true);
         String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
         String ss = "click(" + s + ");" + NL;
         prop.put(ctx, ss);
@@ -137,7 +137,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
 
     @Override
     public void exitClickw(SelescriptParser.ClickwContext ctx) {
-        prop.needsWebdriver = true;
+        config.setInitWebdriver(true);
         String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
         String ss = "clickw(" + s + ");" + NL;
         prop.put(ctx, ss);

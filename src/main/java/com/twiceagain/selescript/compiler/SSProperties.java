@@ -17,16 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class SSProperties extends ParseTreeProperty<String> {
 
-    /**
-     * Mark the code as using mongo.
-     */
-    public boolean needsMongo = false;
-
-    /**
-     * Mark the code as using WebDriver.
-     */
-    public boolean needsWebdriver = false;
-
+    
     /**
      * Retrieves a code fragment.
      * @param node - the node to use

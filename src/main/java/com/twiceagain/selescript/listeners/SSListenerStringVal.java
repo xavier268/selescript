@@ -25,7 +25,7 @@ public class SSListenerStringVal extends SSBaseListener implements SSListener {
 
     @Override
     public void exitAt(SelescriptParser.AtContext ctx) {
-        prop.needsWebdriver = true;
+        config.setInitWebdriver(true);
         StringBuilder sb = new StringBuilder();
         sb.append("at(");
         if (ctx.ID() == null) {
