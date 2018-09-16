@@ -39,7 +39,8 @@ abstract public class Base implements Scrapper {
      * should be defined in the generated class
      */
     protected MongoClient CLIENT = null;
-    protected MongoCollection<Document> COLLECTION;
+    protected MongoCollection<Document> COLLECTION = null;
+    
 
     /**
      * The generix main method.It is non static, and will be called by the
@@ -62,16 +63,20 @@ abstract public class Base implements Scrapper {
             if (initMongo) {
                 initDb();
             }
+            // init input file for external parameters.
+            fs.initInput(getInputParameterFileName());
 
             scrap();
         } catch (Exception ex) {
-            LOG.info(ex.getMessage(),ex);
+            LOG.info(ex.getMessage(), ex);
         } finally {
             if (initWebdriver) {
                 if (fs.getWd() != null) {
                     fs.getWd().quit();
                 }
             }
+            fs.closeInput();
+            
 
         }
     }
@@ -82,5 +87,8 @@ abstract public class Base implements Scrapper {
         }
         COLLECTION = CLIENT.getDatabase(getMongoDbName()).getCollection(getMongoColName());
     }
+
+   
+    
 
 }

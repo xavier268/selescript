@@ -9,20 +9,28 @@ import org.openqa.selenium.Capabilities;
 
 /**
  * Base interface for all scrappers.
+ *
  * @author xavier
  */
 public interface Scrapper {
-    
+
     /**
-     * Launch the scrapping.     * 
+     * Launch the scrapping. *
      */
     public void scrap();
-    
+
     public String getGridUrl();
+
     public Capabilities getBrowserCapabilities();
-    
+
     public String getMongoConnectionString();
+
     public String getMongoDbName();
+
     public String getMongoColName();
-    
+
+    default public String getInputParameterFileName() {
+        return null;
+    }
+
 }

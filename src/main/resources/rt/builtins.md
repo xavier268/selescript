@@ -6,6 +6,8 @@
 | *Web variables* | | |
 | $title  | Read only     | Get the title of the page |
 | $url    | Read or Write | Get the current url, or set it (ie, go to the selected page) |
+| *Input parameters* | | |
+| $read       | Read or Write | Read will return the next line from inpout file. Write will reset the file and read from the start again. |
 | *System variables* | | |
 | $count      | Read only |  Counter inside a running loop(1-based), or 0 if outside |
 | $elapsed    | Read only |   Elapsed time in millis |

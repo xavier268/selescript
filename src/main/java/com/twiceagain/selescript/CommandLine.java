@@ -131,6 +131,14 @@ public class CommandLine {
                     break;
                 }
 
+                case "-i":
+                case "--input": {
+                    i++;
+                    String param = args[i];
+                    config.setInputParameterFileName(param);
+                    break;
+                }
+
                 case "-g":
                 case "--grid":
                 case "--grid-url":
@@ -227,6 +235,7 @@ public class CommandLine {
 
     /**
      * Print help for cli options.
+     *
      * @param config - needed to print detailled version header.
      */
     public static void printHelp(Config config) {
@@ -234,31 +243,35 @@ public class CommandLine {
         List<String> h = Arrays.asList(
                 "Available commands : ",
                 "",
-                "     -h",
+                "      -h",
                 "     --help        : print this help message and exit",
                 "",
-                "     -v",
+                "      -v",
                 "     --version     : print version information and exit",
                 "",
-                "     -d",
+                "      -d",
                 "     --debug        : set debug mode to true, default is false",
                 "",
                 "     --dry-run",
                 "     --dryrun       : compile everything, but do not save to file.",
                 "                      Default is to actually save to file",
                 "",
-                "     -s FILE",
-                "     --source FILE  : compile from specified FILE.",
+                "     - s FILE",
+                "     --source FILE  : compile from specified FILE, relative to ss.sh dir",
                 "                      Default is to read from stdin.",
                 "",
-                "     -x",
+                "      -x",
                 "     --execute",
                 "     --run          : execute immediately the compiled script.",
                 "                      Default is not to run immediately.",
                 "                      Execute has no effect if in --dry-run mode",
                 "                      WARNING : this is LINUX specific",
                 "",
-                "     -g",
+                "      -i FILE",
+                "     --input FILE   : set FILE as input file name. There are no default.",
+                "                      Caution : FILE is relative to COMPILED jar. Or use absolute file.",
+                "",
+                "      -g",
                 "     --grid",
                 "     --grid-url",
                 "     --gridurl      : specify the full url to the grid.",
@@ -272,7 +285,7 @@ public class CommandLine {
                 "      --firefox",
                 "      --chrome      : select browser type. Default is firefox.",
                 "",
-                "     -c",
+                "      -c",
                 "     --class",
                 "     --name",
                 "     --classname CLASSNAME : generated scrapper will be named CLASSNAME.",
@@ -286,7 +299,8 @@ public class CommandLine {
     }
 
     /**
-     * Print a few lines of  version and copyright  configuration info.
+     * Print a few lines of version and copyright configuration info.
+     *
      * @param config - the configuration object
      */
     public static void printVersionInfo(Config config) {

@@ -1,9 +1,14 @@
 package com.twiceagain.selescript.runtime;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -27,12 +32,79 @@ public class FrameStack {
 
     private WebDriver wd;
 
+    private Scanner inputScanner;
+    private String lastInputFileName ;
+
     public FrameStack() {
     }
 
     public FrameStack setWd(WebDriver wd) {
         this.wd = wd;
         return this;
+    }
+
+    /**
+     * Init the input scanner used to retrieve lines of inputs.
+     *
+     * @param fileName - the text file that contains the input lines.
+     * @return
+     */
+    public FrameStack initInput(String fileName) {
+        lastInputFileName = fileName;
+        if (fileName == null || fileName.isEmpty()) {
+            return null;
+        }
+        try {
+            inputScanner = new Scanner(new File(fileName), "UTF-8");
+        } catch (FileNotFoundException ex) {
+            try {
+                throw new RuntimeException("Could not read input from file : " + Paths.get(fileName).toFile().getCanonicalPath(), ex);
+            } catch (IOException ex1) {
+                throw new RuntimeException("Could not read input from file :" + fileName, ex1);
+            }
+        }
+        return this;
+    }
+    
+    /**
+     * Reset input, reading again from the same file from the beginning.
+     * @return  this
+     */
+    public FrameStack resetInput() {
+        closeInput();
+        initInput(lastInputFileName);
+        return this;
+    }
+
+    /**
+     * Retrieve next input line. Ignore comments and empty lines.
+     *
+     * @return null if end of file reached or no scanner available.
+     */
+    public String getNextInput() {
+
+        if (inputScanner == null) {
+            return null;
+        }
+
+        while (inputScanner.hasNextLine()) {
+            String s = inputScanner.nextLine();
+            if (!s.startsWith("#") && !s.isEmpty()) {
+                return s;
+            }
+        }
+        return null;
+
+    }
+    
+    /**
+     * Closes the input scanner.
+     * @return this
+     */
+    public FrameStack closeInput() {
+        if(inputScanner != null) inputScanner.close();
+        return this;
+        
     }
 
     public int size() {

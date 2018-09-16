@@ -1,0 +1,14 @@
+# input text for the scrapper, utf-_ encoded
+# text is organized line per line
+# comments start by # as the first char !
+# empty lines are ignored
+# white spaces are maintained
+
+
+test input nb one
+
+test input nb two
+   test input with white spaces # 3    
+
+
+

@@ -54,11 +54,12 @@ public class ConfigTest {
     }
 
     @Test
-    public void testReadingDemosSOurcefiles() {
+    public void testReadingDemosSourcefiles() {
         List<String> ls = Config.listFilesFromDirectory("demos");
         System.out.println("Demo file list : " + ls.toString());
         assertTrue("There should be at least 3 files", ls.size() >= 3);
-        assertTrue("The first file sohould have a .ss ending", ls.get(0).endsWith(".ss"));
+        assertTrue("The first file should have a .ss or .txt ending", 
+                ls.get(0).endsWith(".ss") );
     }
 
     /**

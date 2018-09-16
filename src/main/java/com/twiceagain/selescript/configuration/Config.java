@@ -64,10 +64,12 @@ public class Config {
 
     private String SOURCEFILENAME = null;
     /**
-     * File to read parameters from.
+     * Texte file to read input parameters from. Parametsr are read one line at
+     * a time. Lines starting by # are comment lines. Empty lines are ignored.
+     * Whitespaces are maintained.
      */
 
-    private String PARAMETERFILENAME = null;
+    private String INPUTPARAMETERFILENAME = null;
     /**
      * debug mode flag.
      */
@@ -248,13 +250,13 @@ public class Config {
     }
 
     public Config setInputParameterFileName(String params) {
-        PARAMETERFILENAME = params;
+        INPUTPARAMETERFILENAME = params;
         incTargetProjectVersion();
         return this;
     }
 
     public String getInputParameterFileName() {
-        return PARAMETERFILENAME;
+        return INPUTPARAMETERFILENAME;
     }
 
     public String getSelescriptVersion() {
@@ -610,6 +612,7 @@ public class Config {
         copyRuntimeJavaClass("Scrapper");
         copyRuntimeJavaClass("FrameStack");
         copyRuntimeJavaClass("Frame");
+        copyRuntimeJavaClass("RuntimeConfig");
         copyRuntimeJavaClass("package-info");
 
         // Builtins
@@ -775,7 +778,7 @@ public class Config {
                 .append("EXECUTEFLAG : ").append(EXECUTEFLAG).append(NL)
                 .append("FILESEPARATOR : ").append(FILESEPARATOR).append(NL)
                 .append("JavaClassName : ").append(JavaClassName).append(NL)
-                .append("PARAMETERFILENAME : ").append(PARAMETERFILENAME).append(NL)
+                .append("INPUTPARAMETERFILENAME : ").append(INPUTPARAMETERFILENAME).append(NL)
                 .append("RUNTIMEPACKAGE : ").append(RUNTIMEPACKAGE).append(NL)
                 .append("SELENIUMVERSION : ").append(SELENIUMVERSION).append(NL)
                 .append("SELESCRIPTVERSION : ").append(SELESCRIPTVERSION).append(NL)
@@ -837,7 +840,7 @@ public class Config {
      */
     public String getConstantDeclarations() {
         // define useful constants
-        return new StringBuilder()
+        StringBuilder sb = new StringBuilder()
                 .append("public final static String VERSION = \"").append(getSelescriptVersion()).append("\";").append(NL)
                 .append("public final static String SELENIUMVERSION = \"").append(getSeleniumVersion()).append("\";").append(NL)
                 .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(NL)
@@ -858,8 +861,17 @@ public class Config {
                 .append(NL)
                 .append(getBrowserCapabilitiesDeclaration()).append(NL)
                 .append("public static final String $$NULL = null;")
-                .append(NL)
-                .toString();
+                .append(NL);
+
+        if (getInputParameterFileName() != null) {
+            sb.append("@Override").append(NL)
+                    .append("public String getInputParameterFileName() { return ")
+                    .append(AP).append(getInputParameterFileName()).append(AP)
+                    .append(";}").append(NL)
+                    .append(NL);
+        }
+
+        return sb.append(NL).toString();
 
     }
 
