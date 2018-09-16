@@ -93,7 +93,7 @@ public class FrameStack {
                 return s;
             }
         }
-        // If we are inside a loop, request the loop to stop
+        // If we are inside a loop, request the current loop to stop looping
         if (!frames.isEmpty()) {
             frames.getLast().requestStop();
         }
