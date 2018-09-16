@@ -12,7 +12,7 @@ go ".//body" , mn:5 {
     go ".//input[@name='btnI']" {
         print "Selected button with name : " + @ name:;       
         print "Click !";
-        clickw "." ;
+        click "." ;
         print @ ;
         }
 

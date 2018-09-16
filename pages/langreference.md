@@ -62,7 +62,7 @@ Statements use expressions to produce an effect in the program. Statements are a
 
 * Assignements to a variable (user variable or builtin variable)
 * Output information, to the console (print), formated (emit), to the database (db)
-* Click on an element and continue immediateletely (click) or click and wait for the element to disapperar before continuing(clickw).
+* Click on an element (click)
 * Evaluate an expression by simply ending the expression with a semicolon. If expression is false/null, the next element in the loop is processed immediateley, or the loop ends if no more elemnts. 
 
 ## Loops

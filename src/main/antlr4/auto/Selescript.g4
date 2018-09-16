@@ -17,7 +17,7 @@ statement
     |   'db' param ? ( ',' param )* ';'         # db   // send to mongodb
     |   'print' stringval ? ';'                 # print  //plain text
     |   'click' stringval ? ';'                 # click  // on the specified xpath
-    |   'clickw' stringval ? ';'                # clickw // click and wait for page to start reloading
+    |   'click' 'w' ':' stringval ? ';'         # clickw // click and wait for page to start reloading
     |   stringval ';'                           # check  // break/continue on null value
     ;
 
