@@ -5,10 +5,13 @@ print;
 go c:10 {
 
     print "before reading ...";
-    print "read <" + $read + ">" ; 
+    read = $read ;
+    print "read <" + read + ">" ; 
+    read ;
     print "after reading ..." ;
 
     }
+
 
 print ;
 print "resetting the file";
@@ -18,7 +21,9 @@ print ;
 go c:10 {
 
     print "before reading ...";
-    print "read <" + $read + ">" ; 
+    read = $read ;
+    print "read <" + read + ">" ; 
+    read ;
     print "after reading ..." ;
 
     }

@@ -18,7 +18,7 @@ statement
     |   'print' stringval ? ';'                 # print  //plain text
     |   'click' stringval ? ';'                 # click  // on the specified xpath
     |   'click' 'w' ':' stringval ? ';'         # clickw // click and wait for page to start reloading
-    |   stringval ';'                           # check  // break/continue on null value
+    |   stringval ';'                           # check  // continue on null value
     ;
 
 param

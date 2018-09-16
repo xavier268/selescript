@@ -33,7 +33,7 @@ public class FrameStack {
     private WebDriver wd;
 
     private Scanner inputScanner;
-    private String lastInputFileName ;
+    private String lastInputFileName;
 
     public FrameStack() {
     }
@@ -65,10 +65,11 @@ public class FrameStack {
         }
         return this;
     }
-    
+
     /**
      * Reset input, reading again from the same file from the beginning.
-     * @return  this
+     *
+     * @return this
      */
     public FrameStack resetInput() {
         closeInput();
@@ -77,34 +78,42 @@ public class FrameStack {
     }
 
     /**
-     * Retrieve next input line. Ignore comments and empty lines.
+     * Retrieve next input line. Ignore comments and empty lines. If we are
+     * inside a loop, request the loop to stop if a file was specified and no
+     * more data is available. Also request a stop upon reading when no file was
+     * specified.
      *
      * @return null if end of file reached or no scanner available.
      */
     public String getNextInput() {
 
-        if (inputScanner == null) {
-            return null;
-        }
-
-        while (inputScanner.hasNextLine()) {
+        while (inputScanner != null && inputScanner.hasNextLine()) {
             String s = inputScanner.nextLine();
             if (!s.startsWith("#") && !s.isEmpty()) {
                 return s;
             }
         }
+        // If we are inside a loop, request the loop to stop
+        if (!frames.isEmpty()) {
+            frames.getLast().requestStop();
+        }
+        
+        // Either finished, or no scanner was set.
         return null;
 
     }
-    
+
     /**
      * Closes the input scanner.
+     *
      * @return this
      */
     public FrameStack closeInput() {
-        if(inputScanner != null) inputScanner.close();
+        if (inputScanner != null) {
+            inputScanner.close();
+        }
         return this;
-        
+
     }
 
     public int size() {
