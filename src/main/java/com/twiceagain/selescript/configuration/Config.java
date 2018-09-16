@@ -147,6 +147,8 @@ public class Config {
      * Cache builtin scan for performance reason.
      */
     private Set<String> builtinSetCached;
+    private boolean initWebdriver = false;
+    private boolean initMongoDb = false;
 
     /**
      * Constructor sets a new project version.
@@ -812,7 +814,7 @@ public class Config {
                 .append("getTargetProjectName : ").append(getTargetProjectName()).append(NL)
                 .append("gettargetProjectVersion : ").append(getTargetProjectVersion()).append(NL)
                 .append("getTargetProjectExecutableJarName : ").append(getTargetProjetExecutableJarName()).append(NL)
-                .append("getConstantDeclarations : ").append(getConstantDeclarations()).append(NL)
+                .append("getConstantDeclarations : ").append(getMainDeclaration()).append(NL)
                 .append(NL);
 
         return sb.toString();
@@ -834,42 +836,68 @@ public class Config {
     }
 
     /**
-     * Return the code that declares various useful constants.
+     * Return the code that declares the static main function.
      *
      * @return
      */
-    public String getConstantDeclarations() {
-        // define useful constants
-        StringBuilder sb = new StringBuilder()
-                .append("public final static String VERSION = \"").append(getSelescriptVersion()).append("\";").append(NL)
-                .append("public final static String SELENIUMVERSION = \"").append(getSeleniumVersion()).append("\";").append(NL)
-                .append("public final static String BUILDDATE = \"").append(new Date()).append("\";").append(NL)
-                .append("public final static String BUILDMILLIS = \"").append(System.currentTimeMillis()).append("\";").append(NL)
-                .append("private final static Class CLASS = ").append(getTargetJavaClassName()).append(".class;").append(NL)
-                .append(NL)
-                .append("@Override").append(NL)
-                .append("public String getGridUrl() { return ").append(AP).append(getGridUrl()).append(AP).append(";}").append(NL)
-                .append(NL)
-                .append("@Override").append(NL)
-                .append("public String getMongoConnectionString() { return ").append(AP).append(MONGOCONNECTIONSTRING).append(AP).append(";}").append(NL)
-                .append(NL)
-                .append("@Override").append(NL)
-                .append("public String getMongoDbName() { return ").append(AP).append(MONGODBNAME).append(AP).append(";}").append(NL)
-                .append(NL)
-                .append("@Override").append(NL)
-                .append("public String getMongoColName() { return ").append(AP).append(MONGOCOLNAME).append(AP).append(";}").append(NL)
-                .append(NL)
-                .append(getBrowserCapabilitiesDeclaration()).append(NL)
-                .append("public static final String $$NULL = null;")
+    public String getMainDeclaration() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("public static final String $$NULL = null;")
                 .append(NL);
 
-        if (getInputParameterFileName() != null) {
-            sb.append("@Override").append(NL)
-                    .append("public String getInputParameterFileName() { return ")
-                    .append(AP).append(getInputParameterFileName()).append(AP)
-                    .append(";}").append(NL)
+        sb
+                .append(NL)
+                .append("public static void main(String[] args) {")
+                .append(NL)
+                .append(getTargetJavaClassName())
+                .append(" scrapper = new ").append(getTargetJavaClassName()).append("();")
+                .append(NL);
+        sb
+                .append("/* Defining runtime config */").append(NL)
+                .append("RuntimeConfig rtconfig = new RuntimeConfig()").append(NL)
+                .append(".setSelescriptVersion(").append(AP)
+                .append(getSelescriptVersion()).append(AP).append(")").append(NL)
+                .append(".setSeleniumVersion(").append(AP)
+                .append(getSeleniumVersion()).append(AP).append(")").append(NL)
+                .append(".setBuildDate(").append(AP)
+                .append(new Date()).append(AP).append(")").append(NL)
+                .append(".setBuildMillis(").append("" + System.currentTimeMillis() + "L").append(")").append(NL)
+                .append(".setSeleniumVersion(").append(AP)
+                .append(getSeleniumVersion()).append(AP).append(")").append(NL)
+                .append(".setGridUrl(").append(AP)
+                .append(getGridUrl()).append(AP).append(")").append(NL)
+                .append(".setMongoConnectionString(").append(AP)
+                .append(MONGOCONNECTIONSTRING).append(AP).append(")").append(NL)
+                .append(".setMongoDbName(").append(AP)
+                .append(MONGODBNAME).append(AP).append(")").append(NL)
+                .append(".setMongoColName(").append(AP)
+                .append(MONGOCOLNAME).append(AP).append(")").append(NL)
+                .append(".setBrowser(").append(AP)
+                .append(BROWSER).append(AP).append(")").append(NL)
+                .append(".setInitWebdriver(").append(initWebdriver).append(")").append(NL)
+                .append(".setInitMongoDb(").append(initMongoDb).append(")").append(NL);
+
+        if(getInputParameterFileName() == null) {
+            sb.append(".setInputParameterFileName(null)")
+                    .append(NL);
+        } else {
+            sb
+                    .append(".setInputParameterFilemane(")
+                    .append(AP)
+                    .append(getInputParameterFileName())
+                    .append(AP)
+                    .append(")")
                     .append(NL);
         }
+        
+        sb.append(";").append(NL);
+
+        sb.append("rtconfig.parseArgs(args);")
+                .append(NL);
+        sb.append("scrapper.main(rtconfig);}")
+                .append(NL);
 
         return sb.append(NL).toString();
 
@@ -985,6 +1013,24 @@ public class Config {
         String tt = "src" + FILESEPARATOR + "main" + FILESEPARATOR + "resources" + FILESEPARATOR + t;
         copyFromResourceToTargetDir(s, tt);
 
+    }
+
+    public Config setInitWebdriver(boolean needsWebdriver) {
+        initWebdriver = needsWebdriver;
+        return this;
+    }
+
+    public Config setInitMongoDb(boolean needsMongo) {
+        initMongoDb = needsMongo;
+        return this;
+    }
+
+    public boolean isInitWebdriver() {
+        return initWebdriver;
+    }
+
+    public boolean isInitMongoDb() {
+        return initMongoDb;
     }
 
 }

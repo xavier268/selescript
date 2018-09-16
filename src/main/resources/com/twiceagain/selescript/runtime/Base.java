@@ -46,31 +46,30 @@ abstract public class Base implements Scrapper {
      * The generix main method.It is non static, and will be called by the
      * static method from the final scrapper class.
      *
-     * @param initWebdriver - do we need to init WebDriver ?
-     * @param initMongo - do we need to init mongo ?
+     * @param rtc - the runtime Configuration object
      */
-    public void main(boolean initWebdriver, boolean initMongo) {
+    public void main(RuntimeConfig rtc) {
 
         final WebDriver w;
         try {
-            if (initWebdriver) {
-                w = new RemoteWebDriver(new URL(getGridUrl()), getBrowserCapabilities());
+            if (rtc.needsInitWebdriver()) {
+                w = new RemoteWebDriver(new URL(rtc.getGridUrl()), rtc.getBrowserCapabilities());
 
                 // Add the webdriver to the FrameStack
                 fs.setWd(w);
             }
             // init the database
-            if (initMongo) {
-                initDb();
+            if (rtc.needsInitMongoDb()) {
+                initDb(rtc);
             }
             // init input file for external parameters.
-            fs.initInput(getInputParameterFileName());
+            fs.initInput(rtc.getInputParameterFileName());
 
             scrap();
         } catch (Exception ex) {
             LOG.info(ex.getMessage(), ex);
         } finally {
-            if (initWebdriver) {
+            if (rtc.needsInitWebdriver()) {
                 if (fs.getWd() != null) {
                     fs.getWd().quit();
                 }
@@ -81,11 +80,11 @@ abstract public class Base implements Scrapper {
         }
     }
 
-    protected void initDb() {
+    protected void initDb(RuntimeConfig rtc) {
         if (CLIENT == null) {
-            CLIENT = MongoClients.create(getMongoConnectionString());
+            CLIENT = MongoClients.create(rtc.getMongoConnectionString());
         }
-        COLLECTION = CLIENT.getDatabase(getMongoDbName()).getCollection(getMongoColName());
+        COLLECTION = CLIENT.getDatabase(rtc.getMongoDbName()).getCollection(rtc.getMongoColName());
     }
 
    

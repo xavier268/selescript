@@ -24,6 +24,9 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
     @Override
     public void exitUnit(SelescriptParser.UnitContext ctx) {
         StringBuilder sb = new StringBuilder();
+        
+        config.setInitWebdriver(prop.needsWebdriver);
+        config.setInitMongoDb (prop.needsMongo);
 
         sb
                 .append(config.getFileHeader())
@@ -41,22 +44,9 @@ public class SSListenerUnit extends SSBaseListener implements SSListener {
 
         // Add useful constants and create builtins
         sb
-                .append(config.getConstantDeclarations())
+                .append(config.getMainDeclaration())
                 .append(config.getBuiltinsDeclarations())
                 .append(NL);
-
-// create a basic main method calling predefined non-static main
-// Call specifies if webdriver or mongo are needed.
-        sb
-                .append("public static void main(String ... args ) {")
-                .append(NL)
-                .append("new ")
-                .append(config.getTargetJavaClassName())
-                .append("().main(")
-                .append(prop.needsWebdriver)
-                .append(",")
-                .append(prop.needsMongo).append(") ;}")
-                .append(Config.NL);
 
         // Create the scrap method
         sb
