@@ -1,11 +1,14 @@
 package com.twiceagain.selescript.runtime;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bson.Document;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -100,17 +103,6 @@ abstract public class Methods extends Base implements Scrapper {
     }
 
     /**
-     * ---------------------------------------------------------------
-     *
-     * Click on the first WebElement that matches the provided xpath.
-     *
-     * @param xpath
-     */
-    protected void click(String xpath) {
-        click(xpath, false);
-    }
-
-    /**
      * --------------------------------------------------------------
      *
      * Click on the first WebElement that matches the provided xpath. No path
@@ -118,11 +110,12 @@ abstract public class Methods extends Base implements Scrapper {
      * ).
      *
      * @param xpath
-     * @param linkShouldGo - Set to true if the link we click is expected to
+     * @param linkShouldGo - Set to true if the input we click is expected to
      * trigger a page reload.
      *
      */
     protected void click(String xpath, boolean linkShouldGo) {
+
         WebElement link;
 
         if (xpath != null) {
@@ -135,7 +128,7 @@ abstract public class Methods extends Base implements Scrapper {
         } else {
             link = fs.getWe();
         }
-        
+
         if (link != null) {
             link.click();
         }
@@ -146,8 +139,36 @@ abstract public class Methods extends Base implements Scrapper {
         }
     }
 
-    protected void clickw(String xpath) {
-        click(xpath, true);
+    /**
+     * Submit the form enclosing the target element.
+     *
+     * @param xpath - xpath for target element, or current element if null
+     * @param linkShouldGo - if true, will wait for target element to become
+     * stale.
+     */
+    protected void submit(String xpath, boolean linkShouldGo) {
+
+        WebElement link;
+
+        if (xpath != null) {
+            List<WebElement> lwe = fs.getSc().findElements(By.xpath(xpath));
+            if (lwe.isEmpty()) {
+                return;
+            } else {
+                link = lwe.get(0);
+            }
+        } else {
+            link = fs.getWe();
+        }
+
+        if (link != null) {
+            link.submit();
+        }
+
+        if (linkShouldGo) {
+            // Wait up to 2 seconds for the page to disappear.
+            (new WebDriverWait(fs.getWd(), 2)).until(ExpectedConditions.stalenessOf(link));
+        }
     }
 
     /*----------------------------------------------------
@@ -168,6 +189,63 @@ abstract public class Methods extends Base implements Scrapper {
             ls.add(sb.toString());
         }
         System.out.printf("%n{%s}%n", String.join(",", ls));
+    }
+
+    /**
+     * Type the text in the provided element. The xpath is 'x' or the default key. The
+     * raw text is provided with the 't' key. The 'u' key will url encode the
+     * text. Multiple text fragement is okay. Mixing encoded and raw text is
+     * okay. Only the last xpath is kept. Xpath defaults to current webelement.
+     * Text defaults to empty string.
+     *
+     * @param par - an even number of string aruments, alternating key and
+     * value.
+     */
+    protected void send(String... par) {
+        String xpath = null;
+        String t = "";
+        for (int i = 0; i < par.length; i += 2) {
+            if (par[i] == null || "x".equals(par[i])) {
+                xpath = par[i + 1];
+                continue;
+            }
+            if ("t".equals(par[i])) {
+                t = t + par[i + 1];
+                continue;
+            }
+            if ("u".equals(par[i])) {
+                try {
+                    t = t + URLEncoder.encode(par[i + 1], "UTF-8");
+                } catch (UnsupportedEncodingException ex) {
+                    throw new RuntimeException("Unexpected runtime exception", ex);
+                }
+                continue;
+            }
+            throw new RuntimeException("Unrecognized key parameter in type statement : " + par[i]);
+        }
+
+        WebElement input;
+
+        if (xpath != null) {
+            List<WebElement> lwe = fs.getSc().findElements(By.xpath(xpath));
+            if (lwe.isEmpty()) {
+                return;
+            } else {
+                input = lwe.get(0);
+            }
+        } else {
+            input = fs.getWe();
+        }
+
+        if (input != null) {
+            try {
+            input.submit();
+            } catch(NoSuchElementException ex) {
+                // When there are no enclosing form, log error and continue.
+                LOG.error("Trying to submit a forma that could not be found");
+            }
+        }
+
     }
 
     protected void mongo(String... par) {

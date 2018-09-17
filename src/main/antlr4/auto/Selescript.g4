@@ -13,12 +13,15 @@ unit
 statement 
     :   'go'  param ? ( ',' param )*  '{' statement * '}'    # go   // one-time loop
     |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'emit' param ? ( ',' param )* ';'       # emit   // json format by default
-    |   'db' param ? ( ',' param )* ';'         # db   // send to mongodb
-    |   'print' stringval ? ';'                 # print  //plain text
-    |   'click' stringval ? ';'                 # click  // on the specified xpath
-    |   'click' 'w' ':' stringval ? ';'         # clickw // click and wait for page to start reloading
-    |   stringval ';'                           # check  // continue on null value
+    |   'emit' param ? ( ',' param )* ';'       # emit    // json format by default
+    |   'db' param ? ( ',' param )* ';'         # db      // send to mongodb
+    |   'print' stringval ? ';'                 # print   //plain text
+    |   'click' stringval ? ';'                 # click   // on the specified xpath
+    |   'click' 'w' ':' stringval ? ';'         # clickw  // click and wait for page to start reloading
+    |   'sendkeys' param ? ( ',' param ) ';'    # send    // type text into element
+    |   'submit' stringval ? ';'                # submit  // submit enclosing form
+    |   'submit' 'w' ':' stringval ? ';'        # submitw //and wait for element to disappear
+    |    stringval ';'                          # check   // continue on null value
     ;
 
 param

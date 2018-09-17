@@ -109,6 +109,14 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
         String s = "mongo(" + parseParams(ctx.param(), true) + ");" + NL;
         prop.put(ctx, s);
     }
+    
+    @Override
+    public void exitSend(SelescriptParser.SendContext ctx) {
+        config.setInitWebdriver(true);
+        String s = "send(" + parseParams(ctx.param(), false) + ");" + NL;
+        prop.put(ctx, s);
+    }
+   
 
     @Override
     public void exitAssign(SelescriptParser.AssignContext ctx) {
@@ -131,7 +139,7 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     public void exitClick(SelescriptParser.ClickContext ctx) {
         config.setInitWebdriver(true);
         String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
-        String ss = "click(" + s + ");" + NL;
+        String ss = "click(" + s + ",false);" + NL;
         prop.put(ctx, ss);
     }
 
@@ -139,7 +147,23 @@ public class SSListenerStatement extends SSListenerParam implements SSListener {
     public void exitClickw(SelescriptParser.ClickwContext ctx) {
         config.setInitWebdriver(true);
         String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
-        String ss = "clickw(" + s + ");" + NL;
+        String ss = "click(" + s + ",true);" + NL;
+        prop.put(ctx, ss);
+    }
+
+    @Override
+    public void exitSubmit(SelescriptParser.SubmitContext ctx) {
+        config.setInitWebdriver(true);
+        String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
+        String ss = "submit(" + s + ",false);" + NL;
+        prop.put(ctx, ss);
+    }
+
+    @Override
+    public void exitSubmitw(SelescriptParser.SubmitwContext ctx) {
+        config.setInitWebdriver(true);
+        String s = (ctx.stringval() == null) ? null : prop.get(ctx.stringval());
+        String ss = "submit(" + s + ",true);" + NL;
         prop.put(ctx, ss);
     }
 
