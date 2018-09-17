@@ -25,6 +25,8 @@ public class RuntimeConfig {
     private String seleniumVersion;
     private String buildDate;
 
+    private static final String NL = System.lineSeparator();
+
     public boolean needsInitWebdriver() {
         return initWebdriver;
     }
@@ -87,7 +89,7 @@ public class RuntimeConfig {
         return mongoColName;
     }
 
-    public RuntimeConfig  setMongoConnectionString(String mongoConnectionString) {
+    public RuntimeConfig setMongoConnectionString(String mongoConnectionString) {
         this.mongoConnectionString = mongoConnectionString;
         return this;
     }
@@ -101,47 +103,112 @@ public class RuntimeConfig {
         this.mongoColName = mongoColName;
         return this;
     }
-    
+
     public RuntimeConfig setSelescriptVersion(String v) {
         selescriptVersion = v;
         return this;
     }
-    
+
     public String getSelescriptVersion() {
         return selescriptVersion;
     }
-    
+
     public RuntimeConfig setBuildMillis(long t) {
         buildMillis = t;
         return this;
     }
-    
+
     public long getBuildMillis() {
         return buildMillis;
     }
-    
+
     public RuntimeConfig setSeleniumVersion(String v) {
         seleniumVersion = v;
         return this;
     }
-    
+
     public String getSeleniumVersion() {
         return seleniumVersion;
     }
-    
-    public RuntimeConfig setBuildDate(String d){
+
+    public RuntimeConfig setBuildDate(String d) {
         buildDate = d;
         return this;
-        
+
     }
-    
+
     public String getBuildDate() {
         return buildDate;
     }
-    
-    public RuntimeConfig parseArgs(String[] args){
-        // TODO 
+
+    public RuntimeConfig parseArgs(String[] args) {
+        
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-i":
+                    i++;
+                    setInputParameterFileName(args[i]);
+                    break;
+                case "-g":
+                    i++;
+                    setGridUrl(args[i]);
+                    break;
+                case "-f":
+                    setBrowser("firefox");
+                    break;
+                case "-c":
+                    setBrowser("chrome");
+                    break;
+                case "-m":
+                    i++;
+                    setMongoConnectionString(args[i]);
+                    break;
+                default:
+                    System.out.println(getHelp());
+                    System.exit(1);
+            }
+        }
+
         return this;
+    }
+
+    private String getHelp() {
+
+        return new StringBuilder()
+                .append(getHeader())
+                .append("Command line options :").append(NL)
+                .append(NL)
+                .append("-i FILE     : input from FILE.").append(NL)
+                .append("-g URL      : use grid hub at URL").append(NL)
+                .append("-f          : use firefox").append(NL)
+                .append("-c          : use chrome").append(NL)
+                .append("-m  URL     : use mongo connection string URL").append(NL)
+                .append("All other   : print this help message and abort").append(NL)
+                .append(NL).toString();
+
+    }
+
+    private String getHeader() {
+        StringBuilder sb = new StringBuilder()
+                .append(NL)
+                .append("Compiled with Selescript ")
+                .append(getSelescriptVersion())
+                .append(NL)
+                .append("See https://xavier268.github.io/selescript/ for details.")
+                .append(NL);
+
+        if (needsInitWebdriver()) {
+            sb
+                    .append("Expecting Selenium Hub on ").append(getGridUrl()).append(NL)
+                    .append("Using Selenium ").append(getSeleniumVersion()).append(NL);
+        }
+        if (needsInitMongoDb()) {
+            sb.append("Expecting Mongo database on ")
+                    .append(getMongoConnectionString()).append(NL);
+        }
+
+        return sb.toString();
+
     }
 
 }
