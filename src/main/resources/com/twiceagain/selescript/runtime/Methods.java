@@ -113,8 +113,9 @@ abstract public class Methods extends Base implements Scrapper {
     /**
      * --------------------------------------------------------------
      *
-     * Click on the first WebElement that matches the provided xpath.
-     * No path means using current context (error if current context is not a WebElement ).
+     * Click on the first WebElement that matches the provided xpath. No path
+     * means using current context (error if current context is not a WebElement
+     * ).
      *
      * @param xpath
      * @param linkShouldGo - Set to true if the link we click is expected to
@@ -132,11 +133,13 @@ abstract public class Methods extends Base implements Scrapper {
                 link = lwe.get(0);
             }
         } else {
-            link = (WebElement) fs.getSc();
+            link = fs.getWe();
+        }
+        
+        if (link != null) {
+            link.click();
         }
 
-        link.click();
-        
         if (linkShouldGo) {
             // Wait up to 2 seconds for the page to disappear.
             (new WebDriverWait(fs.getWd(), 2)).until(ExpectedConditions.stalenessOf(link));
