@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript.configuration;
+package com.twiceagain.selescript.listeners;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
- * The SSListener is the base object that can compile a source script to java.
+ * The SSListener is the base object for all my listeners.
  *
  * @author xavier
  */
 public interface SSListener extends ParseTreeListener {
+    
+    
 
   
 }

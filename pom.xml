@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.twiceagain</groupId>
     <artifactId>selescript</artifactId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>selescript</name>
     
@@ -17,7 +17,7 @@
     </properties>
     
     
-    <description>A Selenium scripting langage.</description>
+    <description>A Selenium scripting langage. Interpreter version.</description>
     
     <build>
         <plugins>
@@ -88,27 +88,21 @@
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
             <scope>test</scope>
-        </dependency>
-        <!-- Plugins below are not really needed, but a convenience for the IDE 
-        to edit the java runtime library in the resources. Scope is provided 
-        for that reason -->
+        </dependency>       
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.14.0</version>
-            <scope>provided</scope>
+            <version>3.14.0</version>            
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
-            <scope>provided</scope>
+            <version>1.7.5</version>           
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-async</artifactId>
-            <version>3.8.1</version>
-            <scope>provided</scope>
+            <version>3.8.1</version>           
         </dependency>
     </dependencies>
    
