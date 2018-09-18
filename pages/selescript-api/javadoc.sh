@@ -1,1 +1,0 @@
-/usr/lib/jvm/jre-10-openjdk/bin/javadoc @options @packages

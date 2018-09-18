@@ -7,7 +7,9 @@ package com.twiceagain.selescript.interpreter;
 
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
-import com.twiceagain.selescript.exceptions.SSSyntaxException;
+import com.twiceagain.selescript.SSConfig;
+import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
+import com.twiceagain.selescript.visitors.SSUnitVisitor;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ConsoleErrorListener;
@@ -34,6 +36,8 @@ public class SSInterpreter {
         parser.addErrorListener(ConsoleErrorListener.INSTANCE);
         
         root = parser.unit();
+        
+        new SSUnitVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
         
         
     }

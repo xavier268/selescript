@@ -11,17 +11,20 @@ import org.antlr.v4.runtime.CharStreams;
 
 /**
  * Main command line entry point.
+ *
  * @author xavier
  */
 public class CommandLine {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) throws IOException {  
-        
+    public static void main(String[] args) throws IOException {
+
+       
         System.out.println("Please, type script (Ctl-D to finish) :");
-        new SSInterpreter(CharStreams.fromStream(System.in));
+        SSInterpreter ssInterpreter = new SSInterpreter(CharStreams.fromStream(System.in));
     }
-    
+
 }

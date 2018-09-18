@@ -25,7 +25,7 @@ statement
     ;
 
 param
-    :   ( ID ':' ) ? stringval 
+    :   ( TAG ':' ) ? stringval 
     ;
 
 stringval 
@@ -38,7 +38,7 @@ stringval
     |   stringval '==' stringval                # eq    // Not null means true
     |   stringval '!=' stringval                # neq
     |   '(' stringval ')'                       # par
-    |   '@' (ID ? ':' )? ( stringval ) ?        # at    // derefence based on current search context
+    |   '@' (TAG ? ':' )? ( stringval ) ?        # at    // derefence based on current search context
     |   stringval '|' stringval                 # or    // logical or
     |   stringval '&' stringval                 # and   // logical and
     |   NULL                                    # null
@@ -57,13 +57,13 @@ constantstring
 
 constantnumber
 
-    :  '(' constantnumber ')'                    # cpar
-    |  constantnumber '*' constantnumber         # ctimes
-    |  constantnumber '/' constantnumber         # cdiv
-    |  constantnumber '+' constantnumber         # cplus
-    |  constantnumber '-' constantnumber         # cminus
-    |  '-' constantnumber                        # uminus
-    |  NUMBER                                    # cnumber
+    :  '(' constantnumber ')'                    # cnpar
+    |  constantnumber '*' constantnumber         # cntimes
+    |  constantnumber '/' constantnumber         # cndiv
+    |  constantnumber '+' constantnumber         # cnplus
+    |  constantnumber '-' constantnumber         # cnminus
+    |  '-' constantnumber                        # cnuminus
+    |  NUMBER                                    # cnnumber
     ;
 
 
@@ -83,6 +83,9 @@ STRING  :  '"'  .* ? '"'
 
 // Numbers are not signed integer ( but unary minus exists )
 NUMBER  : '0' | NONZERODIGIT DIGIT* ;
+
+// Tag are currently similar to IDs but that may change.
+TAG : : LETTER DIGITORLETTER * ;
 
 // Acceptable ID starts with a letter
 ID : LETTER DIGITORLETTER * ;
