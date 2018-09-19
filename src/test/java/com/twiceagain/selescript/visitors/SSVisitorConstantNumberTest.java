@@ -24,27 +24,24 @@ public class SSVisitorConstantNumberTest {
 
     @Test
     public void test1() {
-        assertEquals((Long) 3L, t("1 + 2"));
-        assertEquals((Long) 6L, t("1 + 2 + 3"));
-        assertEquals((Long) 7L, t("1 + 2 * 3 "));
-        assertEquals((Long) 5L, t("1 * 2 + 3"));
-        assertEquals((Long) (-1L), t("1 - 2"));
-        assertEquals((Long) 1L, t("- 1 + 2"));
-        assertEquals((Long) 0L, t("1 / 2"));
-        assertEquals((Long) 2L, t("5 / 2 "));
-        assertEquals((Long) (-2L), t("1 + 2 - 5 "));
+        assertEquals((Long) 3L,     t("1 + 2"));
+        assertEquals((Long) 6L,     t("1 + 2 + 3"));
+        assertEquals((Long) 7L,     t("1 + 2 * 3 "));
+        assertEquals((Long) 5L,     t("1 * 2 + 3"));
+        assertEquals((Long) (-1L),  t("1 - 2"));
+        assertEquals((Long) 1L,     t("- 1 + 2"));
+        assertEquals((Long) 0L,     t("1 / 2"));
+        assertEquals((Long) 2L,     t("5 / 2 "));
+        assertEquals((Long) (-2L),  t("1 + 2 - 5 "));
     }
 
     private Long t(String s) {
         SelescriptLexer lexer = new SelescriptLexer(CharStreams.fromString(s));
         CommonTokenStream ts = new CommonTokenStream(lexer);
         SelescriptParser parser = new SelescriptParser(ts);
-
         parser.removeErrorListeners();
         parser.addErrorListener(ConsoleErrorListener.INSTANCE);
-
         SelescriptParser.ConstantnumberContext root = parser.constantnumber();
-
         return (Long) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }
 

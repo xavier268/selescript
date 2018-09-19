@@ -10,45 +10,58 @@ import auto.SelescriptParser;
 import com.twiceagain.selescript.SSConfig;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import com.twiceagain.selescript.visitors.SSVisitor;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ConsoleErrorListener;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * Main interpreter object. This object will create an executable tree for the
- * script to run,  then execute it.
+ * script to run, then execute it.
  *
  * @author xavier
  */
-public class SSInterpreter {    
-    
+public class SSInterpreter {
+
     private final SelescriptParser parser;
-    private final ParseTree root ;
-    
+    private final ParseTree root;
+
+    /**
+     * Interpret from a CharStream.
+     * @param in 
+     */
     public SSInterpreter(CharStream in) {
-        
+
         SelescriptLexer lexer = new SelescriptLexer(in);
         CommonTokenStream ts = new CommonTokenStream(lexer);
         parser = new SelescriptParser(ts);
-        
+
         parser.removeErrorListeners();
         parser.addErrorListener(ConsoleErrorListener.INSTANCE);
-        
+
         root = parser.unit();
-        
-        new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);       
-        
+
+        new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
+
     }
 
-    public SelescriptParser getParser() {
-        return parser;
+    /**
+     * Interpret from the provided script in String format.
+     * @param script 
+     */
+    public SSInterpreter(String script) {
+        this(CharStreams.fromString(script));
     }
-
-    public ParseTree getRoot() {
-        return root;
+    /**
+     * Interpret from a script file given by its path.
+     * @param path 
+     * @throws java.io.IOException 
+     */
+    public SSInterpreter(Path path) throws IOException{
+        this(CharStreams.fromPath(path));
     }
-    
-    
 
 }
