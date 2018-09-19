@@ -22,6 +22,8 @@ public class SSConfig {
     private String mongoCollection = "mongocol";
 
     private String scriptFileName = null;
+    private boolean debug = false;
+    
     // Read only
     private final String selescriptVersion = "1.0";
     private final String javaVersion = Runtime.version().toString();
@@ -94,4 +96,14 @@ public class SSConfig {
         return startMillis;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    
+    
 }

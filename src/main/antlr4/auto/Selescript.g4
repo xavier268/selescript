@@ -12,45 +12,43 @@ unit
 
 statement 
     :   'go'  param ? ( ',' param )*  '{' statement * '}'    # go   // one-time loop
-    |   ( ID | BIID ) '=' stringval ';'         # assign
-    |   'emit' param ? ( ',' param )* ';'       # emit    // json format by default
+    |    ID   '=' stringval ';'                 # assigni
+    |    BIID '=' stringval ';'                 # assignb
     |   'db' param ? ( ',' param )* ';'         # db      // send to mongodb
-    |   'print' stringval ? ';'                 # print   //plain text
-    |   'click' stringval ? ';'                 # click   // on the specified xpath
-    |   'click' 'w' ':' stringval ? ';'         # clickw  // click and wait for page to start reloading
-    |   'sendkeys' param ? ( ',' param ) ';'    # send    // type text into element
-    |   'submit' stringval ? ';'                # submit  // submit enclosing form
-    |   'submit' 'w' ':' stringval ? ';'        # submitw //and wait for element to disappear
+    |   'print' param ? ( ',' param )* ';'      # print   //plain text
+    |   'click' param ? ';'                     # click   // on the specified xpath
+    |   'type'  param ? ( ',' param ) ';'       # type    // type text into element
+    |   'submit' param ? ';'                    # submit  // submit enclosing form
     |    stringval ';'                          # check   // continue on null value
     ;
 
 param
-    :   ( TAG ':' ) ? stringval 
+    :   ( TAG ) ? stringval 
     ;
 
 stringval 
     
-    :   constantstring                          # sstring
-    |   '!' stringval                           # not   // Not null means true
-    |   stringval '+' stringval                 # concat    
-    |   stringval '~' stringval                 # find // null if not found
-    |   stringval '~' stringval ':' stringval   # replace // find and replace all, null if not found   
-    |   stringval '==' stringval                # eq    // Not null means true
-    |   stringval '!=' stringval                # neq
-    |   '(' stringval ')'                       # par
-    |   '@' (TAG ? ':' )? ( stringval ) ?        # at    // derefence based on current search context
-    |   stringval '|' stringval                 # or    // logical or
-    |   stringval '&' stringval                 # and   // logical and
-    |   NULL                                    # null
-    |   BIID                                    # biid
-    |   ID                                      # id
+    :   constantstring                          # svstring
+    |   '!' stringval                           # svnot   // Not null means true
+    |   stringval '+' stringval                 # svconcat    
+    |   stringval '~' stringval                 # svfind // null if not found
+    |   stringval '~' stringval ':' stringval   # svreplace // find and replace all, null if not found   
+    |   stringval '==' stringval                # sveq    // Not null means true
+    |   stringval '!=' stringval                # svneq
+    |   '(' stringval ')'                       # svpar
+    |   '@' TAG  ?  stringval  ?                # svat    // derefence based on current search context
+    |   stringval '|' stringval                 # svor    // logical or
+    |   stringval '&' stringval                 # svand   // logical and
+    |   NULL                                    # svnull
+    |   BIID                                    # svbiid
+    |   ID                                      # svid
     ;
 
 constantstring
     :  '(' constantstring ')'                   # cspar
     |  '!' constantstring                       # csnot
     |  constantstring '+' constantstring        # csplus
-    |  constantnumber                           # csc
+    |  constantnumber                           # csnumber
     |  STRING                                   # csstring
     ; 
 
@@ -58,11 +56,11 @@ constantstring
 constantnumber
 
     :  '(' constantnumber ')'                    # cnpar
+    |  '-' constantnumber                        # cnuminus
     |  constantnumber '*' constantnumber         # cntimes
     |  constantnumber '/' constantnumber         # cndiv
     |  constantnumber '+' constantnumber         # cnplus
     |  constantnumber '-' constantnumber         # cnminus
-    |  '-' constantnumber                        # cnuminus
     |  NUMBER                                    # cnnumber
     ;
 
@@ -84,8 +82,8 @@ STRING  :  '"'  .* ? '"'
 // Numbers are not signed integer ( but unary minus exists )
 NUMBER  : '0' | NONZERODIGIT DIGIT* ;
 
-// Tag are currently similar to IDs but that may change.
-TAG : : LETTER DIGITORLETTER * ;
+// Tags start with a semi-colon..
+TAG : ':' DIGITORLETTER * ;
 
 // Acceptable ID starts with a letter
 ID : LETTER DIGITORLETTER * ;

@@ -9,7 +9,7 @@ import auto.SelescriptLexer;
 import auto.SelescriptParser;
 import com.twiceagain.selescript.SSConfig;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
-import com.twiceagain.selescript.visitors.SSUnitVisitor;
+import com.twiceagain.selescript.visitors.SSVisitor;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ConsoleErrorListener;
@@ -23,8 +23,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class SSInterpreter {    
     
-    protected SelescriptParser parser;
-    protected ParseTree root ;
+    private final SelescriptParser parser;
+    private final ParseTree root ;
     
     public SSInterpreter(CharStream in) {
         
@@ -37,9 +37,18 @@ public class SSInterpreter {
         
         root = parser.unit();
         
-        new SSUnitVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
-        
+        new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);       
         
     }
+
+    public SelescriptParser getParser() {
+        return parser;
+    }
+
+    public ParseTree getRoot() {
+        return root;
+    }
+    
+    
 
 }
