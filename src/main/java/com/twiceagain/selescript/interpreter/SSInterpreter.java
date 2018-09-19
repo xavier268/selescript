@@ -31,7 +31,8 @@ public class SSInterpreter {
 
     /**
      * Interpret from a CharStream.
-     * @param in 
+     *
+     * @param in
      */
     public SSInterpreter(CharStream in) {
 
@@ -50,17 +51,20 @@ public class SSInterpreter {
 
     /**
      * Interpret from the provided script in String format.
-     * @param script 
+     *
+     * @param script
      */
     public SSInterpreter(String script) {
         this(CharStreams.fromString(script));
     }
+
     /**
      * Interpret from a script file given by its path.
-     * @param path 
-     * @throws java.io.IOException 
+     *
+     * @param path
+     * @throws java.io.IOException
      */
-    public SSInterpreter(Path path) throws IOException{
+    public SSInterpreter(Path path) throws IOException {
         this(CharStreams.fromPath(path));
     }
 

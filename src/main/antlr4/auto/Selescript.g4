@@ -47,7 +47,7 @@ stringval
 constantstring
     :  '(' constantstring ')'                   # cspar
     |  '!' constantstring                       # csnot
-    |  constantstring '+' constantstring        # csplus
+    |  constantstring constantstring            # csconcat
     |  constantnumber                           # csnumber
     |  STRING                                   # csstring
     ; 
