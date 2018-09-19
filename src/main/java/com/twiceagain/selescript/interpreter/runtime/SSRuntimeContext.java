@@ -13,7 +13,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -29,6 +32,8 @@ public class SSRuntimeContext implements Closeable {
     private final SSConfig config;
     private WebDriver wd = null;
     private final Deque<SSFrame> frames = new ArrayDeque<>();
+    private final Map<String, String> symbols = new HashMap<>();
+    private final SSBuiltins biids = new SSBuiltins(this);
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
@@ -46,7 +51,7 @@ public class SSRuntimeContext implements Closeable {
      *
      * @return
      */
-    WebDriver getWd() {
+    public WebDriver getWd() {
         if (wd != null) {
             return wd;
         }
@@ -58,6 +63,15 @@ public class SSRuntimeContext implements Closeable {
                     + config.getGridUrl(), ex);
         }
         return wd;
+    }
+    
+    /**
+     * Get serach context.
+     * @return - never null.
+     */
+    public SearchContext getSc() {
+        if (frames.isEmpty()) return getWd();
+        return frames.getLast().getSc();
     }
 
     /**
@@ -116,6 +130,18 @@ public class SSRuntimeContext implements Closeable {
                     "Trying to close a loop that never started ?!");
         }
         frames.removeLast();
+    }
+
+    public String getId(String id) {
+        return symbols.get(id);
+    }
+
+    public void putId(String id, String value) {
+        symbols.put(id, value);
+    }
+
+    public String getBiid(String id) {
+        return biids.get(id);
     }
 
 }
