@@ -33,7 +33,6 @@ public class SSUnitVisitor extends SSVisitor {
         System.out.println("Visiting check !");
         if(rtc.shouldStop()) return null;
         String s = (String) visit(ctx.stringval());
-        if(s == null) rtc.requestStop();        
         return null;
     }
     
