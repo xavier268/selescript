@@ -20,13 +20,11 @@ If you are already using Linux, follow the [quickstart](pages/quickstart.html) a
 
 Not available yet. Anyone interested ?
 
-## Selecript langage reference
+## To learn more
 
-See the full [Selescript langage reference](pages/langreference.html).
+* [Selescript reference](reference.md)
+* [This project API](../target/site/apidocs/)
+* [Selenium project](https://www.seleniumhq.org/)
+* [Xpath reference](https://developer.mozilla.org/en-US/docs/Web/XPath)
+* [Xpath tutorial](https://www.w3schools.com/xml/xpath_intro.asp)
 
-## Javadoc APIs
-
-There are two javadoc APIs :
-
-* the [API for Selescript](pages/selescript-api) itself
-* the [API for the runtime](pages/runtime-api) itself, as used by a demo file.
