@@ -31,8 +31,8 @@ stringval
     :   constantstring                          # svstring
     |   '!' stringval                           # svnot   // Not null means true
     |   stringval  stringval                    # svconcat    
+    |   stringval '~'  stringval ',' stringval  # svreplace // find and replace all, null if not found   
     |   stringval '~' stringval                 # svfind // null if not found
-    |   stringval '~'  TAG  stringval           # svreplace // find and replace all, null if not found   
     |   stringval '==' stringval                # sveq    // Not null means true
     |   stringval '!=' stringval                # svneq
     |   '(' stringval ')'                       # svpar

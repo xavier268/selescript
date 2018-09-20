@@ -25,7 +25,7 @@ public class SSConfig {
     private boolean debug = false;
     
     // Read only
-    private final String selescriptVersion = "1.0";
+    private final String selescriptVersion = "1.1.0";
     private final String javaVersion = Runtime.version().toString();
     private final Long startMillis = System.currentTimeMillis();
 
@@ -102,6 +102,10 @@ public class SSConfig {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public String getBrowser() {
+        return browser;
     }
 
     

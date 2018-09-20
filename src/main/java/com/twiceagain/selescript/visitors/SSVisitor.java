@@ -23,7 +23,11 @@ public class SSVisitor extends SSVisitorAbstract {
     public SSVisitor(SSRuntimeContext rtc) {
         super(rtc);
     }
-
+/**
+ * Main interpreter entry point.
+ * @param ctx
+ * @return 
+ */
     @Override
     public Object visitUnit(UnitContext ctx) {
         System.out.println("Visiting unit !");
@@ -33,18 +37,11 @@ public class SSVisitor extends SSVisitorAbstract {
                 break;
             }
         }
+        rtc.close(); // cleanup
         return null;
     }
 
-    @Override
-    public Object visitCheck(CheckContext ctx) {
-        System.out.println("Visiting check !");
-        if (rtc.shouldStop()) {
-            return null;
-        }
-        String s = (String) visit(ctx.stringval());
-        return null;
-    }
+    
 
     // ===========================================
     //    Constant numbers represented as Long
@@ -252,8 +249,8 @@ public class SSVisitor extends SSVisitorAbstract {
 
         String s = (String) visit(ctx.stringval(0));
         String p = (String) visit(ctx.stringval(1));
-        String r = (String) ctx.TAG().getText().substring(1);
-
+        String r = (String) visit(ctx.stringval(2));
+        
         if (s == null) {
             return null;
         }
@@ -299,4 +296,16 @@ public class SSVisitor extends SSVisitorAbstract {
         return (String) visit(ctx.constantstring());
     }
 
+    // ===========================================
+    //    Statements
+    // ===========================================
+    
+    @Override
+    public Object visitCheck(CheckContext ctx) {        
+        if (rtc.shouldStop()) {
+            return null;
+        }
+        String s = (String) visit(ctx.stringval());
+        return null;
+    }
 }

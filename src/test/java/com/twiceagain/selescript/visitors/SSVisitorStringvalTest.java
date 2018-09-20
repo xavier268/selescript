@@ -46,7 +46,35 @@ public class SSVisitorStringvalTest {
         assertNotNull(t("'abc' == 'abc'"));
         assertNull(t("null != null"));
         assertNull(t("'ab' == 'abc'"));
+        
+        // find
+        assertEquals("true", t("'abcdef' ~ 'cd' "));
+        assertEquals("true", t("'abcdef' ~ null "));
+        assertEquals("true", t("'abcdef' ~ '' "));
+        assertEquals("true", t("'abcdef' ~ '^az*' "));
+        assertEquals("true", t("'abcdef' ~ '^a.*f$' "));
+        
+        assertEquals(null, t("null ~ 'kjh' "));
+        assertEquals(null, t("null ~ null "));
+        assertEquals(null, t("null ~ '' "));
+        
+        // Find & replace
+         assertEquals("abxef", t("'abcdef' ~ 'cd' , 'x' "));
+         assertEquals("abcdef", t("'abcdef' ~ null , 'x' "));
+         assertEquals("abcdef", t("'abcdef' ~ 'null , null "));
+         assertEquals("xaxbxcxdxexfx", t("'abcdef' ~ '' , 'x' "));
+         assertEquals("abef", t("'abcdef' ~ 'cd' , null "));    
 
+    }
+    
+    @Test
+    public void biidTest(){
+        
+    }
+    
+    @Test
+    public void testAt() {
+        
     }
 
     private String t(String s) {

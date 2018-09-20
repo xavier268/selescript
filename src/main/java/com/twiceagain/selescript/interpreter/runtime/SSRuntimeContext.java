@@ -64,13 +64,16 @@ public class SSRuntimeContext implements Closeable {
         }
         return wd;
     }
-    
+
     /**
      * Get serach context.
+     *
      * @return - never null.
      */
     public SearchContext getSc() {
-        if (frames.isEmpty()) return getWd();
+        if (frames.isEmpty()) {
+            return getWd();
+        }
         return frames.getLast().getSc();
     }
 
@@ -142,6 +145,14 @@ public class SSRuntimeContext implements Closeable {
 
     public String getBiid(String id) {
         return biids.get(id);
+    }
+
+    public void putBiid(String biid, String value) {
+        biids.put(biid, value);
+    }
+
+    public SSConfig getConfig() {
+        return config;
     }
 
 }
