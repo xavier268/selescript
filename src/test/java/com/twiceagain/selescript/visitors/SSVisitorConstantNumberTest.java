@@ -42,7 +42,7 @@ public class SSVisitorConstantNumberTest {
         CommonTokenStream ts = new CommonTokenStream(lexer);
         SelescriptParser parser = new SelescriptParser(ts);
         parser.removeErrorListeners();
-        parser.addErrorListener(new DebugErrorListener());
+        parser.addErrorListener(new SSDebugErrorListener());
         SelescriptParser.ConstantnumberContext root = parser.constantnumber();
         return (Long) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }

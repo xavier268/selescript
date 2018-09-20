@@ -114,10 +114,6 @@ public class SSConfig {
         return browser;
     }
 
-    static SSConfig parseArgs(String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public String toString() {
         return new StringBuilder()
@@ -144,6 +140,68 @@ public class SSConfig {
             return "no file script was set";
         }
         return Paths.get(getScriptFileName()).toAbsolutePath().toString();
+    }
+
+    public static SSConfig parseArgs(String[] args) {
+
+        SSConfig config = new SSConfig();
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-d":
+                case "--debug":
+                    config.setDebug(true);
+                    break;
+                case "--firefox":
+                    config.setBrowserFirefox();
+                    break;
+                case "--chrome":
+                    config.setBrowserChrome();
+                    break;
+                case "--grid":
+                    i++;
+                    config.setGridUrl(args[i]);
+                    break;
+                case "--mongo":
+                    i++;
+                    config.setMongoConnexionString(args[i]);
+                    break;
+                case "-s":
+                    i++;
+                    config.setScriptFileName(args[i]);
+                    break;
+                case "-h":
+                case "--help":
+                default:
+                    config.printHelp();
+
+            }
+        }
+        return config;
+    }
+
+    public void printHelp() {
+
+        System.out.println(toString());
+
+        System.out.println(String.join(NL, new String[]{
+            "Recognized command lines options :",
+            "",
+            "-s FILE            : specify the FILE to run",
+            "",
+            " -d",
+            "--debug            : set the debug mode (more verbose)",
+            "",
+            "--firefox          : use firefox (default)",
+            "--chrome           : use chrome",
+            "",
+            "--grid URL         : set the Grid Url to use.",
+            "",
+            "--mongo    URL     : set the mongo connexion string to URL",
+            "",
+            " -h",
+            "--help             : print these messages",
+            ""}));
+
     }
 
 }

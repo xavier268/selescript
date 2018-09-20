@@ -83,7 +83,7 @@ public class SSVisitorStringvalTest {
         CommonTokenStream ts = new CommonTokenStream(lexer);
         SelescriptParser parser = new SelescriptParser(ts);
         parser.removeErrorListeners();
-        parser.addErrorListener(new DebugErrorListener());
+        parser.addErrorListener(new SSDebugErrorListener());
         SelescriptParser.StringvalContext root = parser.stringval();
         return (String) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }

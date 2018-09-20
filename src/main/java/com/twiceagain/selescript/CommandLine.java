@@ -21,12 +21,19 @@ public class CommandLine {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        
+
         SSConfig config = SSConfig.parseArgs(args);
 
-       
-        System.out.println("Please, type script (Ctl-D to finish) :");
-        SSInterpreter ssInterpreter = new SSInterpreter(CharStreams.fromStream(System.in));
+        if (config.isDebug()) {
+            System.out.println(config.toString());
+        }
+
+        if (config.getScriptFileName() == null) {
+            System.out.println("Please, type script (Ctl-D to finish) :");
+            SSInterpreter ssInterpreter = new SSInterpreter(config, CharStreams.fromStream(System.in));
+        } else {
+            SSInterpreter ssInterpreter = new SSInterpreter(config);
+        }
     }
 
 }

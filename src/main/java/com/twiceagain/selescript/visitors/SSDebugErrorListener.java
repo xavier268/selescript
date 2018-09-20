@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.Recognizer;
  * Same as console, but will throw an exception.
  * @author xavier
  */
-public class DebugErrorListener extends ConsoleErrorListener {
+public class SSDebugErrorListener extends ConsoleErrorListener {
     
     @Override
 	public void syntaxError(Recognizer<?, ?> recognizer,

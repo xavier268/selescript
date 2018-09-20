@@ -30,7 +30,7 @@ public class SSVisitorStatementTest {
         CommonTokenStream ts = new CommonTokenStream(lexer);
         SelescriptParser parser = new SelescriptParser(ts);
         parser.removeErrorListeners();
-        parser.addErrorListener(new DebugErrorListener());
+        parser.addErrorListener(new SSDebugErrorListener());
         SelescriptParser.StatementContext root = parser.statement();
         return (String) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }
