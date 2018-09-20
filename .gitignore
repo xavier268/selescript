@@ -1,11 +1,5 @@
-target
-target/
 target/*
 target/**/*
-
-example-dist
-example-dist/
-example-dist/*
-example-dist/**/*
+!target/site/**
 
 /nbproject/
