@@ -2,13 +2,9 @@
 
 ## What is **Selescript** ?
 
-**Selescript** is both a compiler/translator and a langage.
+**Selescript** is a langage designed to make web scrapping easier
 
-From a small script, written in the **Selescript** langage, the **Selescript** compiler 
-will generate a complete java application, compile and package it as a 
-self-sustained, executable jar that can run anywhere, as long and as often as you need.
-
-Running this application will *scrap* the web, selecting and retrieving  
+Running a **selescript** script will *scrap* the web, selecting and retrieving  
 information, and automatically navigating from page to page. 
 
 The scrapped data can be easily retrieved in various formats, from csv files to 
