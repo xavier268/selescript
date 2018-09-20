@@ -416,18 +416,17 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitStdb(StdbContext ctx) {
 
-        Map<String, Object> pp = new HashMap<>();
+        Map<String, String> pp = new HashMap<>();
         // Prepare parameters
         ctx.param().forEach((ParamContext p) -> {
             if (p.TAG() == null) {
                 throw new SSSyntaxException("Tags are mandatory to send data to database in " + ctx.parent.getText());
             } else {
-                pp.put(p.TAG().getText().substring(1), visit(p.stringval()));
+                pp.put(p.TAG().getText().substring(1), (String) visit(p.stringval()));
             }
-        });
-
-        // Send to db, returning the string content that was sent (debug mode only).
-        return rtc.dbWrite(pp);
+        });        
+        rtc.dbWrite(pp);
+        return null;
     }
 
     @Override

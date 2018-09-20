@@ -37,10 +37,11 @@ public class SSRuntimeContext implements Closeable {
     private final Map<String, String> symbols = new HashMap<>();
     private final SSBuiltins biids = new SSBuiltins(this);
     private boolean stopGlobal = false;
-    private final SSMongo mongo = new SSMongo(this);;
+    private final SSMongo mongo ;
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
+        this.mongo = new SSMongo(config);
         
     }
 
@@ -213,12 +214,11 @@ public class SSRuntimeContext implements Closeable {
     }
 
     /**
-     * Write record in database. Return a string value for debugging.
+     * Write record in database.Return a string value for debugging.
      * @param pp
-     * @return - a string representation of the inseerted document, if debug mode.
      */
-    public String dbWrite(Map<String, Object> pp) {
-        return mongo.insert(pp);
+    public void dbWrite(Map<String, String> pp) {
+         mongo.insert(pp);
     }
 
 }

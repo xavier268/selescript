@@ -27,7 +27,7 @@ public class SSBuiltins {
         }
         switch (biid) {
 
-            case "$Os":
+            case "$os":
                 return System.getProperty("os.name").toLowerCase();
             case "$java":
                 return rtc.getConfig().getJavaVersion();

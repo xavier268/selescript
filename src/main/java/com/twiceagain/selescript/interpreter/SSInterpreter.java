@@ -55,7 +55,7 @@ public class SSInterpreter {
 
         root = parser.unit();
 
-        new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
+        new SSVisitor(new SSRuntimeContext(config)).visit(root);
 
     }
 

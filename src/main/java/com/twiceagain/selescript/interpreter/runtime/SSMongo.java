@@ -5,15 +5,12 @@
  */
 package com.twiceagain.selescript.interpreter.runtime;
 
-import com.mongodb.async.SingleResultCallback;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoCollection;
-import com.mongodb.async.client.MongoDatabase;
-import com.twiceagain.selescript.exceptions.SSDatabaseException;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.twiceagain.selescript.SSConfig;
 import java.util.Map;
 import org.bson.Document;
-import org.bson.json.JsonWriterSettings;
 
 /**
  * Access layer to the mongo db. Uses lazy initialisation.
@@ -23,41 +20,36 @@ import org.bson.json.JsonWriterSettings;
 public class SSMongo {
 
     private static MongoClient CLIENT = null;
-    private static MongoDatabase DATABASE = null;
-    private static MongoCollection<Document> COLLECTION = null;
-    private final SSRuntimeContext rtc;
+    private final SSConfig config;
 
-    SSMongo(SSRuntimeContext rtc) {
-        this.rtc = rtc;
+    SSMongo(SSConfig config) {
+        
+        this.config = config;
+        CLIENT = MongoClients.create(config.getMongoConnexionString());
+           
+       
     }
 
     /**
      * In debug mode, will return a string representation of the inserted
      * document.
      *
-     * @param data
-     * @return
+     * @param data - a Map with the document key/value.
      */
-    public String insert(Map<String, Object> data) {
-        if (CLIENT == null) {
-            CLIENT = MongoClients.create(rtc.getConfig().getMongoConnexionString());
-            DATABASE = CLIENT.getDatabase(rtc.getConfig().getMongoDatabase());
-            COLLECTION = DATABASE.getCollection(rtc.getConfig().getMongoCollection());
-        }
+    public void insert(Map<String, String> data) {        
 
-        Document doc = new Document("selescript", rtc.getConfig().getSelescriptVersion())
-                .append("data", new Document(data));
-        COLLECTION.insertOne(doc, (Void result, Throwable ex) -> {
-            if (ex != null) {
-                throw new SSDatabaseException(ex);
-            }
+        Document doc = new Document();
+        data.keySet().forEach((k) -> {
+            doc.append(k,data.get(k));
         });
-        if (rtc.getConfig().isDebug()) {
-            return doc.toJson(JsonWriterSettings.builder().indent(true).build());
-        } else {
-            return null;
-        }
+        Document dd = new Document("data", doc).append("Selescript", config.getSelescriptVersion());
+        
+        System.out.println("DEBUG : " + config);
+        System.out.println("DEBUG : printing doc content :" + dd.toJson());
+        CLIENT
+                .getDatabase(config.getMongoDatabase())
+                .getCollection(config.getMongoCollection())
+                .insertOne(dd);     
+        
     }
 }
-
-

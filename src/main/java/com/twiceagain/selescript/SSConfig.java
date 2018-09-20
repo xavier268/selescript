@@ -21,8 +21,8 @@ public class SSConfig {
     private String browser = "firefox";
 
     private String mongoConnexionString = "mongodb://localhost:27017";
-    private String mongoDatabase = "mongodb";
-    private String mongoCollection = "mongocol";
+    private String mongoDatabase = "ssdb";
+    private String mongoCollection = "sscol";
 
     private String scriptFileName = null;
     private boolean debug = false;
@@ -119,13 +119,15 @@ public class SSConfig {
         return new StringBuilder()
                 .append(NL)
                 .append(getNotice()).append(NL)
-                .append("Selescript version ").append(getSelescriptVersion()).append(NL)
-                .append("Java version ").append(getJavaVersion()).append(NL)
-                .append("Using ").append(getBrowser()).append(NL)
-                .append("Grid url ").append(getGridUrl()).append(NL)
-                .append("Mongo url ").append(getMongoConnexionString()).append(NL)
+                .append("Selescript version : ").append(getSelescriptVersion()).append(NL)
+                .append("Java version : ").append(getJavaVersion()).append(NL)
+                .append("Using : ").append(getBrowser()).append(NL)
+                .append("Grid url : ").append(getGridUrl()).append(NL)
+                .append("Mongo url : ").append(getMongoConnexionString()).append(NL)
+                .append("Mongo db : ").append(getMongoDatabase()).append(NL)
+                .append("Mongo col : ").append(getMongoCollection()).append(NL)
                 .append("Script file : ").append(getAbsoluteScriptFileName()).append(NL)
-                .append("Debug mode ").append(isDebug()).append(NL)
+                .append("Debug mode : ").append(isDebug()).append(NL)
                 .append(NL).toString();
 
     }
