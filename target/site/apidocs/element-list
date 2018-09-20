@@ -1,0 +1,6 @@
+auto
+com.twiceagain.selescript
+com.twiceagain.selescript.exceptions
+com.twiceagain.selescript.interpreter
+com.twiceagain.selescript.interpreter.runtime
+com.twiceagain.selescript.visitors
