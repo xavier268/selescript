@@ -2,24 +2,23 @@
 
 $url = "http://www.google.fr" ;
 
-print "Opened page : " + $url ;
+print "Opened page : "  $url ;
 
-print "title : " + $title ;
-print "$count = " + $count ;
-print "elapsed time = " + $elapsed ;
+print "title : "  $title ;
+print "$count = "  $count ;
+print "elapsed time = "  $elapsed ;
 
 
 go ".//body" {
     print "Entering body loop" ;
     print "Getting the text of the current element" ;
     print @ ;    
-    print "Body count = " + $count ;   
+    print "Body count = "  $count ;   
     print "Now looking for first 6 divs" ;
-    go ".//div", c:6 {        
+    go ".//div", :c 6 {        
         print "In the div loop" ;
-        print "div count = "+$count ;
-        print "time = " + $millis ;
-        print "elapsed time = " + $elapsed ;
+        print "div count = " $count ;
+        print "elapsed time = "  $elapsed ;
         print "Getting the text of the current element, filtering on existing text" ;
         @ == "" ; /* filter on empty text */
         print @ ;
@@ -28,7 +27,7 @@ go ".//body" {
     print ;
     print "Now, looking for existing input tags ..." ;
     go "//input" {
-        print "Input value : " + @ value: + " , name : " + @ name: ;
+        print "Input value : "  @ :value  " , name  "  @ :name ;
         }
 
 
@@ -37,8 +36,8 @@ go ".//body" {
     // It seems attributes name or value are never null.
     go "//input" {
         // Assume neither null nor empty string
-        (@ value : | "") != "" ;
-        print "Input value : " + @ value: + " , name : " + @ name: ;
+        (@ :value  | "") != "" ;
+        print "Input value : "  @ :value " , name : "  @ :name ;
         }
 
 
@@ -47,8 +46,8 @@ go ".//body" {
     // It seems attributes name or value are never null.
     go "//input" {
         // Assume type hidden
-        @ type : == "hidden" ;
-        print "Input value : " + @ value: + " , name : " + @ name: + " , type :" + @ type : ;
+        @ :type  == "hidden" ;
+        print "Input value : "  @ :value  " , name : "  @ :name  " , type :" @ :type  ;
         }
 
     print ;
@@ -56,8 +55,8 @@ go ".//body" {
     // It seems attributes name or value are never null.
     go "//input" {
         print "There is always one, as for name, value, ..., even a default one !";
-        ! @ maxlength ;
-        print "Input value : " + @ value: + " , name : " + @ name: + " , maxlength :" + @ maxlength : ;
+        ! @ :maxlength ;
+        print "Input value : "  @ :value  " , name : "  @ :name  " , maxlength :"  @ :maxlength ;
         }
 
     } // go body

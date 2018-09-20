@@ -53,6 +53,8 @@ public class SSBuiltins {
                 return rtc.getWd().getTitle();
             case "$count":
                 return rtc.getCount();
+            case "$elapsed":
+                return rtc.getElapsed().toString();
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be read from : " + biid);
 
@@ -68,6 +70,7 @@ public class SSBuiltins {
         switch (biid) {
             case "$url" :
                 rtc.getWd().get(value);
+                break;
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be written to : " + biid);
 

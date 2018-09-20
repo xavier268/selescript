@@ -37,12 +37,13 @@ public class SSRuntimeContext implements Closeable {
     private final Map<String, String> symbols = new HashMap<>();
     private final SSBuiltins biids = new SSBuiltins(this);
     private boolean stopGlobal = false;
-    private final SSMongo mongo ;
+    private final SSMongo mongo;
+    private final long start = System.currentTimeMillis();
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
         this.mongo = new SSMongo(config);
-        
+
     }
 
     /**
@@ -203,22 +204,28 @@ public class SSRuntimeContext implements Closeable {
         }
         (new WebDriverWait(getWd(), max)).until(cond);
     }
-/**
+
+    /**
      * Explicit wait for a condition.
      *
      * @param cond - Condition to wait for (use default timeout)
      */
-   
+
     public void wait(ExpectedCondition cond) {
         wait(cond, null);
     }
 
     /**
      * Write record in database.Return a string value for debugging.
+     *
      * @param pp
      */
     public void dbWrite(Map<String, String> pp) {
-         mongo.insert(pp);
+        mongo.insert(pp);
+    }
+
+    Long getElapsed() {
+        return (Long) (System.currentTimeMillis() - start);
     }
 
 }
