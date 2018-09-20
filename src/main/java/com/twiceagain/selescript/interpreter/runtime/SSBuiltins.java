@@ -51,6 +51,8 @@ public class SSBuiltins {
                 return rtc.getWd().getCurrentUrl();
             case "$title":
                 return rtc.getWd().getTitle();
+            case "$count":
+                return rtc.getCount();
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be read from : " + biid);
 

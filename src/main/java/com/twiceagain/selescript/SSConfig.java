@@ -1,5 +1,6 @@
 package com.twiceagain.selescript;
 
+import java.nio.file.Paths;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -13,6 +14,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
  */
 public class SSConfig {
 
+    static final String NL = System.lineSeparator();
+
     // Read-write
     private String gridUrl = "http://localhost:4444/wd/hub";
     private String browser = "firefox";
@@ -23,8 +26,11 @@ public class SSConfig {
 
     private String scriptFileName = null;
     private boolean debug = false;
-    
+
     // Read only
+    private final String notice = "Selescript - (c) Xavier Gandillot 2018"
+            + NL
+            + "See https://xavier268.github.io/selescript/";
     private final String selescriptVersion = "1.1.0";
     private final String javaVersion = Runtime.version().toString();
     private final Long startMillis = System.currentTimeMillis();
@@ -108,6 +114,36 @@ public class SSConfig {
         return browser;
     }
 
-    
-    
+    static SSConfig parseArgs(String[] args) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append(NL)
+                .append(getNotice()).append(NL)
+                .append("Selescript version ").append(getSelescriptVersion()).append(NL)
+                .append("Java version ").append(getJavaVersion()).append(NL)
+                .append("Using ").append(getBrowser()).append(NL)
+                .append("Grid url ").append(getGridUrl()).append(NL)
+                .append("Mongo url ").append(getMongoConnexionString()).append(NL)
+                .append("Script file : ").append(getAbsoluteScriptFileName()).append(NL)
+                .append("Debug mode ").append(isDebug()).append(NL)
+                .append(NL).toString();
+
+    }
+
+    public String getNotice() {
+        return notice;
+    }
+
+    private String getAbsoluteScriptFileName() {
+        String f = getScriptFileName();
+        if (f == null) {
+            return "no file script was set";
+        }
+        return Paths.get(getScriptFileName()).toAbsolutePath().toString();
+    }
+
 }

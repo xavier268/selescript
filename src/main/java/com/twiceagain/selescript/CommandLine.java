@@ -21,6 +21,8 @@ public class CommandLine {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
+        
+        SSConfig config = SSConfig.parseArgs(args);
 
        
         System.out.println("Please, type script (Ctl-D to finish) :");

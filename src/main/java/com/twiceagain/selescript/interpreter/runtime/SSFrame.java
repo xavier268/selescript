@@ -36,7 +36,7 @@ class SSFrame {
     private Integer count = 0;
     private Integer maxCount = null;
 
-    private boolean stopRequested = false;
+    private boolean stopLocal = false;
 
     private final Deque<WebElement> tovisit = new ArrayDeque<>();
     private final Set<WebElement> visited = new HashSet<>();
@@ -59,13 +59,20 @@ class SSFrame {
     }
 
     /**
+     * Request exit from local loop as soon as possible.
+     */
+    public void requestStopLocal() {
+        stopLocal = true;
+    }
+    
+    /**
      * Should we stop now ?
      *
      * @return
      */
     public boolean shouldStop() {
 
-        if (stopRequested) {
+        if (stopLocal) {
             return true;
         }
         if (maxCount != null && count >= maxCount) {
@@ -116,6 +123,7 @@ class SSFrame {
      */
     public void getNext() {
         if(!hasNext()) return;
+        count ++;
         we = tovisit.pop();
     }
 

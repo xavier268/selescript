@@ -23,11 +23,16 @@ public class SSVisitor extends SSVisitorAbstract {
     public SSVisitor(SSRuntimeContext rtc) {
         super(rtc);
     }
-/**
- * Main interpreter entry point.
- * @param ctx
- * @return 
- */
+    // =======================================
+    //  unit is the top level syntax concept
+    // =======================================
+
+    /**
+     * Main interpreter entry point.
+     *
+     * @param ctx
+     * @return
+     */
     @Override
     public Object visitUnit(UnitContext ctx) {
         System.out.println("Visiting unit !");
@@ -40,8 +45,6 @@ public class SSVisitor extends SSVisitorAbstract {
         rtc.close(); // cleanup
         return null;
     }
-
-    
 
     // ===========================================
     //    Constant numbers represented as Long
@@ -106,6 +109,11 @@ public class SSVisitor extends SSVisitorAbstract {
         }
         return s0 + s1;
     }
+    
+    @Override
+    public String visitCsnull(CsnullContext ctx) {
+        return null;
+    }
 
     @Override
     public String visitCsnot(CsnotContext ctx) {
@@ -135,10 +143,7 @@ public class SSVisitor extends SSVisitorAbstract {
         return rtc.getBiid(ctx.BIID().getText());
     }
 
-    @Override
-    public String visitSvnull(SvnullContext ctx) {
-        return null;
-    }
+    
 
     @Override
     public String visitSvand(SvandContext ctx) {
@@ -250,7 +255,7 @@ public class SSVisitor extends SSVisitorAbstract {
         String s = (String) visit(ctx.stringval(0));
         String p = (String) visit(ctx.stringval(1));
         String r = (String) visit(ctx.stringval(2));
-        
+
         if (s == null) {
             return null;
         }
@@ -290,22 +295,15 @@ public class SSVisitor extends SSVisitorAbstract {
             return null;
         }
     }
-    
+
     @Override
-    public String visitSvstring(SvstringContext ctx){
+    public String visitSvstring(SvstringContext ctx) {
         return (String) visit(ctx.constantstring());
     }
 
     // ===========================================
-    //    Statements
+    //    Statements, represented as Object, potentially null.
     // ===========================================
     
-    @Override
-    public Object visitCheck(CheckContext ctx) {        
-        if (rtc.shouldStop()) {
-            return null;
-        }
-        String s = (String) visit(ctx.stringval());
-        return null;
-    }
+
 }

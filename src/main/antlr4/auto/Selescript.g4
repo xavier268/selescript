@@ -39,7 +39,6 @@ stringval
     |   '@' TAG  ?  stringval  ?                # svat    // derefence based on current search context
     |   stringval '|' stringval                 # svor    // logical or
     |   stringval '&' stringval                 # svand   // logical and
-    |   NULL                                    # svnull
     |   BIID                                    # svbiid
     |   ID                                      # svid
     ;
@@ -50,6 +49,8 @@ constantstring
     |  constantstring constantstring            # csconcat
     |  constantnumber                           # csnumber
     |  STRING                                   # csstring
+    |  NULL                                     # csnull
+    
     ; 
 
 

@@ -34,12 +34,23 @@ public class SSRuntimeContext implements Closeable {
     private final Deque<SSFrame> frames = new ArrayDeque<>();
     private final Map<String, String> symbols = new HashMap<>();
     private final SSBuiltins biids = new SSBuiltins(this);
+    private boolean stopGlobal = false;
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
     }
 
+    /**
+     * Request global interpreter stop as soon as possible.
+     */
+    public void requestStopGlobal() {
+        stopGlobal = true;
+    }
+
     public boolean shouldStop() {
+        if (stopGlobal) {
+            return true;
+        }
         if (frames.isEmpty()) {
             return false;
         }
@@ -153,6 +164,14 @@ public class SSRuntimeContext implements Closeable {
 
     public SSConfig getConfig() {
         return config;
+    }
+
+    public String getCount() {
+        Integer c = 0;
+        if (!frames.isEmpty()) {
+            c = frames.getLast().getCount();
+        }
+        return c.toString();
     }
 
 }
