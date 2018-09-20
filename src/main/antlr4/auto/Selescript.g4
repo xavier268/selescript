@@ -11,15 +11,15 @@ unit
     ;
 
 statement 
-    :   'go'  param ? ( ',' param )*  '{' statement * '}'    # go   // one-time loop
-    |    ID   '=' stringval ';'                 # assigni
-    |    BIID '=' stringval ';'                 # assignb
-    |   'db' param ? ( ',' param )* ';'         # db      // send to mongodb
-    |   'print' param ? ( ',' param )* ';'      # print   //plain text
-    |   'click' param ? ';'                     # click   // on the specified xpath
-    |   'type'  param ? ( ',' param ) ';'       # type    // type text into element
-    |   'submit' param ? ';'                    # submit  // submit enclosing form
-    |    stringval ';'                          # check   // continue on null value
+    :   'go'  param ? ( ',' param )*  '{' statement * '}'    # stgo   // one-time loop
+    |    ID   '=' stringval ';'                 # stassigni
+    |    BIID '=' stringval ';'                 # stassignb
+    |   'db' param ? ( ',' param )* ';'         # stdb      // send to mongodb
+    |   'print' param ? ( ',' param )* ';'      # stprint   //plain text
+    |   'click' param ? ';'                     # stclick   // on the specified xpath
+    |   'type'  param ? ( ',' param ) ';'       # sttype    // type text into element
+    |   'submit' param ? ';'                    # stsubmit  // submit enclosing form
+    |    stringval ';'                          # stcheck   // continue on null value
     ;
 
 param

@@ -6,12 +6,19 @@
 package com.twiceagain.selescript.visitors;
 
 import auto.SelescriptParser.*;
+import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Visit a Unit (ie, the full script).
@@ -109,7 +116,7 @@ public class SSVisitor extends SSVisitorAbstract {
         }
         return s0 + s1;
     }
-    
+
     @Override
     public String visitCsnull(CsnullContext ctx) {
         return null;
@@ -142,8 +149,6 @@ public class SSVisitor extends SSVisitorAbstract {
     public String visitSvbiid(SvbiidContext ctx) {
         return rtc.getBiid(ctx.BIID().getText());
     }
-
-    
 
     @Override
     public String visitSvand(SvandContext ctx) {
@@ -302,8 +307,295 @@ public class SSVisitor extends SSVisitorAbstract {
     }
 
     // ===========================================
-    //    Statements, represented as Object, potentially null.
+    //    Statements, represented as String, usually null.
     // ===========================================
-    
+    @Override
+    public String visitStcheck(StcheckContext ctx) {
+        if (visit(ctx.stringval()) == null) {
+            rtc.requestStopLocal();
+        }
+        return null;
+    }
+
+    @Override
+    public String visitStsubmit(StsubmitContext ctx) {
+
+        // Set parameters
+        Boolean wait = false;
+        String xpath = ".";
+        if (ctx.param() != null) {
+            if ((ctx.param().TAG() != null) && (":w".equals(ctx.param().TAG().getText()))) {
+                wait = true;
+            }
+            if (ctx.param().stringval() != null) {
+                xpath = (String) visit(ctx.param().stringval());
+            }
+        }
+
+        // Do submit
+        List<WebElement> lwe = rtc.getSc().findElements(By.xpath(xpath));
+        if (lwe.isEmpty()) {
+            return null;
+        }
+        WebElement w = lwe.get(0);
+        w.submit();
+
+        // If :w tag, wait for element to disappear.
+        if (wait) {
+            rtc.wait(ExpectedConditions.stalenessOf(w));
+        }
+        return null;
+    }
+
+    @Override
+    public String visitStclick(StclickContext ctx) {
+
+        // Set parameters
+        Boolean wait = false;
+        String xpath = ".";
+        if (ctx.param() != null) {
+            if ((ctx.param().TAG() != null) && (":w".equals(ctx.param().TAG().getText()))) {
+                wait = true;
+            }
+            if (ctx.param().stringval() != null) {
+                xpath = (String) visit(ctx.param().stringval());
+            }
+        }
+
+        // Do click
+        List<WebElement> lwe = rtc.getSc().findElements(By.xpath(xpath));
+        if (lwe.isEmpty()) {
+            return null;
+        }
+        WebElement w = lwe.get(0);
+        w.click();
+
+        // If :w tag, wait for element to disappear.
+        if (wait) {
+            rtc.wait(ExpectedConditions.stalenessOf(w));
+        }
+        return null;
+    }
+
+    @Override
+    public String visitStprint(StprintContext ctx) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (ParamContext p : ctx.param()) {
+            if (p.TAG() == null) {
+                if (p.stringval() != null) {
+                    sb.append(visit(p.stringval()));
+                }
+            } else {
+                switch (p.TAG().getText()) {
+                    case ":t": // raw text - this is the default
+                        if (p.stringval() != null) {
+                            sb.append(visit(p.stringval()));
+                        }
+                        break;
+                    case ":u":  // url encoded
+                        if (p.stringval() != null) {
+                            try {
+                                sb.append(URLEncoder.encode((String) visit(p.stringval()), "UTF-8"));
+                            } catch (UnsupportedEncodingException ex) {
+                                throw new SSSyntaxException("Encoding error", ex);
+                            }
+                        }
+                        break;
+                    default:
+                        throw new SSSyntaxException("Unknown tag in print " + p.TAG().getText());
+                }
+            }
+        }
+        String s = sb.toString();
+        System.out.println(s);
+        return s;
+    }
+
+    @Override
+    public String visitStdb(StdbContext ctx) {
+
+        Map<String, Object> pp = new HashMap<>();
+        // Prepare parameters
+        ctx.param().forEach((ParamContext p) -> {
+            if (p.TAG() == null) {
+                throw new SSSyntaxException("Tags are mandatory to send data to database in " + ctx.parent.getText());
+            } else {
+                pp.put(p.TAG().getText().substring(1), visit(p.stringval()));
+            }
+        });
+
+        // Send to db, returning the string content that was sent (debug mode only).
+        return rtc.dbWrite(pp);
+    }
+
+    @Override
+    public String visitStassignb(StassignbContext ctx) {
+        rtc.putBiid(ctx.BIID().getText(), (String) visit(ctx.stringval()));
+        return null;
+    }
+
+    @Override
+    public String visitStassigni(StassigniContext ctx) {
+        rtc.putId(ctx.ID().getText(), (String) visit(ctx.stringval()));
+        return null;
+    }
+
+    @Override
+    public String visitStgo(StgoContext ctx) {
+
+        By by = null;
+        Integer count = null;
+        Long dm, millis = null;
+
+        // parse  params
+        for (ParamContext p : ctx.param()) {
+            String k, x;
+            if (p.TAG() == null) {
+                k = ":x";
+            } else {
+                k = p.TAG().getText();
+            }
+
+            switch (k) {
+                case ":c":
+                case ":count":
+                    count = Integer.decode((String) visit(p.stringval()));
+                    break;
+                case ":ms":
+                    dm = Long.decode((String) visit(p.stringval()));
+                    if (millis == null) {
+                        millis = dm;
+                    } else {
+                        millis += dm;
+                    }
+                    break;
+                case ":sec":
+                    dm = Long.decode((String) visit(p.stringval())) * 1000;
+                    if (millis == null) {
+                        millis = dm;
+                    } else {
+                        millis += dm;
+                    }
+                    break;
+
+                case ":min":
+                    dm = Long.decode((String) visit(p.stringval())) * 60 * 1000;
+                    if (millis == null) {
+                        millis = dm;
+                    } else {
+                        millis += dm;
+                    }
+                    break;
+
+                case ":hour":
+                    dm = Long.decode((String) visit(p.stringval())) * 60 * 60 * 1000;
+                    if (millis == null) {
+                        millis = dm;
+                    } else {
+                        millis += dm;
+                    }
+                    break;
+
+                case ":day":
+                    dm = Long.decode((String) visit(p.stringval())) * 24 * 60 * 60 * 1000;
+                    if (millis == null) {
+                        millis = dm;
+                    } else {
+                        millis += dm;
+                    }
+                    break;
+                case ":x":
+                case ":xpath":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.xpath(x);
+                    }
+                    break;
+                case ":id":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.id(x);
+                    }
+                    break;
+
+                case ":class":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.className(x);
+                    }
+                    break;
+
+                case ":linktext":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.linkText(x);
+                    }
+                    break;
+
+                case ":name":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.name(x);
+                    }
+                    break;
+
+                case ":plinktext":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.partialLinkText(x);
+                    }
+                    break;
+
+                case ":tag":
+                    x = (String) visit(p.stringval());
+                    if (x == null) {
+                        by = null;
+                    } else {
+                        by = By.tagName(x);
+                    }
+                    break;
+
+                default:
+                    throw new SSSyntaxException("Urecognized TAG for go loop  " + k);
+
+            }
+        }
+
+        // startloop
+        rtc.loopStart(by, millis, count);
+        try {
+            // main loop body
+            while (rtc.loopWhile()) {
+
+                for (StatementContext s : ctx.statement()) {
+                    visit(s);
+                    if (rtc.shouldStop()) {
+                        break;
+                    }
+                }
+
+            }
+        } catch (StaleElementReferenceException ex) {
+            // Page changed. Exit the loop.
+        }
+        // cleanup
+        rtc.loopEnd();
+
+   return null;
+    }
 
 }

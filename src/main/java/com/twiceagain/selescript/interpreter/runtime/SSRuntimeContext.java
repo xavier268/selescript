@@ -19,6 +19,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * The class that maintains the context of the current running program. There
@@ -35,9 +37,11 @@ public class SSRuntimeContext implements Closeable {
     private final Map<String, String> symbols = new HashMap<>();
     private final SSBuiltins biids = new SSBuiltins(this);
     private boolean stopGlobal = false;
+    private final SSMongo mongo = new SSMongo(this);;
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
+        
     }
 
     /**
@@ -172,6 +176,49 @@ public class SSRuntimeContext implements Closeable {
             c = frames.getLast().getCount();
         }
         return c.toString();
+    }
+
+    /**
+     * Request stop of innermost loop - or porgram stop if no loop available.
+     */
+    public void requestStopLocal() {
+        if (frames.isEmpty()) {
+            requestStopGlobal();
+        } else {
+            frames.getLast().requestStopLocal();
+        }
+    }
+
+    /**
+     * Explicit wait for a condition.
+     *
+     * @param cond - Condition to wait for.
+     * @param maxSeconds - max number of seconds, or null for default (5sec).
+     */
+    public void wait(ExpectedCondition cond, Integer maxSeconds) {
+        Integer max = 5; // default timeout
+        if (maxSeconds != null) {
+            max = maxSeconds;
+        }
+        (new WebDriverWait(getWd(), max)).until(cond);
+    }
+/**
+     * Explicit wait for a condition.
+     *
+     * @param cond - Condition to wait for (use default timeout)
+     */
+   
+    public void wait(ExpectedCondition cond) {
+        wait(cond, null);
+    }
+
+    /**
+     * Write record in database. Return a string value for debugging.
+     * @param pp
+     * @return - a string representation of the inseerted document, if debug mode.
+     */
+    public String dbWrite(Map<String, Object> pp) {
+        return mongo.insert(pp);
     }
 
 }
