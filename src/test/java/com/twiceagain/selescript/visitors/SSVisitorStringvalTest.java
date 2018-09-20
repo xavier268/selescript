@@ -8,6 +8,7 @@ package com.twiceagain.selescript.visitors;
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
 import com.twiceagain.selescript.SSConfig;
+import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -74,6 +75,11 @@ public class SSVisitorStringvalTest {
     @Test
     public void testAt() {
         // Will only be tested at the statement level.
+    }
+    
+    @Test(expected=SSSyntaxException.class)
+    public void testError() {
+        t("'null == null");
     }
 
     private String t(String s) {

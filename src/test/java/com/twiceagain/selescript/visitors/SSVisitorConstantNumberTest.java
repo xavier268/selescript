@@ -12,7 +12,6 @@ import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ConsoleErrorListener;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -43,7 +42,7 @@ public class SSVisitorConstantNumberTest {
         CommonTokenStream ts = new CommonTokenStream(lexer);
         SelescriptParser parser = new SelescriptParser(ts);
         parser.removeErrorListeners();
-        parser.addErrorListener(ConsoleErrorListener.INSTANCE);
+        parser.addErrorListener(new DebugErrorListener());
         SelescriptParser.ConstantnumberContext root = parser.constantnumber();
         return (Long) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }
