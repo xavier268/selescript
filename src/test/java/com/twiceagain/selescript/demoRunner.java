@@ -27,5 +27,20 @@ class demoRunner {
             System.out.println();
         }
     }
-    
+
+    public void runDebug(String fileName) throws IOException {
+        try {
+            System.out.println();
+            System.out.println("================================================");
+            System.out.println("=   Starting " + fileName + " in debug mode");
+            System.out.println("================================================");
+            CommandLine.main( "-s", fileName,"-d");
+        } finally {
+            System.out.println("================================================");
+            System.out.println("=   Finished " + fileName + " in debug mode");
+            System.out.println("================================================");
+            System.out.println();
+        }
+    }
+
 }

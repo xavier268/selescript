@@ -12,18 +12,21 @@ import org.antlr.v4.runtime.Recognizer;
 
 /**
  * Same as console, but will throw an exception.
+ *
  * @author xavier
  */
 public class SSDebugErrorListener extends ConsoleErrorListener {
-    
+
     @Override
-	public void syntaxError(Recognizer<?, ?> recognizer,
-							Object offendingSymbol,
-							int line,
-							int charPositionInLine,
-							String msg,
-							RecognitionException e){
-            super.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
-            throw new SSSyntaxException("Debug error : ", e);
-        }
+    public void syntaxError(Recognizer<?, ?> recognizer,
+            Object offendingSymbol,
+            int line,
+            int charPositionInLine,
+            String msg,
+            RecognitionException e) {
+        super.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+        String m = String.format("%nDebugging error captured from SSEdebugErrorListener :%n%n\tLine : %d%n\tPosition : %d%n\tMessage :%s%n",
+                line, charPositionInLine, msg);
+        throw new SSSyntaxException(m, e);
+    }
 }

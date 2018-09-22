@@ -5,12 +5,13 @@
  */
 package com.twiceagain.selescript;
 
+import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import org.junit.Test;
 
 /**
- * Run demoHelloWorld.ss
+ * Run all demos (and more)
  *
  * @author xavier
  */
@@ -21,10 +22,29 @@ public class commandLineTest extends demoRunner {
         run("fileDoesNotExist.ss");
     }
 
+    /**
+     * Will not throw, despite error, because debug mode is not activated.
+     * @throws IOException 
+     */
+    @Test()
+    public void runSyntaxErrorFile() throws IOException {
+        run("demos/erroneous/demoSyntaxError.ss");
+    }
+    
+    /**
+     * Will throw because debug mode activated.
+     * @throws IOException 
+     */
+    @Test(expected=SSSyntaxException.class)
+    public void runSyntaxErrorFile2() throws IOException {
+        runDebug("demos/erroneous/demoSyntaxError.ss");
+    }
+    
+    
+
     @Test
     public void runHelloWorld() throws IOException {
         run("demos/demoHelloWorld.ss");
     }
-
 
 }
