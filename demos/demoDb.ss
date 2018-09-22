@@ -1,12 +1,8 @@
 
-
-
 print "Demo of sending data to the database" ;
+print " ( no web element requested ) ";
 
-db :un "data one", :deux "data two", :trois 123 ;
-db :un "data one", :deux "data two", :trois 123 ;
-db :un 'data one', :nullkey null, :trois 444 ;
-db :un "data one", :deux "data two", :trois 123 ;
+db from: "demoDb.ss", deux:"two", number: 123, null-key: null;
 
 print "records were successfully sent to db" ;
 print "End of demo";

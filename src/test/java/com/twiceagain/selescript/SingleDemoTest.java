@@ -16,6 +16,6 @@ public class SingleDemoTest extends DemoRunner {
 
     @Test
     public void run1() throws IOException {
-        run("demos/demoLoop.ss");
+        run("demos/demoDb.ss");
     }
 }

@@ -42,9 +42,10 @@ public class SSMongo {
             doc.append(k, data.get(k));
         });
         Document dd = new Document("data", doc).append("Selescript", config.getSelescriptVersion());
-
-        System.out.println("DEBUG : " + config);
-        System.out.println("DEBUG : printing doc content :" + dd.toJson());
+        
+        
+        // add debugging log in debug mode ?
+        
         CLIENT
                 .getDatabase(config.getMongoDatabase())
                 .getCollection(config.getMongoCollection())

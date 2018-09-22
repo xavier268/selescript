@@ -167,6 +167,14 @@ public class SSConfig {
                     i++;
                     config.setMongoConnexionString(args[i]);
                     break;
+                case "--db":
+                    i++;
+                    config.setMongoDatabase(args[i]);
+                    break;
+                case "--col":
+                     i++;
+                    config.setMongoCollection(args[i]);
+                    break;
                 case "-s":
                     i++;
                     config.setScriptFileName(args[i]);
@@ -199,6 +207,8 @@ public class SSConfig {
             "--grid URL         : set the Grid Url to use.",
             "",
             "--mongo    URL     : set the mongo connexion string to URL",
+            "--db       DB      : set the mongo database to DB",
+            "--col      COL     : set the mongo collection to COL",
             "",
             " -h",
             "--help             : print these messages",

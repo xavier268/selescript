@@ -19,7 +19,7 @@ class DemoRunner {
             System.out.println("================================================");
             System.out.println("=   Starting " + fileName);
             System.out.println("================================================");
-            CommandLine.main("-s", fileName);
+            CommandLine.main("-s", fileName, "--col", "testcol", "--db","testdb");
         } finally {
             System.out.println("================================================");
             System.out.println("=   Finished " + fileName);
@@ -34,7 +34,7 @@ class DemoRunner {
             System.out.println("================================================");
             System.out.println("=   Starting " + fileName + " in debug mode");
             System.out.println("================================================");
-            CommandLine.main( "-s", fileName,"-d");
+            CommandLine.main( "-s", fileName,"-d","--col", "testcol", "--db","testdb");
         } finally {
             System.out.println("================================================");
             System.out.println("=   Finished " + fileName + " in debug mode");
