@@ -14,6 +14,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
  */
 public class SSConfig {
 
+   
+
     static final String NL = System.lineSeparator();
 
     // Read-write
@@ -107,7 +109,7 @@ public class SSConfig {
     }
 
     public void setDebug(boolean debug) {
-        this.debug = debug;
+        this.debug = debug;        
     }
 
     public String getBrowser() {
@@ -172,7 +174,7 @@ public class SSConfig {
                     config.setMongoDatabase(args[i]);
                     break;
                 case "--col":
-                     i++;
+                    i++;
                     config.setMongoCollection(args[i]);
                     break;
                 case "-s":
@@ -186,6 +188,7 @@ public class SSConfig {
 
             }
         }
+
         return config;
     }
 
