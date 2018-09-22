@@ -124,7 +124,8 @@ class SSFrame {
     public void getNext() {
         if(!hasNext()) return;
         count ++;
-        we = tovisit.pop();
+        we = tovisit.pop();   
+        visited.add(we);
     }
 
     private void refresh() {

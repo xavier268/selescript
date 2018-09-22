@@ -55,7 +55,11 @@ public class SSInterpreter {
 
         root = parser.unit();
 
-        new SSVisitor(new SSRuntimeContext(config)).visit(root);
+        try (SSRuntimeContext rtc = new SSRuntimeContext(config)) {            
+            new SSVisitor(rtc).visit(root);
+        } catch (Exception ex) {
+            throw ex;
+        }
 
     }
 
