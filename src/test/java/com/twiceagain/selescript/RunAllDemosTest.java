@@ -15,7 +15,7 @@ import org.junit.Test;
  * Caution : running all the demos in debug mode. May take a while ...
  * @author xavier
  */
-public class runAllDemosTest extends demoRunner {
+public class RunAllDemosTest extends DemoRunner {
     
     @Test
     public void listDemos() throws IOException {

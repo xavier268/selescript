@@ -64,7 +64,7 @@ class SSFrame {
     public void requestStopLocal() {
         stopLocal = true;
     }
-    
+
     /**
      * Should we stop now ?
      *
@@ -75,7 +75,7 @@ class SSFrame {
         if (stopLocal) {
             return true;
         }
-        if (maxCount != null && count >= maxCount) {
+        if (maxCount != null && count > maxCount) {
             return true;
         }
         if (maxMillis != null && System.currentTimeMillis() > startMillis + maxMillis) {
@@ -91,7 +91,7 @@ class SSFrame {
 
     public WebElement getWe() {
         if (we == null && hasNext()) {
-            getNext();
+            fetchNext();
         }
         return we;
     }
@@ -110,7 +110,7 @@ class SSFrame {
 
     public boolean hasNext() {
         if (by == null) {
-            return false;
+            return true; // Should never happen ...
         }
         if (!tovisit.isEmpty()) {
             return true;
@@ -118,19 +118,34 @@ class SSFrame {
         refresh();
         return !tovisit.isEmpty();
     }
+
     /**
-     * Fetch the next element in the loop.
+     * Fetch the next element in the loop, if a By was specified. Does nothing
+     * otherwise. Increments counts.
+     *
+     * @return true if success in fetching new element, of BY was null (infinite
+     * loop).
      */
-    public void getNext() {
-        if(!hasNext()) return;
-        count ++;
-        we = tovisit.pop();   
+    public boolean fetchNext() {
+        count++;
+        if (by == null) {
+            return true;
+        }
+        if (!hasNext()) {
+            return false;
+        }
+        we = tovisit.pop();
         visited.add(we);
+        return true;
     }
 
+    /**
+     * Tries to fetch another batch of elements to visit, excluding those
+     * already seen.
+     */
     private void refresh() {
         if (by == null) {
-            return;
+            return; // should never happen ...
         }
         SearchContext sc;
         if (previous == null) {

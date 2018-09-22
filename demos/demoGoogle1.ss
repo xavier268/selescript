@@ -31,11 +31,11 @@ go ".//body" {
 
 
     print ;
-    print "Looking for input, only those with a value other than empty string" ;
+    print "Looking for input, only those with a value other than null or empty string" ;
     // It seems attributes name or value are never null.
     go "//input" {
         // Assume neither null nor empty string
-        (@ value:  | "") != "" ;
+        (@ value:  + "") != "" ;
         print "Input value : " +  @ value: +  " , name : " + @ name: ;
         }
 
@@ -55,7 +55,7 @@ go ".//body" {
     go "//input" {
         print "There is always one, as for name, value, ..., even a default one !";
         ! @ maxlength: ;
-        print "Input value : " + @ value:  " , name : " + @ name: +  " , maxlength :" + @ maxlength: ;
+        print "Input value : " + @ value:  + " , name : " + @ name: +  " , maxlength :" + @ maxlength: ;
         }
 
     } // go body

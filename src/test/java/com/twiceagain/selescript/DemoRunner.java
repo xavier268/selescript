@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * @author xavier
  */
-class demoRunner {
+class DemoRunner {
 
     public void run(String fileName) throws IOException {
         try {

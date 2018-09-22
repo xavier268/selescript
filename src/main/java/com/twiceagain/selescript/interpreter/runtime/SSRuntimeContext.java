@@ -53,6 +53,12 @@ public class SSRuntimeContext implements Closeable {
         stopGlobal = true;
     }
 
+    /**
+     * Decides if we should stop. Only deals with time and count limit, not
+     * WebElements availability.
+     *
+     * @return - true if we should stop.
+     */
     public boolean shouldStop() {
         if (stopGlobal) {
             return true;
@@ -135,10 +141,9 @@ public class SSRuntimeContext implements Closeable {
         }
         if (frames.isEmpty()) {
             throw new SSSyntaxException(
-                    "You should not call loop() outisde of an initialized loop.");
-        }
-        frames.getLast().getNext();
-        return frames.getLast().hasNext();
+                    "You should NEVER call loop() outside of an initialized loop.");
+        }       
+        return frames.getLast().fetchNext();
     }
 
     /**
@@ -210,7 +215,6 @@ public class SSRuntimeContext implements Closeable {
      *
      * @param cond - Condition to wait for (use default timeout)
      */
-
     public void wait(ExpectedCondition cond) {
         wait(cond, null);
     }

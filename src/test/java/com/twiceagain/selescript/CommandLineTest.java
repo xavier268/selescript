@@ -15,7 +15,7 @@ import org.junit.Test;
  *
  * @author xavier
  */
-public class commandLineTest extends demoRunner {
+public class CommandLineTest extends DemoRunner {
 
     @Test(expected = NoSuchFileException.class)
     public void runNonExistentFile() throws IOException {
@@ -24,27 +24,29 @@ public class commandLineTest extends demoRunner {
 
     /**
      * Will not throw, despite error, because debug mode is not activated.
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     @Test()
     public void runSyntaxErrorFile() throws IOException {
         run("demos/erroneous/demoSyntaxError.ss");
     }
-    
+
     /**
      * Will throw because debug mode activated.
-     * @throws IOException 
+     *
+     * @throws IOException
      */
-    @Test(expected=SSSyntaxException.class)
+    @Test(expected = SSSyntaxException.class)
     public void runSyntaxErrorFile2() throws IOException {
         runDebug("demos/erroneous/demoSyntaxError.ss");
     }
-    
-    
 
     @Test
     public void runHelloWorld() throws IOException {
         run("demos/demoHelloWorld.ss");
     }
+
+   
 
 }
