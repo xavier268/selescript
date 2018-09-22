@@ -629,10 +629,10 @@ public class SSVisitor extends SSVisitorAbstract {
             while (rtc.loopWhile()) {
 
                 for (StatementContext s : ctx.statement()) {
-                    visit(s);
                     if (rtc.shouldStop()) {
                         break;
                     }
+                    visit(s);                    
                 }
 
             }
