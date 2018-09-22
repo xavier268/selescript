@@ -39,10 +39,12 @@ public class SSRuntimeContext implements Closeable {
     private boolean stopGlobal = false;
     private final SSMongo mongo;
     private final long start = System.currentTimeMillis();
+    private final SSInput input;
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
         this.mongo = new SSMongo(config);
+        this.input = new SSInput(config);
 
     }
 
@@ -230,6 +232,16 @@ public class SSRuntimeContext implements Closeable {
 
     Long getElapsed() {
         return (Long) (System.currentTimeMillis() - start);
+    }
+    
+    public String readInput() {
+        String s =  input.read();
+        if(s == null) requestStopLocal();
+        return s;
+    }
+    
+    public void resetInput() {
+       input.reset();
     }
 
 }

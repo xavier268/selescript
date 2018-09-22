@@ -12,11 +12,8 @@ go c:10 {
 
     }
 
-
-print ;
-print "resetting the file";
-$read = "Any input would do ..." ;
-print ;
+print "Resetting the input file ...";
+$read = null;
 
 go c:10 {
 
@@ -27,7 +24,6 @@ go c:10 {
     print "after reading ..." ;
 
     }
-
 
 
 print "End of file was reached";

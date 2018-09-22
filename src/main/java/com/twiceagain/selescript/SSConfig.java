@@ -27,6 +27,7 @@ public class SSConfig {
     private String mongoCollection = "sscol";
 
     private String scriptFileName = null;
+    private String inputFileName = null;
     private boolean debug = false;
 
     // Read only
@@ -62,6 +63,14 @@ public class SSConfig {
 
     public String getMongoConnexionString() {
         return mongoConnexionString;
+    }
+
+    public String getInputFileName() {
+        return inputFileName;
+    }
+
+    public void setInputFileName(String inputFileName) {
+        this.inputFileName = inputFileName;
     }
 
     public void setMongoConnexionString(String mongoConnexionString) {
@@ -129,6 +138,7 @@ public class SSConfig {
                 .append("Mongo db : ").append(getMongoDatabase()).append(NL)
                 .append("Mongo col : ").append(getMongoCollection()).append(NL)
                 .append("Script file : ").append(getAbsoluteScriptFileName()).append(NL)
+                .append("Input file : ").append(getInputFileName()).append(NL)
                 .append("Debug mode : ").append(isDebug()).append(NL)
                 .append(NL).toString();
 
@@ -181,6 +191,10 @@ public class SSConfig {
                     i++;
                     config.setScriptFileName(args[i]);
                     break;
+                case "-i":
+                    i++;
+                    config.setInputFileName(args[i]);
+                    break;
                 case "-h":
                 case "--help":
                 default:
@@ -200,6 +214,8 @@ public class SSConfig {
             "Recognized command lines options :",
             "",
             "-s FILE            : specify the FILE to run",
+            "",
+            "-i FILE            : requested input will be read from FILE",
             "",
             " -d",
             "--debug            : set the debug mode (more verbose)",

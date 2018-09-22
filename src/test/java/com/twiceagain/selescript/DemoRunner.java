@@ -19,7 +19,7 @@ class DemoRunner {
             System.out.println("================================================");
             System.out.println("=   Starting " + fileName);
             System.out.println("================================================");
-            CommandLine.main("-s", fileName, "--col", "testcol", "--db","testdb");
+            CommandLine.main("-s", fileName, "--col", "testcol", "--db", "testdb");
         } finally {
             System.out.println("================================================");
             System.out.println("=   Finished " + fileName);
@@ -34,10 +34,25 @@ class DemoRunner {
             System.out.println("================================================");
             System.out.println("=   Starting " + fileName + " in debug mode");
             System.out.println("================================================");
-            CommandLine.main( "-s", fileName,"-d","--col", "testcol", "--db","testdb");
+            CommandLine.main("-s", fileName, "-d", "--col", "testcol", "--db", "testdb");
         } finally {
             System.out.println("================================================");
             System.out.println("=   Finished " + fileName + " in debug mode");
+            System.out.println("================================================");
+            System.out.println();
+        }
+    }
+
+    public void runWithInput(String fileName, String inputFileName) throws IOException {
+        try {
+            System.out.println();
+            System.out.println("================================================");
+            System.out.println("=   Starting " + fileName + " with input " + inputFileName);
+            System.out.println("================================================");
+            CommandLine.main("-d", "-s", fileName, "-d", "--col", "testcol", "-i", inputFileName);
+        } finally {
+            System.out.println("================================================");
+            System.out.println("=   Finished " + fileName + " with input " + inputFileName);
             System.out.println("================================================");
             System.out.println();
         }

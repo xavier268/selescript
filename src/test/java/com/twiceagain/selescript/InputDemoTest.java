@@ -12,10 +12,10 @@ import org.junit.Test;
  * Currently tested demo.
  * @author xavier
  */
-public class SingleDemoTest extends DemoRunner {
+public class InputDemoTest extends DemoRunner {
 
     @Test
     public void run1() throws IOException {
-        run("demos/demoDb.ss");
+        runWithInput("demos/demoInput.ss", "demos/input/input.txt");
     }
 }
