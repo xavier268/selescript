@@ -6,11 +6,8 @@
 package com.twiceagain.selescript.visitors;
 
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
+import static com.twiceagain.selescript.visitors.SSVisitorAbstract.trim1;
 import static com.twiceagain.selescript.visitors.SSVisitorAbstract.trim2;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -21,22 +18,6 @@ import static org.junit.Assert.*;
 public class SSVisitorTest {
 
     public SSVisitorTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test(expected = SSSyntaxException.class)
@@ -52,7 +33,23 @@ public class SSVisitorTest {
     @Test
     public void testTrim2() {
         assertEquals("ab", trim2("cabd"));
+    }
 
+    @Test
+    public void testTrim1() {
+        assertEquals("abc", trim1("abc:"));
+        assertEquals("a", trim1("a:"));
+
+    }
+
+    @Test(expected = SSSyntaxException.class)
+    public void testTrim1a() {
+        assertEquals(null, trim1(null));
+    }
+
+    @Test(expected = SSSyntaxException.class)
+    public void testTrim1b() {
+        assertEquals("", trim1(":"));
     }
 
 }

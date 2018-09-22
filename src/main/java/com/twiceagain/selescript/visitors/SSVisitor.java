@@ -180,7 +180,7 @@ public class SSVisitor extends SSVisitorAbstract {
         String xpath = ".";
         String attr = null;
         if (ctx.TAG() != null) {
-            attr = ctx.TAG().getText().substring(1);
+            attr = trim1(ctx.TAG().getText());
         }
         if (ctx.stringval() != null) {
             xpath = (String) visit(ctx.stringval());
@@ -324,7 +324,7 @@ public class SSVisitor extends SSVisitorAbstract {
         Boolean wait = false;
         String xpath = ".";
         if (ctx.param() != null) {
-            if ((ctx.param().TAG() != null) && (":w".equals(ctx.param().TAG().getText()))) {
+            if ((ctx.param().TAG() != null) && ("w:".equals(ctx.param().TAG().getText()))) {
                 wait = true;
             }
             if (ctx.param().stringval() != null) {
@@ -354,7 +354,7 @@ public class SSVisitor extends SSVisitorAbstract {
         Boolean wait = false;
         String xpath = ".";
         if (ctx.param() != null) {
-            if ((ctx.param().TAG() != null) && (":w".equals(ctx.param().TAG().getText()))) {
+            if ((ctx.param().TAG() != null) && ("w:".equals(ctx.param().TAG().getText()))) {
                 wait = true;
             }
             if (ctx.param().stringval() != null) {
@@ -370,7 +370,7 @@ public class SSVisitor extends SSVisitorAbstract {
         WebElement w = lwe.get(0);
         w.click();
 
-        // If :w tag, wait for element to disappear.
+        // If w: tag, wait for element to disappear.
         if (wait) {
             rtc.wait(ExpectedConditions.stalenessOf(w));
         }
@@ -383,18 +383,18 @@ public class SSVisitor extends SSVisitorAbstract {
         StringBuilder sb = new StringBuilder();
 
         for (ParamContext p : ctx.param()) {
-            if (p.TAG() == null) {
+            if ((p.TAG() == null) || trim1(p.TAG().getText()).isEmpty()) {
                 if (p.stringval() != null) {
-                    sb.append(visit(p.stringval()));
+                    sb.append((String) visit(p.stringval()));
                 }
             } else {
-                switch (p.TAG().getText()) {
-                    case ":t": // raw text - this is the default
+                switch (trim1(p.TAG().getText())) {
+                    case "t": // raw text - this is the default
                         if (p.stringval() != null) {
-                            sb.append(visit(p.stringval()));
+                            sb.append((String) visit(p.stringval()));
                         }
                         break;
-                    case ":u":  // url encoded
+                    case "u":  // url encoded
                         if (p.stringval() != null) {
                             try {
                                 sb.append(URLEncoder.encode((String) visit(p.stringval()), "UTF-8"));
@@ -404,13 +404,61 @@ public class SSVisitor extends SSVisitorAbstract {
                         }
                         break;
                     default:
-                        throw new SSSyntaxException("Unknown tag in print " + p.TAG().getText());
+                        throw new SSSyntaxException("Unknown tag in print " + p.TAG().getText() + ":");
                 }
             }
         }
         String s = sb.toString();
         System.out.println(s);
         return s;
+    }
+
+    @Override
+    public String visitSttype(SttypeContext ctx) {
+
+        String s = ""; // text to type
+        String x = "."; // xpath to use
+
+        for (ParamContext p : ctx.param()) {
+
+            if ((p.TAG() == null) || trim1(p.TAG().getText()).isEmpty()) {
+                if (p.stringval() != null) {
+                    s = s + visit(p.stringval());
+                }
+            } else {
+                switch (trim1(p.TAG().getText())) {
+                    case "t": // raw text - this is the default
+                        if (p.stringval() != null) {
+                            s = s + visit(p.stringval());
+                        }
+                        break;
+                    case "u":  // url encoded
+                        if (p.stringval() != null) {
+                            try {
+                                s = s + URLEncoder.encode((String) visit(p.stringval()), "UTF-8");
+                            } catch (UnsupportedEncodingException ex) {
+                                throw new SSSyntaxException("Encoding error", ex);
+                            }
+                        }
+                        break;
+                    case "x":
+                    case "xpath":
+                        if (p.stringval() != null) {
+                            x = (String) visit(p.stringval());
+                        }
+                        break;
+                    default:
+                        throw new SSSyntaxException("Unknown tag in type " + p.TAG().getText() + ":");
+                }
+            }
+        }
+        // Do the actual typing
+        List<WebElement> lwe = rtc.getSc().findElements(By.xpath(x));
+        if(lwe.isEmpty() )return null;
+        WebElement w = lwe.get(0);
+        w.clear();
+        w.sendKeys(s);
+        return null;
     }
 
     @Override
@@ -422,9 +470,9 @@ public class SSVisitor extends SSVisitorAbstract {
             if (p.TAG() == null) {
                 throw new SSSyntaxException("Tags are mandatory to send data to database in " + ctx.parent.getText());
             } else {
-                pp.put(p.TAG().getText().substring(1), (String) visit(p.stringval()));
+                pp.put(trim1(p.TAG().getText()), (String) visit(p.stringval()));
             }
-        });        
+        });
         rtc.dbWrite(pp);
         return null;
     }
@@ -452,17 +500,17 @@ public class SSVisitor extends SSVisitorAbstract {
         for (ParamContext p : ctx.param()) {
             String k, x;
             if (p.TAG() == null) {
-                k = ":x";
+                k = "x:";
             } else {
                 k = p.TAG().getText();
             }
 
             switch (k) {
-                case ":c":
-                case ":count":
+                case "c:":
+                case "count:":
                     count = Integer.decode((String) visit(p.stringval()));
                     break;
-                case ":ms":
+                case "ms:":
                     dm = Long.decode((String) visit(p.stringval()));
                     if (millis == null) {
                         millis = dm;
@@ -470,7 +518,7 @@ public class SSVisitor extends SSVisitorAbstract {
                         millis += dm;
                     }
                     break;
-                case ":sec":
+                case "sec:":
                     dm = Long.decode((String) visit(p.stringval())) * 1000;
                     if (millis == null) {
                         millis = dm;
@@ -479,7 +527,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":min":
+                case "min:":
                     dm = Long.decode((String) visit(p.stringval())) * 60 * 1000;
                     if (millis == null) {
                         millis = dm;
@@ -488,7 +536,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":hour":
+                case "hour:":
                     dm = Long.decode((String) visit(p.stringval())) * 60 * 60 * 1000;
                     if (millis == null) {
                         millis = dm;
@@ -497,7 +545,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":day":
+                case "day:":
                     dm = Long.decode((String) visit(p.stringval())) * 24 * 60 * 60 * 1000;
                     if (millis == null) {
                         millis = dm;
@@ -505,8 +553,8 @@ public class SSVisitor extends SSVisitorAbstract {
                         millis += dm;
                     }
                     break;
-                case ":x":
-                case ":xpath":
+                case "x:":
+                case "xpath:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -514,7 +562,7 @@ public class SSVisitor extends SSVisitorAbstract {
                         by = By.xpath(x);
                     }
                     break;
-                case ":id":
+                case "id:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -523,7 +571,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":class":
+                case "class:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -532,7 +580,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":linktext":
+                case "linktext:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -541,7 +589,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":name":
+                case "name:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -550,7 +598,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":plinktext":
+                case "plinktext:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -559,7 +607,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     }
                     break;
 
-                case ":tag":
+                case "tag:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
@@ -594,7 +642,7 @@ public class SSVisitor extends SSVisitorAbstract {
         // cleanup
         rtc.loopEnd();
 
-   return null;
+        return null;
     }
 
 }

@@ -11,7 +11,6 @@ import com.twiceagain.selescript.SSConfig;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ConsoleErrorListener;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -23,18 +22,18 @@ public class SSVisitorConstantNumberTest {
 
     @Test
     public void test1() {
-        assertEquals((Long) 3L, t("1 + 2"));
-        assertEquals((Long) 6L, t("1 + 2 + 3"));
-        assertEquals((Long) 7L, t("1 + 2 * 3 "));
-        assertEquals((Long) 5L, t("1 * 2 + 3"));
+        assertEquals((Long) 3L, t("1 ++ 2"));
+        assertEquals((Long) 6L, t("1 ++ 2 ++ 3"));
+        assertEquals((Long) 7L, t("1 ++ 2 * 3 "));
+        assertEquals((Long) 5L, t("1 * 2 ++ 3"));
         assertEquals((Long) (-1L), t("1 - 2"));
-        assertEquals((Long) 1L, t("- 1 + 2"));
+        assertEquals((Long) 1L, t("- 1 ++ 2"));
         assertEquals((Long) 0L, t("1 / 2"));
         assertEquals((Long) 2L, t("5 / 2 "));
-        assertEquals((Long) 12L, t("5 / 2 + 10 "));
+        assertEquals((Long) 12L, t("5 / 2 ++ 10 "));
         assertEquals((Long) (-2L), t("5 / -2 "));
         assertEquals((Long) (5L), t("----5"));
-        assertEquals((Long) (-2L), t("1 + 2 - 5 "));
+        assertEquals((Long) (-2L), t("1 ++ 2 - 5 "));
     }
 
     private Long t(String s) {

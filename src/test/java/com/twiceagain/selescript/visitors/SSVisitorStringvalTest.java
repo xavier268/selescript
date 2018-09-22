@@ -25,10 +25,10 @@ public class SSVisitorStringvalTest {
     @Test
     public void test() {
         assertEquals("abc", t("'abc'"));
-        assertEquals("abc", t("'a' 'bc'"));
-        assertEquals("abc", t("'a''b''c'"));
+        assertEquals("abc", t("'a' + 'bc'"));
+        assertEquals("abc", t("'a'+ 'b'+'c'"));
 
-        assertEquals("123", t("100 + 23"));
+        assertEquals("123", t("100 ++ 23"));
 
         assertNull(t("toto"));
         assertNull(t("null"));

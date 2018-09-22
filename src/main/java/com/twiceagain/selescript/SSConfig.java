@@ -31,7 +31,7 @@ public class SSConfig {
     private final String notice = "Selescript - (c) Xavier Gandillot 2018"
             + NL
             + "See https://xavier268.github.io/selescript/";
-    private final String selescriptVersion = "1.1.0";
+    private final String selescriptVersion = "1.2.0";
     private final String javaVersion = Runtime.version().toString();
     private final Long startMillis = System.currentTimeMillis();
 

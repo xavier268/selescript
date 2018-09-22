@@ -37,4 +37,19 @@ public class SSVisitorAbstract extends SelescriptBaseVisitor<Object> {
         }
     }
 
+    /**
+     * Remove the last character.
+     *
+     * @param s - a new String
+     * @return
+     */
+    public static String trim1(String s) {
+        if (s == null || s.length() <2) {
+            throw new SSSyntaxException("Tags string should have length of at least 2 and end with ':' ");
+        } else {
+            return s.substring(0, s.length()-1);
+        }
+
+    }
+
 }

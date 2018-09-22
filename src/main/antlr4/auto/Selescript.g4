@@ -30,8 +30,8 @@ stringval
     
     :   constantstring                          # svstring
     |   '!' stringval                           # svnot   // Not null means true
-    |   stringval  stringval                    # svconcat    
-    |   stringval '~'  stringval ',' stringval  # svreplace // find and replace all, null if not found   
+    |   stringval '+' stringval                 # svconcat    
+    |   stringval '~' stringval ',' stringval   # svreplace // find and replace all, null if not found   
     |   stringval '~' stringval                 # svfind // null if not found
     |   stringval '==' stringval                # sveq    // Not null means true
     |   stringval '!=' stringval                # svneq
@@ -46,7 +46,7 @@ stringval
 constantstring
     :  '(' constantstring ')'                   # cspar
     |  '!' constantstring                       # csnot
-    |  constantstring constantstring            # csconcat
+    |  constantstring '+' constantstring        # csconcat
     |  constantnumber                           # csnumber
     |  STRING                                   # csstring
     |  NULL                                     # csnull
@@ -60,7 +60,7 @@ constantnumber
     |  '-' constantnumber                        # cnuminus
     |  constantnumber '*' constantnumber         # cntimes
     |  constantnumber '/' constantnumber         # cndiv
-    |  constantnumber '+' constantnumber         # cnplus
+    |  constantnumber '++' constantnumber        # cnplus
     |  constantnumber '-' constantnumber         # cnminus
     |  NUMBER                                    # cnnumber
     ;
@@ -80,11 +80,12 @@ STRING  :  '"'  .* ? '"'
         |  '\'' .* ? '\'' 
         ; 
 
+
+// Tags end  with a semi-colon..
+TAG :  DIGITORLETTER  (DIGITORLETTER | [&/@\-*.])* ':' ;
+
 // Numbers are not signed integer ( but unary minus exists )
 NUMBER  : '0' | NONZERODIGIT DIGIT* ;
-
-// Tags start with a semi-colon..
-TAG : ':' DIGITORLETTER + ;
 
 // Acceptable ID starts with a letter
 ID : LETTER DIGITORLETTER * ;

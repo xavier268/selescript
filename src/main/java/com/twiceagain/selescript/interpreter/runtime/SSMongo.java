@@ -5,7 +5,6 @@
  */
 package com.twiceagain.selescript.interpreter.runtime;
 
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.twiceagain.selescript.SSConfig;
@@ -23,33 +22,33 @@ public class SSMongo {
     private final SSConfig config;
 
     SSMongo(SSConfig config) {
-        
+
         this.config = config;
-        CLIENT = MongoClients.create(config.getMongoConnexionString());
-           
-       
     }
 
     /**
-     * In debug mode, will return a string representation of the inserted
-     * document.
+     * Lazy insert. Will create a MongoClient if none is yet available.
      *
      * @param data - a Map with the document key/value.
      */
-    public void insert(Map<String, String> data) {        
+    public void insert(Map<String, String> data) {
+
+        if (CLIENT == null) {
+            CLIENT = MongoClients.create(config.getMongoConnexionString());
+        }
 
         Document doc = new Document();
         data.keySet().forEach((k) -> {
-            doc.append(k,data.get(k));
+            doc.append(k, data.get(k));
         });
         Document dd = new Document("data", doc).append("Selescript", config.getSelescriptVersion());
-        
+
         System.out.println("DEBUG : " + config);
         System.out.println("DEBUG : printing doc content :" + dd.toJson());
         CLIENT
                 .getDatabase(config.getMongoDatabase())
                 .getCollection(config.getMongoCollection())
-                .insertOne(dd);     
-        
+                .insertOne(dd);
+
     }
 }
