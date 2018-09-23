@@ -28,15 +28,34 @@ public class SSInput {
     public SSInput(SSConfig config) {
 
         this.config = config;
-        reset();
+        reset(config.getInputFileName());
 
     }
 
     
-    public final void reset() {
-        if (config.getInputFileName() != null) {
+    public final void reset(String fileName) {
+        if (fileName != null) {
             try {
-                inputScanner = new Scanner(new File(config.getInputFileName()), "UTF-8");
+                inputScanner = new Scanner(new File(fileName), "UTF-8");
+                config.setInputFileName(fileName);
+            } catch (FileNotFoundException ex) {
+                try {
+                    throw new RuntimeException(
+                            "Could not read input from file : "
+                            + Paths.get(fileName).toFile().getCanonicalPath(),
+                            ex);
+                } catch (IOException ex1) {
+                    throw new RuntimeException(
+                            "Could not read input from file :"
+                            + fileName,
+                            ex1);
+                }
+            }
+        } else {
+            // Use config, if not null.
+            if(config.getInputFileName() == null ) return ;
+            try {
+                inputScanner = new Scanner(new File(config.getInputFileName()), "UTF-8");                
             } catch (FileNotFoundException ex) {
                 try {
                     throw new RuntimeException(
@@ -50,6 +69,7 @@ public class SSInput {
                             ex1);
                 }
             }
+            
         }
 
     }

@@ -16,7 +16,7 @@ import org.junit.Test;
 public class SSInputTest {
 
     @Test
-    //@Ignore
+    @Ignore
     public void testRead() {
         SSConfig config = new SSConfig();
         config.setInputFileName("demos/input/input.txt");
@@ -30,9 +30,18 @@ public class SSInputTest {
             System.out.printf("%n%03d\t<%s>", ii,r);
         } while (r != null);
         
-        System.out.printf("%nResetting ...");
-        i.reset();
+        System.out.printf("%nResetting with default file name");
+        i.reset(null);
         
+        ii = 0;
+        do {
+            ii++;
+            r = i.read();
+            System.out.printf("%n%03d\t<%s>", ii,r);
+        } while (r != null);
+        
+        System.out.printf("%nResetting with source file name");
+        i.reset("demos/demoInput.ss");
         ii = 0;
         do {
             ii++;

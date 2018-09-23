@@ -1,30 +1,18 @@
-print ;
-print "Reading from the input parameter file" ;
-print;
 
-go c:10 {
+print "Reading from the cli provided input parameter file : " + $input;
 
-    print "before reading ...";
-    read = $read ;
-    print "read <" + read + ">" ; 
-    read ;
-    print "after reading ..." ;
-
+go c:10 {    
+    print $count +  $tab + "read <" + $read + ">" ;     
     }
 
-print "Resetting the input file ...";
-$read = null;
+print "Resetting the input file to source file : " + $source;
+$read = $source;
 
-go c:10 {
-
-    print "before reading ...";
-    read = $read ;
-    print "read <" + read + ">" ; 
-    read ;
-    print "after reading ..." ;
-
+go c:30 {   
+    print $count +  $tab + "read <" + $read + ">" ;     
     }
 
+print "End of " + $source ;
 
 print "End of file was reached";
 print "end of demo" ;

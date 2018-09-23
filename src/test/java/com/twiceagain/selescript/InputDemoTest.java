@@ -18,4 +18,11 @@ public class InputDemoTest extends DemoRunner {
     public void run1() throws IOException {
         runWithInput("demos/demoInput.ss", "demos/input/input.txt");
     }
+    
+    @Test
+    public void run2() throws IOException {
+        runDebug("demos/demoInput.ss");
+    }
+    
+    
 }

@@ -42,7 +42,6 @@ public class SSVisitor extends SSVisitorAbstract {
      */
     @Override
     public Object visitUnit(UnitContext ctx) {
-        System.out.println("Visiting unit !");
         for (StatementContext s : ctx.statement()) {
             visit(s);
             if (rtc.shouldStop()) {

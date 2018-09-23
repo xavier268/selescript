@@ -240,8 +240,10 @@ public class SSRuntimeContext implements Closeable {
         return s;
     }
     
-    public void resetInput() {
-       input.reset();
+    
+    
+    public void resetInput(String fileName) {
+        input.reset(fileName);
     }
 
 }
