@@ -3,16 +3,19 @@ $url = "https://www.google.com";
 print "Now on page " + $url ;
 
 print;
-print "Looping for 5 times max without xpath";
+print "Starting a loop for 5 times that should abort during the first loop";
 
 go  c:5 {
-
-    print "Before selecting any xpath :" + @;
+    print "Count = " + $count ;
     print "Page title = " + $title ;
+    print "Calling @ with no xpath set will now abort the loop " + @ ;    
+}
+print "Aborted ..." + $nl;
 
-    go ".//body" { 
+print "Now, looping for different bodies";
+go ".//body" { 
         print "Entered body loop" ;
-        print "Selected BODY = " + @ ;
+        print "Selected BODY = " + ( @ ~ $nl , " " ) ;
 
         go ".//input[@name='btnI']" {
             print "Selected  button with name : " + @ name:;       
@@ -21,8 +24,5 @@ go  c:5 {
             print @ ;
             }
         }
-
-}
-
-print ;
-print "Done" ;
+print "No more bodies available";
+print "End of " + $source ;

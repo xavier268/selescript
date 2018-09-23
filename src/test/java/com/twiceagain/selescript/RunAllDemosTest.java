@@ -39,7 +39,7 @@ public class RunAllDemosTest extends DemoRunner {
         for(File f : ddir.listFiles()) {
             String fn = f.getCanonicalPath();
             if(fn.endsWith(".ss")) {
-                runWithInput(fn,"demos/input/input.txt");
+                runDebug(fn);
             }
         }
     }

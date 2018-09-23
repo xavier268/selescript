@@ -616,7 +616,8 @@ public class SSVisitor extends SSVisitorAbstract {
 
             }
         } catch (StaleElementReferenceException ex) {
-            // Page changed. Exit the loop.
+            // Just break out of the current loop.
+            
         }
         // cleanup
         rtc.loopEnd();
