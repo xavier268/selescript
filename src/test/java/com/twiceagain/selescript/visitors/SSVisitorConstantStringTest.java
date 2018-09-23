@@ -21,35 +21,24 @@ import org.junit.Test;
  * @author xavier
  */
 public class SSVisitorConstantStringTest {
-    
+
     @Test
     public void test() {
-        
+
         assertEquals("12", t("3*4"));
-        assertEquals("34", t("3 + 4"));
-        assertEquals("35", t("3 + 4 ++ 1 "));
-        assertEquals("64", t("3*2 + 4  "));
-        
+        assertEquals("7", t("3 ++ 4"));
+
         assertEquals("35", t("'35'"));
         assertEquals("ab", t("'ab'"));
         assertEquals("35", t("\"35\""));
         assertEquals("ab", t("\"ab\""));
-        
-        assertEquals(null, t("!'35'"));
-        assertEquals(null, t("!35"));
-        assertEquals("5", t("!3+5"));
-        assertEquals(null, t("!3++5"));
-        
-        assertEquals("ab", t(" null + 'ab' "));
-        assertEquals("ab", t("  'ab' + null "));
-        
-        assertNotNull(t("! null "));
+
         assertNull(t("null"));
-        
+
         assertEquals("kjh", t(" ('kjh')"));
-        
+
     }
-    
+
     private String t(String s) {
         SelescriptLexer lexer = new SelescriptLexer(CharStreams.fromString(s));
         CommonTokenStream ts = new CommonTokenStream(lexer);

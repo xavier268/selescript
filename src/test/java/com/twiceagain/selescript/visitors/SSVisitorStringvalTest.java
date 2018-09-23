@@ -64,6 +64,19 @@ public class SSVisitorStringvalTest {
         assertEquals("xaxbxcxdxexfx", t("'abcdef' ~ '' , 'x' "));
         assertEquals("abef", t("'abcdef' ~ 'cd' , null "));
 
+        assertEquals("35", t("3 + 4 ++ 1 "));
+        assertEquals("64", t("3*2 + 4  "));
+
+        
+        assertEquals(null, t("!'35'"));
+        assertEquals(null, t("!35"));
+        assertEquals("5", t("!3+5"));
+        assertEquals(null, t("!3++5"));
+        
+        assertEquals("ab", t(" null + 'ab' "));
+        assertEquals("ab", t("  'ab' + null "));
+        
+        assertNotNull(t("! null "));
     }
 
     @Test
@@ -75,8 +88,6 @@ public class SSVisitorStringvalTest {
     public void testAt() {
         // Will only be tested at the statement level.
     }
-    
-    
 
     private String t(String s) {
         SelescriptLexer lexer = new SelescriptLexer(CharStreams.fromString(s));
