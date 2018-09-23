@@ -50,7 +50,7 @@ print "Concat 2 " + null + "string" ;
 print "Concat 3 " + 'string' ;
 
 
-print  "End of demo." ;
+print  "End of " + $source ;
 
 
 

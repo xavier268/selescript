@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript;
+package com.twiceagain.selescript.demos.tests;
 
+import com.twiceagain.selescript.demos.tests.DemoRunner;
 import java.io.IOException;
 import org.junit.Test;
 
@@ -12,9 +13,9 @@ import org.junit.Test;
  * Currently tested demo.
  * @author xavier
  */
-public class InputDemoTest extends DemoRunner {
+public class InputDemo extends DemoRunner {
 
-    @Test
+    @Test    
     public void run1() throws IOException {
         runWithInput("demos/demoInput.ss", "demos/input/input.txt");
     }

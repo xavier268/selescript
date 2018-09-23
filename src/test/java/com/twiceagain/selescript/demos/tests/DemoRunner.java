@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript;
+package com.twiceagain.selescript.demos.tests;
 
+import com.twiceagain.selescript.CommandLine;
 import java.io.IOException;
 
 /**
  *
  * @author xavier
  */
-class DemoRunner {
+public class DemoRunner {
 
     public void run(String fileName) throws IOException {
         try {

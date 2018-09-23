@@ -5,6 +5,8 @@
  */
 package com.twiceagain.selescript.exceptions;
 
+import com.twiceagain.selescript.SSConfig;
+
 /**
  * Base class for all generated exceptions.
  * @author xavier
@@ -24,7 +26,7 @@ public class SSException extends RuntimeException{
 
     public SSException(Throwable cause) {
         super(cause);
-    }
+    }   
 
     public SSException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);

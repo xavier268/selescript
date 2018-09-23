@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript;
+package com.twiceagain.selescript.demos.tests;
 
+import com.twiceagain.selescript.demos.tests.DemoRunner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -15,7 +16,7 @@ import org.junit.Test;
  * Caution : running all the demos in debug mode. May take a while ...
  * @author xavier
  */
-public class RunAllDemosTest extends DemoRunner {
+public class RunAllDemos extends DemoRunner {
     
     @Test
     public void listDemos() throws IOException {

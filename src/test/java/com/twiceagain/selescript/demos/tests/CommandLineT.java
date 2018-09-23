@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.twiceagain.selescript;
+package com.twiceagain.selescript.demos.tests;
 
+import com.twiceagain.selescript.demos.tests.DemoRunner;
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -15,7 +16,7 @@ import org.junit.Test;
  *
  * @author xavier
  */
-public class CommandLineTest extends DemoRunner {
+public class CommandLineT extends DemoRunner {
 
     @Test(expected = NoSuchFileException.class)
     public void runNonExistentFile() throws IOException {
