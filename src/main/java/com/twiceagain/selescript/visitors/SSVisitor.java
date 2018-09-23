@@ -103,13 +103,10 @@ public class SSVisitor extends SSVisitorAbstract {
         return "" + (Long) visit(ctx.constantnumber());
     }
 
-    
     @Override
     public String visitCsnull(CsnullContext ctx) {
         return null;
     }
-
-    
 
     @Override
     public String visitCspar(CsparContext ctx) {
@@ -399,44 +396,50 @@ public class SSVisitor extends SSVisitorAbstract {
         String x = "."; // xpath to use
 
         for (ParamContext p : ctx.param()) {
-
+            String k;
             if ((p.TAG() == null) || trim1(p.TAG().getText()).isEmpty()) {
-                if (p.stringval() != null) {
-                    s = s + visit(p.stringval());
-                }
+                k = "t:";
             } else {
-                switch (trim1(p.TAG().getText())) {
-                    case "t": // raw text - this is the default
-                        if (p.stringval() != null) {
-                            s = s + visit(p.stringval());
+                k = p.TAG().getText();
+            }
+
+            switch (k) {
+                case "t:": // raw text - this is the default
+                    if (p.stringval() != null) {
+                        s = s + visit(p.stringval());
+                    }
+                    break;
+                case "u:":  // url encoded
+                    if (p.stringval() != null) {
+                        try {
+                            s = s + URLEncoder.encode((String) visit(p.stringval()), "UTF-8");
+                        } catch (UnsupportedEncodingException ex) {
+                            throw new SSSyntaxException("Encoding error", ex);
                         }
-                        break;
-                    case "u":  // url encoded
-                        if (p.stringval() != null) {
-                            try {
-                                s = s + URLEncoder.encode((String) visit(p.stringval()), "UTF-8");
-                            } catch (UnsupportedEncodingException ex) {
-                                throw new SSSyntaxException("Encoding error", ex);
-                            }
-                        }
-                        break;
-                    case "x":
-                    case "xpath":
-                        if (p.stringval() != null) {
-                            x = (String) visit(p.stringval());
-                        }
-                        break;
-                    default:
-                        throw new SSSyntaxException("Unknown tag in type " + p.TAG().getText() + ":");
-                }
+                    }
+                    break;
+                case "x:":
+                case "xpath:":
+                    if (p.stringval() != null) {
+                        x = (String) visit(p.stringval());
+                    }
+                    break;
+                default:
+                    throw new SSSyntaxException("Unknown tag in type " + p.TAG().getText());
             }
         }
+
         // Do the actual typing
         List<WebElement> lwe = rtc.getSc().findElements(By.xpath(x));
-        if(lwe.isEmpty() )return null;
+
+        if (lwe.isEmpty()) {
+            return null;
+        }
         WebElement w = lwe.get(0);
+
         w.clear();
         w.sendKeys(s);
+
         return null;
     }
 
@@ -447,7 +450,8 @@ public class SSVisitor extends SSVisitorAbstract {
         // Prepare parameters
         ctx.param().forEach((ParamContext p) -> {
             if (p.TAG() == null) {
-                throw new SSSyntaxException("Tags are mandatory to send data to database in " + ctx.parent.getText());
+                throw new SSSyntaxException("Tags are mandatory to send data to database in "
+                        + ctx.parent.getText());
             } else {
                 pp.put(trim1(p.TAG().getText()), (String) visit(p.stringval()));
             }
@@ -505,7 +509,6 @@ public class SSVisitor extends SSVisitorAbstract {
                         millis += dm;
                     }
                     break;
-
                 case "min:":
                     dm = Long.decode((String) visit(p.stringval())) * 60 * 1000;
                     if (millis == null) {
@@ -514,7 +517,6 @@ public class SSVisitor extends SSVisitorAbstract {
                         millis += dm;
                     }
                     break;
-
                 case "hour:":
                     dm = Long.decode((String) visit(p.stringval())) * 60 * 60 * 1000;
                     if (millis == null) {
@@ -549,7 +551,6 @@ public class SSVisitor extends SSVisitorAbstract {
                         by = By.id(x);
                     }
                     break;
-
                 case "class:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
@@ -558,7 +559,6 @@ public class SSVisitor extends SSVisitorAbstract {
                         by = By.className(x);
                     }
                     break;
-
                 case "linktext:":
                     x = (String) visit(p.stringval());
                     if (x == null) {
@@ -567,9 +567,9 @@ public class SSVisitor extends SSVisitorAbstract {
                         by = By.linkText(x);
                     }
                     break;
-
                 case "name:":
-                    x = (String) visit(p.stringval());
+                    x = (String) visit(p
+                            .stringval());
                     if (x == null) {
                         by = null;
                     } else {
@@ -581,6 +581,7 @@ public class SSVisitor extends SSVisitorAbstract {
                     x = (String) visit(p.stringval());
                     if (x == null) {
                         by = null;
+
                     } else {
                         by = By.partialLinkText(x);
                     }
@@ -594,34 +595,33 @@ public class SSVisitor extends SSVisitorAbstract {
                         by = By.tagName(x);
                     }
                     break;
-
                 default:
                     throw new SSSyntaxException("Urecognized TAG for go loop  " + k);
-
             }
         }
 
         // startloop
         rtc.loopStart(by, millis, count);
+
         try {
             // main loop body
             while (rtc.loopWhile()) {
-
                 for (StatementContext s : ctx.statement()) {
                     if (rtc.shouldStop()) {
                         break;
                     }
-                    visit(s);                    
+                    visit(s);
+                    if (rtc.shouldStop()) {
+                        break;
+                    }
                 }
-
             }
         } catch (StaleElementReferenceException ex) {
-            // Just break out of the current loop.
             
+
         }
         // cleanup
         rtc.loopEnd();
-
         return null;
     }
 

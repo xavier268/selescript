@@ -65,6 +65,8 @@ public class SSBuiltins {
                 return System.lineSeparator();
             case "$tab":
                 return "\t";
+            case "$depth":
+                return rtc.getDepth();
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be read from : " + biid);
 

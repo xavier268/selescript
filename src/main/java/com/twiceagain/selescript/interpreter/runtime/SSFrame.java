@@ -127,16 +127,24 @@ class SSFrame {
      * loop).
      */
     public boolean fetchNext() {
-        count++;
-        if (by == null) {
+
+        if (by == null) {            
+            return true;
+        } else {
+            if (!hasNext()) {
+                return false;
+            }
+            we = tovisit.pop();
+            visited.add(we);            
             return true;
         }
-        if (!hasNext()) {
-            return false;
-        }
-        we = tovisit.pop();
-        visited.add(we);
-        return true;
+    }
+    
+    /**
+     * The only way to increment the loop counter.
+     */
+    public void increment() {
+        count++;
     }
 
     /**

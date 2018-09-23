@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-<!-- legala levels are : TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF -->
+<!-- legal levels are : TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF -->
     <root level="WARN">
         <appender-ref ref="STDOUT" />
     </root>

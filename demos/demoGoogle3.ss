@@ -2,27 +2,20 @@
 $url = "https://www.google.com";
 print "Now on page " + $url ;
 
-print;
-print "Looping for 5 loops max ";
-go  c:5 {
-    
-    go ".//body" {
-    print "Selected title = " + $title ;
-
-    print "Type hello world" ;
+go x:".//body" , c:5 {
+    print $nl + "loop " + $tab + $count + $nl ;
+    print "Now on url : " + $url + " and title : " + $title ;    
     xp = ".//input[@name='q']" ;
-    sendkeys t:"hello world\n", x:xp;
-    print @ ;
-    print "Submitting ...";
-    submit   xp ;
-    
-    go ".//div[@id='resultStats']" {
-        print @;
-        }
-        
+    print "Preparing to send content to : " + xp;
+    type t:"hello world", x:xp;
+    print "Now on url : " + $url + " and title : " + $title ;    
+    print "Submitting " + xp ;
+    submit   w:xp ;
+    print "Now on url : " + $url + " and title : " + $title ;     
     }
+print $nl + "End of " + $source ;
 
-}
-
-print ;
-print "Done" ;
+/* A few comments here :
+ - we don't call @ inside the loop after the page changed, otherwise the loop would stop.
+ - the $title and $url do not generate stale emement excptions on changed pages.
+*/

@@ -138,6 +138,7 @@ public class SSRuntimeContext implements Closeable {
      * @return true if we should proceed. False to exit the while loop.
      */
     public boolean loopWhile() {
+        //System.out.printf("%nDEBUG : calling loop while with count : %s, depth: %d", getCount(), frames.size());
         if (shouldStop()) {
             return false;
         }
@@ -145,6 +146,7 @@ public class SSRuntimeContext implements Closeable {
             throw new SSSyntaxException(
                     "You should NEVER call loop() outside of an initialized loop.");
         }       
+        frames.getLast().increment();
         return frames.getLast().fetchNext();
     }
 
@@ -246,4 +248,8 @@ public class SSRuntimeContext implements Closeable {
         input.reset(fileName);
     }
 
+    
+    public String getDepth() {
+        return ""+frames.size();
+    }
 }
