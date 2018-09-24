@@ -37,6 +37,7 @@ class SSFrame {
     private Integer maxCount = null;
 
     private boolean stopLocal = false;
+    private boolean stopContinue = false;
 
     private final Deque<WebElement> tovisit = new ArrayDeque<>();
     private final Set<WebElement> visited = new HashSet<>();
@@ -72,7 +73,7 @@ class SSFrame {
      */
     public boolean shouldStop() {
 
-        if (stopLocal) {
+        if (stopLocal | stopContinue) {
             return true;
         }
         if (maxCount != null && count > maxCount) {
@@ -187,6 +188,14 @@ class SSFrame {
             return previous.getSc();
         }
 
+    }
+    
+    public void requestStopContinue() {
+        stopContinue = true;
+    }
+    
+    public void resetStopContinue() {
+        stopContinue = false;
     }
 
 }

@@ -471,6 +471,24 @@ public class SSVisitor extends SSVisitorAbstract {
         rtc.putId(ctx.ID().getText(), (String) visit(ctx.stringval()));
         return null;
     }
+    
+    @Override
+    public String visitStabort(StabortContext ctx) {
+        rtc.requestStopGlobal();
+        return null;
+    }
+    
+    @Override
+    public String visitStbreak(StbreakContext ctx) {
+        rtc.requestStopLocal();
+        return null;
+    }
+    
+    @Override
+    public String visitStcontinue(StcontinueContext ctx) {
+        rtc.requestStopContinue();
+        return null;
+    }
 
     @Override
     public String visitStgo(StgoContext ctx) {

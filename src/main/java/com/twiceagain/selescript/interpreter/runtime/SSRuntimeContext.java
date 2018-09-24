@@ -138,14 +138,20 @@ public class SSRuntimeContext implements Closeable {
      * @return true if we should proceed. False to exit the while loop.
      */
     public boolean loopWhile() {
-        //System.out.printf("%nDEBUG : calling loop while with count : %s, depth: %d", getCount(), frames.size());
+
+        // reset the continue flag
+        if (!frames.isEmpty()) {
+            frames.getLast().resetStopContinue();
+        }
+
         if (shouldStop()) {
             return false;
         }
         if (frames.isEmpty()) {
             throw new SSSyntaxException(
                     "You should NEVER call loop() outside of an initialized loop.");
-        }       
+        }
+
         frames.getLast().increment();
         return frames.getLast().fetchNext();
     }
@@ -190,7 +196,8 @@ public class SSRuntimeContext implements Closeable {
     }
 
     /**
-     * Request stop of innermost loop - or porgram stop if no loop available.
+     * Request stop of innermost loop - or porgram stop if no loop available,
+     * similar to java break statement.
      */
     public void requestStopLocal() {
         if (frames.isEmpty()) {
@@ -198,6 +205,18 @@ public class SSRuntimeContext implements Closeable {
         } else {
             frames.getLast().requestStopLocal();
         }
+    }
+
+    /**
+     * Similar to java continue statement. If not in a loop, will abort.
+     *
+     */
+    public void requestStopContinue() {
+        if (frames.isEmpty()) {
+            requestStopGlobal();
+            return;
+        }
+        frames.getLast().requestStopContinue();
     }
 
     /**
@@ -235,21 +254,20 @@ public class SSRuntimeContext implements Closeable {
     Long getElapsed() {
         return (Long) (System.currentTimeMillis() - start);
     }
-    
+
     public String readInput() {
-        String s =  input.read();
-        if(s == null) requestStopLocal();
+        String s = input.read();
+        if (s == null) {
+            requestStopLocal();
+        }
         return s;
     }
-    
-    
-    
+
     public void resetInput(String fileName) {
         input.reset(fileName);
     }
 
-    
     public String getDepth() {
-        return ""+frames.size();
+        return "" + frames.size();
     }
 }

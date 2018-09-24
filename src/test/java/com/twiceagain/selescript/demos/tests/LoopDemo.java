@@ -5,7 +5,6 @@
  */
 package com.twiceagain.selescript.demos.tests;
 
-import com.twiceagain.selescript.demos.tests.DemoRunner;
 import java.io.IOException;
 import org.junit.Test;
 
