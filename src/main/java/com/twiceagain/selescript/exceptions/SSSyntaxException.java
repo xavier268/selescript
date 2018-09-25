@@ -6,10 +6,13 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- * Syntax error while parsing the script.
+ * Syntax error while parsing the script. Grammar errors are typically detected
+ * during the initial parse of the script, when the abstract tree is
+ * constructed.
+ *
  * @author xavier
  */
-public class SSSyntaxException extends SSException{
+public class SSSyntaxException extends SSException {
 
     public SSSyntaxException() {
     }
@@ -29,5 +32,5 @@ public class SSSyntaxException extends SSException{
     public SSSyntaxException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

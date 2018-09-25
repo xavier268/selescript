@@ -11,7 +11,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
 /**
- * Same as console, but will throw an exception.
+ * Error listener looks like console error listener, but will throw an exception
+ * upon seeing the first error. Used only in debug mode.
  *
  * @author xavier
  */

@@ -6,7 +6,6 @@
 package com.twiceagain.selescript.visitors;
 
 import auto.SelescriptParser.*;
-import com.sun.jdi.LongValue;
 import com.twiceagain.selescript.exceptions.SSNumberException;
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;

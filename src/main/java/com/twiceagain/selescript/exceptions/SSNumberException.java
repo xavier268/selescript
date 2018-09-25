@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- * Both number format conversion errors or arithmetic excpetions, such as divide
+ * Both number format conversion errors or arithmetic exceptions, such as divide
  * by zero. For instance null or too long number.
  *
  * @author xavier

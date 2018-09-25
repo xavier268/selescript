@@ -25,7 +25,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * The class that maintains the context of the current running program. There
  * should be exactly one RuntimeContext per running script. It is created by
- * providing the existing SSConfig object.
+ * providing the existing SSConfig object. It is directly responsible for
+ * managing loop and there associated timeouts/countout.
  *
  * @author xavier
  */

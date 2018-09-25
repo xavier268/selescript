@@ -1,6 +1,6 @@
 
 /**
- *  Program main class : command line processing
- * See https://xavier268.github.io/selescript/ for details.
+ *  Program main class : command line processing and configuration management.
+ * See README for details.
  */
 package com.twiceagain.selescript;

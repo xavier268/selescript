@@ -6,7 +6,7 @@
 package com.twiceagain.selescript.exceptions;
 
 /**
- *
+ * Database (mongo) related exceptions.
  * @author xavier
  */
 public class SSDatabaseException extends SSException{

@@ -11,7 +11,8 @@ import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 
 /**
  * Structure of a visitor. All specific visitor inherit from this structure.
- * Visitors are constructed with and return a RuntimeContext object.
+ * Visitors are constructed and rely on the provided RuntimeContext object to
+ * run the script.
  *
  * @author xavier
  */
@@ -44,10 +45,10 @@ public class SSVisitorAbstract extends SelescriptBaseVisitor<Object> {
      * @return
      */
     public static String trim1(String s) {
-        if (s == null || s.length() <2) {
+        if (s == null || s.length() < 2) {
             throw new SSSyntaxException("Tags string should have length of at least 2 and end with ':' ");
         } else {
-            return s.substring(0, s.length()-1);
+            return s.substring(0, s.length() - 1);
         }
 
     }
