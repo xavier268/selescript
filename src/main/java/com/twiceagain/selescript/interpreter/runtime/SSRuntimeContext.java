@@ -30,7 +30,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author xavier
  */
-public class SSRuntimeContext implements Closeable {
+public class SSRuntimeContext extends SSSnapShot implements Closeable {
 
     private final SSConfig config;
     private WebDriver wd = null;

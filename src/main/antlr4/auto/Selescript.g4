@@ -17,8 +17,9 @@ statement
     |   'db' param ? ( ',' param )* ';'         # stdb      // send to mongodb
     |   'print' param ? ( ',' param )* ';'      # stprint   //plain text
     |   'click' param ? ';'                     # stclick   // on the specified xpath
-    |   'type'  param ? ( ',' param ) ';'       # sttype    // type text into element
+    |   'type'  param ? ( ',' param )* ';'      # sttype    // type text into element
     |   'submit' param ? ';'                    # stsubmit  // submit enclosing form
+    |   'shot' param ? ( ',' param )*  ';'      # stshot    // snapshot full page or element
     |    stringval ';'                          # stcheck   // break on null value
     ;
 

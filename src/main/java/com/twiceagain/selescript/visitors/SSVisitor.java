@@ -226,7 +226,7 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitSvuminus(SvuminusContext ctx) {
         try {
-            Long l = -Long.valueOf((String)visit(ctx.stringval()));
+            Long l = -Long.valueOf((String) visit(ctx.stringval()));
             return l.toString();
         } catch (NumberFormatException ex) {
             throw new SSNumberException(ex);
@@ -237,8 +237,8 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitSvminus(SvminusContext ctx) {
         try {
-            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
-            l = l - Long.valueOf((String)visit(ctx.stringval(1)));
+            Long l = Long.valueOf((String) visit(ctx.stringval(0)));
+            l = l - Long.valueOf((String) visit(ctx.stringval(1)));
             return l.toString();
         } catch (NumberFormatException ex) {
             throw new SSNumberException("Problem with : "
@@ -250,8 +250,8 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitSvtimes(SvtimesContext ctx) {
         try {
-            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
-            l *= Long.valueOf((String)visit(ctx.stringval(1)));
+            Long l = Long.valueOf((String) visit(ctx.stringval(0)));
+            l *= Long.valueOf((String) visit(ctx.stringval(1)));
             return l.toString();
         } catch (NumberFormatException ex) {
             throw new SSNumberException("Problem with : "
@@ -263,8 +263,8 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitSvdiv(SvdivContext ctx) {
         try {
-            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
-            l /= Long.valueOf((String)visit(ctx.stringval(1)));
+            Long l = Long.valueOf((String) visit(ctx.stringval(0)));
+            l /= Long.valueOf((String) visit(ctx.stringval(1)));
             return l.toString();
         } catch (ArithmeticException | IllegalArgumentException ex) {
             throw new SSNumberException("Problem with : "
@@ -276,7 +276,7 @@ public class SSVisitor extends SSVisitorAbstract {
     @Override
     public String visitSvplus(SvplusContext ctx) {
         try {
-            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
+            Long l = Long.valueOf((String) visit(ctx.stringval(0)));
             l += Long.valueOf((String) visit(ctx.stringval(1)));
             return l.toString();
         } catch (NumberFormatException ex) {
@@ -492,7 +492,23 @@ public class SSVisitor extends SSVisitorAbstract {
         return null;
     }
 
-    
+    /**
+     * Specify file target with file: .
+     * Specify xpath with x: tag: id: ...
+     * Selecting null xpath implies full page.
+     * page,
+     *
+     * @param ctx
+     * @return
+     */
+    @Override
+    @Deprecated
+    public String visitStshot(StshotContext ctx) {
+
+       //TODO
+       return null ;
+    }
+
     @Override
     public String visitStgo(StgoContext ctx) {
 
