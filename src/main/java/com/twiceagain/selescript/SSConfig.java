@@ -1,6 +1,7 @@
 package com.twiceagain.selescript;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -13,8 +14,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
  * @author xavier
  */
 public class SSConfig {
-
-   
 
     static final String NL = System.lineSeparator();
 
@@ -118,7 +117,7 @@ public class SSConfig {
     }
 
     public void setDebug(boolean debug) {
-        this.debug = debug;        
+        this.debug = debug;
     }
 
     public String getBrowser() {
@@ -197,9 +196,16 @@ public class SSConfig {
                     break;
                 case "-h":
                 case "--help":
-                    return null;
-                default:
                     config.printHelp();
+                    return null;                    
+                default:
+                    System.out.println(
+                            "Command line arguments not recognized : " 
+                            + args[i] 
+                            + " in " 
+                            + Arrays.toString(args));
+                    config.printHelp();
+                    return null;
 
             }
         }
@@ -231,7 +237,7 @@ public class SSConfig {
             "--col      COL     : set the mongo collection to COL",
             "",
             " -h",
-            "--help             : print these messages",
+            "--help             : print these messages and exit",
             ""}));
 
     }
