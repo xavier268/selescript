@@ -168,7 +168,7 @@ The **demos** folder contains a few example of using the various features of the
 
 ## Command line parameters
 
-Command line parameters acan be listed with :
+Command line parameters can be listed with :
 
 ````
 $ ./ss.sh -h 
@@ -212,4 +212,6 @@ Recognized command lines options :
 
 
 ````
+
+Running ss.sh with no cli arguments will capture a script from the command line, running with default parameters.
 
