@@ -147,6 +147,20 @@ All tags and arguments are optionnal. Default is no text, plain text, on current
 Use the w: tag to force to wait until the elemnt becomes stale before continuing.
 
 
+**shot** will take a screenshot. 
+
+| Tag |  Meaning |
+| ---- | ------------|
+| file:  | file name to save to. Directories are created as needed |
+| full:  |   Take a picture of the full page |
+| x: or xpath: | search by xpath|
+| id: | search by id |
+| class: | search by class name |
+| linktext: | search by full link text |
+| plinktext: | search by partial link text |
+| name: | search by name |
+|tag: | search by tag name |
+
 ## Flow control
 
 **go** is the main flow control statement. All arguments are optionnal.
