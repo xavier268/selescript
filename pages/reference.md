@@ -55,7 +55,16 @@ If multiple webelements are found, only the first one is processed.
 For instance, **result = @ href: './/a'** retrieves the value of 
 the 'href' attribute of the first 'a' element, and store it in a user variable named result.
 
+The **find** and **find and replace** operators use the **~**, as in :
 
+````
+test1 = 'a long sentence' ~ 'long' ; // test1 will contain 'long', and evaluate to true.
+test2 = 'a short sentence' ~ 'long' ; // test2 will contain null, and evaluate to false.
+test3 = 'a short sentence' ~ 's.*?t','long' ; 
+    // test3 will contain 'a long sentence', where 'short' has been replaced with 'long'.
+````
+
+Usual regex syntax applies.
 
 ## Statements
 
