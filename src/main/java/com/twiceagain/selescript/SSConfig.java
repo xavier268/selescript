@@ -197,6 +197,7 @@ public class SSConfig {
                     break;
                 case "-h":
                 case "--help":
+                    return null;
                 default:
                     config.printHelp();
 

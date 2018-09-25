@@ -34,9 +34,7 @@ public class SSBuiltins {
             case "$selescript":
                 return rtc.getConfig().getSelescriptVersion();
             case "$grid":
-                return rtc.getConfig().getGridUrl();
-            case "$filename":
-                return rtc.getConfig().getScriptFileName();
+                return rtc.getConfig().getGridUrl();            
             case "$mongocol":
                 return rtc.getConfig().getMongoCollection();
             case "$mongo":
@@ -74,6 +72,7 @@ public class SSBuiltins {
                 rtc.requestStopContinue();
                 return "Continuing ...";
             case "$abort":
+            case "$quit":
                 rtc.requestStopGlobal();
                 return "Aborting ...";
             default:
@@ -88,11 +87,12 @@ public class SSBuiltins {
         if (biid == null) {
             throw new SSSyntaxException("The builtin id cannot be null !");
         }
-        switch (biid) {
+        switch (biid) {            
             case "$url" :
                 rtc.getWd().get(value);
                 break;
-            case "$read":                
+            case "$read":   
+            case "$input":
                 rtc.resetInput(value);
                 break;
             default:

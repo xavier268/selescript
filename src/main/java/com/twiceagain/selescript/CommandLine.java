@@ -23,6 +23,7 @@ public class CommandLine {
     public static void main(String ... args) throws IOException {
 
         SSConfig config = SSConfig.parseArgs(args);
+        if(config == null) return ;
 
         if (config.isDebug()) {
             System.out.println(config.toString());
