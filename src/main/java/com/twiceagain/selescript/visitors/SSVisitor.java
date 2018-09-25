@@ -6,6 +6,8 @@
 package com.twiceagain.selescript.visitors;
 
 import auto.SelescriptParser.*;
+import com.sun.jdi.LongValue;
+import com.twiceagain.selescript.exceptions.SSNumberException;
 import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import java.io.UnsupportedEncodingException;
@@ -50,67 +52,6 @@ public class SSVisitor extends SSVisitorAbstract {
         }
         rtc.close(); // cleanup
         return null;
-    }
-
-    // ===========================================
-    //    Constant numbers represented as Long
-    // ===========================================
-    @Override
-    public Long visitCnnumber(CnnumberContext ctx) {
-        return Long.decode(ctx.NUMBER().getText());
-    }
-
-    @Override
-    public Long visitCnuminus(CnuminusContext ctx) {
-        return -(Long) visit(ctx.constantnumber());
-    }
-
-    @Override
-    public Long visitCnminus(CnminusContext ctx) {
-        return (Long) visit(ctx.constantnumber(0)) - (Long) visit(ctx.constantnumber(1));
-    }
-
-    @Override
-    public Long visitCnplus(CnplusContext ctx) {
-        return (Long) visit(ctx.constantnumber(0)) + (Long) visit(ctx.constantnumber(1));
-    }
-
-    @Override
-    public Long visitCntimes(CntimesContext ctx) {
-        return (Long) visit(ctx.constantnumber(0)) * (Long) visit(ctx.constantnumber(1));
-    }
-
-    @Override
-    public Long visitCndiv(CndivContext ctx) {
-        return (Long) visit(ctx.constantnumber(0)) / (Long) visit(ctx.constantnumber(1));
-    }
-
-    @Override
-    public Long visitCnpar(CnparContext ctx) {
-        return (Long) visit(ctx.constantnumber());
-    }
-
-    // ================================================
-    // Constant strings represented as String, potentially null
-    // ================================================
-    @Override
-    public String visitCsstring(CsstringContext ctx) {
-        return trim2(ctx.STRING().getText());
-    }
-
-    @Override
-    public String visitCsnumber(CsnumberContext ctx) {
-        return "" + (Long) visit(ctx.constantnumber());
-    }
-
-    @Override
-    public String visitCsnull(CsnullContext ctx) {
-        return null;
-    }
-
-    @Override
-    public String visitCspar(CsparContext ctx) {
-        return (String) visit(ctx.constantstring());
     }
 
     // ==========================================
@@ -178,7 +119,7 @@ public class SSVisitor extends SSVisitorAbstract {
         String s = (String) visit(ctx.stringval(0));
         if (s != null) {
             if (s.equals((String) visit(ctx.stringval(1)))) {
-                return "true";
+                return s;
             } else {
                 return null;
             }
@@ -220,11 +161,12 @@ public class SSVisitor extends SSVisitorAbstract {
             return null;
         }
         if (p == null) {
-            return "true";
+            return s;
         }
 
-        if (Pattern.compile(p).matcher(s).find()) {
-            return "true";
+        Matcher m = Pattern.compile(p).matcher(s);
+        if (m.find()) {
+            return m.group();
         }
 
         return null;
@@ -279,7 +221,86 @@ public class SSVisitor extends SSVisitorAbstract {
 
     @Override
     public String visitSvstring(SvstringContext ctx) {
-        return (String) visit(ctx.constantstring());
+        return (trim2(ctx.STRING().getText()));
+    }
+
+    @Override
+    public String visitSvuminus(SvuminusContext ctx) {
+        try {
+            Long l = -Long.valueOf((String)visit(ctx.stringval()));
+            return l.toString();
+        } catch (NumberFormatException ex) {
+            throw new SSNumberException(ex);
+        }
+
+    }
+
+    @Override
+    public String visitSvminus(SvminusContext ctx) {
+        try {
+            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
+            l = l - Long.valueOf((String)visit(ctx.stringval(1)));
+            return l.toString();
+        } catch (NumberFormatException ex) {
+            throw new SSNumberException("Problem with : "
+                    + ctx.stringval(0).getText() + " - "
+                    + ctx.stringval(1).getText(), ex);
+        }
+    }
+
+    @Override
+    public String visitSvtimes(SvtimesContext ctx) {
+        try {
+            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
+            l *= Long.valueOf((String)visit(ctx.stringval(1)));
+            return l.toString();
+        } catch (NumberFormatException ex) {
+            throw new SSNumberException("Problem with : "
+                    + ctx.stringval(0).getText() + " * "
+                    + ctx.stringval(1).getText(), ex);
+        }
+    }
+
+    @Override
+    public String visitSvdiv(SvdivContext ctx) {
+        try {
+            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
+            l /= Long.valueOf((String)visit(ctx.stringval(1)));
+            return l.toString();
+        } catch (ArithmeticException | IllegalArgumentException ex) {
+            throw new SSNumberException("Problem with : "
+                    + ctx.stringval(0).getText() + " / "
+                    + ctx.stringval(1).getText(), ex);
+        }
+    }
+
+    @Override
+    public String visitSvplus(SvplusContext ctx) {
+        try {
+            Long l = Long.valueOf((String)visit(ctx.stringval(0)));
+            l += Long.valueOf((String) visit(ctx.stringval(1)));
+            return l.toString();
+        } catch (NumberFormatException ex) {
+            throw new SSNumberException("Problem with : "
+                    + ctx.stringval(0).getText() + " ++ "
+                    + ctx.stringval(1).getText(), ex);
+        }
+    }
+
+    @Override
+    public String visitSvnull(SvnullContext ctx) {
+        return null;
+    }
+
+    @Override
+    public String visitSvnumber(SvnumberContext ctx) {
+        try {
+            Long l = Long.valueOf(ctx.NUMBER().getText());
+            return l.toString();
+        } catch (NumberFormatException ex) {
+            throw new SSNumberException("Problem with number : "
+                    + ctx.NUMBER().getText(), ex);
+        }
     }
 
     // ===========================================
@@ -471,19 +492,19 @@ public class SSVisitor extends SSVisitorAbstract {
         rtc.putId(ctx.ID().getText(), (String) visit(ctx.stringval()));
         return null;
     }
-    
+
     @Override
     public String visitStabort(StabortContext ctx) {
         rtc.requestStopGlobal();
         return null;
     }
-    
+
     @Override
     public String visitStbreak(StbreakContext ctx) {
         rtc.requestStopLocal();
         return null;
     }
-    
+
     @Override
     public String visitStcontinue(StcontinueContext ctx) {
         rtc.requestStopContinue();
@@ -635,7 +656,6 @@ public class SSVisitor extends SSVisitorAbstract {
                 }
             }
         } catch (StaleElementReferenceException ex) {
-            
 
         }
         // cleanup

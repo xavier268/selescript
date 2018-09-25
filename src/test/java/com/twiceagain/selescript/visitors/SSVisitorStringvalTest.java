@@ -8,6 +8,7 @@ package com.twiceagain.selescript.visitors;
 import auto.SelescriptLexer;
 import auto.SelescriptParser;
 import com.twiceagain.selescript.SSConfig;
+import com.twiceagain.selescript.exceptions.SSNumberException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -45,13 +46,18 @@ public class SSVisitorStringvalTest {
         assertNotNull(t("'abc' == 'abc'"));
         assertNull(t("null != null"));
         assertNull(t("'ab' == 'abc'"));
+        
+        assertEquals("true",t("null == null"));
+        assertEquals("abc",t("'abc' == 'ab' + 'c'"));
+        
+        
 
         // find
-        assertEquals("true", t("'abcdef' ~ 'cd' "));
-        assertEquals("true", t("'abcdef' ~ null "));
-        assertEquals("true", t("'abcdef' ~ '' "));
-        assertEquals("true", t("'abcdef' ~ '^az*' "));
-        assertEquals("true", t("'abcdef' ~ '^a.*f$' "));
+        assertEquals("cd", t("'abcdef' ~ 'cd' "));
+        assertEquals("abcdef", t("'abcdef' ~ null "));
+        assertEquals("", t("'abcdef' ~ '' "));
+        assertEquals("a", t("'abcdef' ~ '^az*' "));
+        assertEquals("abcdef", t("'abcdef' ~ '^a.*f$' "));
 
         assertEquals(null, t("null ~ 'kjh' "));
         assertEquals(null, t("null ~ null "));
@@ -67,15 +73,14 @@ public class SSVisitorStringvalTest {
         assertEquals("35", t("3 + 4 ++ 1 "));
         assertEquals("64", t("3*2 + 4  "));
 
-        
         assertEquals(null, t("!'35'"));
         assertEquals(null, t("!35"));
-        assertEquals("5", t("!3+5"));
+        assertEquals("5", t("(!3)+5"));
         assertEquals(null, t("!3++5"));
-        
+
         assertEquals("ab", t(" null + 'ab' "));
         assertEquals("ab", t("  'ab' + null "));
-        
+
         assertNotNull(t("! null "));
     }
 
@@ -85,10 +90,73 @@ public class SSVisitorStringvalTest {
     }
 
     @Test
-    public void testAt() {
-        // Will only be tested at the statement level.
+    public void testPrecedence() {
+        assertEquals("7", t(" 1 ++ 2 * 3"));
+        assertEquals("-1", t(" 1 ++ 2 * 3 - 8"));
+        assertEquals("16", t("1 + 2*3"));
+
+        assertEquals("7", t(" 1 ++ 20 / 3"));
+        assertEquals("-1", t(" 1 ++ 20 / 3 - 8"));
+        assertEquals("16", t("1 + 20/3"));
+        
+        assertEquals("537",t(" 1*2 ++ 3 + 5*6 ++ 7 == (53447 ~ 44 , ) "));
+        assertEquals("537",t(" ( 1*2 ++ 3 + 5*6 ++ 7) == 537 "));
+        assertEquals("537",t("   1*2 ++ 3 + 5*6 ++ 7  == 537 "));
+        assertEquals(null,t(" 1*2 ++ 3 + 5*6 ++ 7 != 537 "));
+        
+   
     }
 
+    @Test
+    public void test1() {
+
+        assertEquals("6", t("'1'++'3' ++ '2'"));
+        assertEquals("6", t("1++'3' ++ 2"));
+        assertEquals("6", t("'1'++3 ++ 2"));
+
+        assertEquals("3", t("1 ++ 2"));
+        assertEquals("6", t("1 ++ 2 ++ 3"));
+        assertEquals("6", t("(1 ++ 2) ++ 3"));
+        assertEquals("7", t("1 ++ 2 * 3 "));
+        assertEquals("5", t("1 * 2 ++ 3"));
+        assertEquals("-1", t("1 - 2"));
+        assertEquals("1", t("- 1 ++ 2"));
+        assertEquals("0", t("1 / 2"));
+        assertEquals("2", t("5 / 2 "));
+        assertEquals("12", t("5 / 2 ++ 10 "));
+        assertEquals("-2", t("5 / -2 "));
+        assertEquals("5", t("----5"));
+        assertEquals("-2", t("1 ++ 2 - 5 "));
+    }
+
+    @Test
+    public void test2() {
+
+        assertEquals("12", t("3*4"));
+        assertEquals("7", t("3 ++ 4"));
+
+        assertEquals("35", t("'35'"));
+        assertEquals("ab", t("'ab'"));
+        assertEquals("35", t("\"35\""));
+        assertEquals("ab", t("\"ab\""));
+
+        assertNull(t("null"));
+
+        assertEquals("kjh", t(" ('kjh')"));
+
+    }
+
+    @Test(expected = SSNumberException.class)
+    public void test3() {
+        t("10/0");
+    }
+
+    @Test(expected = SSNumberException.class)
+    public void test4() {
+        t("null ++ 23");
+    }
+
+    // =======================================================================
     private String t(String s) {
         SelescriptLexer lexer = new SelescriptLexer(CharStreams.fromString(s));
         CommonTokenStream ts = new CommonTokenStream(lexer);
@@ -98,4 +166,5 @@ public class SSVisitorStringvalTest {
         SelescriptParser.StringvalContext root = parser.stringval();
         return (String) new SSVisitor(new SSRuntimeContext(new SSConfig())).visit(root);
     }
+
 }

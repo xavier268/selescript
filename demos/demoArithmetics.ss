@@ -35,13 +35,13 @@ print "(1 ++ 2) * 3 = 9 ? " ;   print  ( 1 ++ 2) * 3  ;
 
 print ;
 print "Testing precedence between operators" ;
-print "'1' + 2 ~ 2 => true ?" ;         print ('1' + 2 ~ 2 ) ;
-print "1 + 2 ~ 3 => null ?" ;           print  (1  +2 ~ 3 ) ;
+print "'1' + 2 ~ 2 => 12 ?" ;         print ('1' + 2 ~ 2 ) ;
+print "1 + 2 ~ 3 => 1 ?" ;           print  (1  +2 ~ 3 ) ;
 print "1 + (2 ~ 3) => 1 ?" ;            print (1 + (2 ~ 3) ) ;
 print "1 + null | 2 => 1 ?" ;           print (1 + null | 2 ) ;
-print "'bla' ~ 'a' => true ?" ;         print ('bla' ~ 'a' ) ;
+print "'bla' ~ 'a' => a ?" ;         print ('bla' ~ 'a' ) ;
 print "'bla' ~ 'a' == 'b' => null ?" ;  print ('bla' ~ 'a' == 'b') ;
-print "'bla' ~('a' == 'b') => true ?";  print ('bla' ~ ('a' == 'b')) ;
+print "'bla' ~('a' == 'b') => bla ?";  print ('bla' ~ ('a' == 'b')) ;
 print "('bla'~'a') == 'b' => null ?" ;  print (('bla' ~ 'a' ) == 'b') ;
 
 print ;

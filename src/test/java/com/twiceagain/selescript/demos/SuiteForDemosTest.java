@@ -14,15 +14,16 @@ import org.junit.runners.Suite;
  * Adjust classes as needed.
  * @author xavier
  */
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     DemoArithmetics.class,
     // GoogleDemo.class,
-    CommandLineT.class,
-    InputDemo.class,
-    LoopDemo.class,
-   // DbDemo.class,
-   // RunAllDemos.class,
+     CommandLineT.class,
+     InputDemo.class,
+     LoopDemo.class,
+   //  DbDemo.class,
+   //  RunAllDemos.class,
 })
 public class SuiteForDemosTest {   
 

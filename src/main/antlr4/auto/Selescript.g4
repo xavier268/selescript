@@ -31,39 +31,26 @@ param
 
 stringval 
     
-    :   constantstring                          # svstring
-    |   '!' stringval                           # svnot   // Not null means true
-    |   stringval '+' stringval                 # svconcat    
+    :   '-' stringval                           # svuminus
+    |   stringval '*' stringval                 # svtimes
+    |   stringval '/' stringval                 # svdiv
+    |   stringval '++' stringval                # svplus
+    |   stringval '-'  stringval                # svminus
     |   stringval '~' stringval ',' stringval   # svreplace // find and replace all, null if not found   
     |   stringval '~' stringval                 # svfind // null if not found
+    |   stringval '+' stringval                 # svconcat    
+    |   '!' stringval                           # svnot   // Not null means true
     |   stringval '==' stringval                # sveq    // Not null means true
     |   stringval '!=' stringval                # svneq
     |   '(' stringval ')'                       # svpar
     |   '@' TAG  ?  stringval  ?                # svat    // derefence based on current search context
     |   stringval '|' stringval                 # svor    // logical or
     |   stringval '&' stringval                 # svand   // logical and
+    |   NUMBER                                  # svnumber
     |   BIID                                    # svbiid
     |   ID                                      # svid
-    ;
-
-constantstring
-    :  '(' constantstring ')'                   # cspar
-    |  constantnumber                           # csnumber
-    |  STRING                                   # csstring
-    |  NULL                                     # csnull
-    
-    ; 
-
-
-constantnumber
-
-    :  '(' constantnumber ')'                    # cnpar
-    |  '-' constantnumber                        # cnuminus
-    |  constantnumber '*' constantnumber         # cntimes
-    |  constantnumber '/' constantnumber         # cndiv
-    |  constantnumber '++' constantnumber        # cnplus
-    |  constantnumber '-' constantnumber         # cnminus
-    |  NUMBER                                    # cnnumber
+    |   NULL                                    # svnull
+    |   STRING                                  # svstring
     ;
 
 
