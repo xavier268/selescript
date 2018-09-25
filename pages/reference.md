@@ -27,7 +27,36 @@ If used before initialization, they contain null.
 
 Built-in variables start with $ sign. 
 For instance, $read or $os. 
-They can be read, and sometimes written to (see reference below).
+They can be read, and sometimes written to.
+
+| Variable | Read | Write |
+|-----------------|-------------------------------------|-------------------------------------------|
+| $os | the os name |
+| $java | the java version |
+| $selescript | the selescript version |
+| $grid | the url to communicate with the selenium grid server | 
+| $mongo | the mongo server URI | 
+| $mongodb | the mongo database name | 
+| $mongocol | the mongo collection name |
+| $debug | activate the debug mode |
+| $browser | configured browser, 'firefox' or 'chrome' |
+| $url | current url | navigate to the provided url |
+| $title | page title |
+| $count | loop counter |
+| $depth | the level of depth in the loops. 0 for no loop |
+| $elapsed | total elapsed time running |
+| $read | read a single, non-comment, non empty line from the parameter file | set/reset file input value. If null, use config (idem $input) |
+| $source | the source file for the running script |
+| $input | the file parameters are read from | set/reset the file name, if null, use config (idem $read) |
+| $nl | the system line separator |
+| $tab | a tab character |
+| $break | break, exit current loop or stop if no loop |
+| $continue | jump over the rest of the current iteration |
+| $abort or $quit | do a clean abort, releasing all ressources |
+
+
+
+
 
 ## Operators
 
@@ -43,7 +72,7 @@ See [grammar reference](https://xavier268.github.io/selescript/src/main/antlr4/a
 **IMPORTANT** : addition is ++, concatenation is +. Please note the difference !
 
 **Comparison** operators are and(&), or(|), not(!), equals(==) and not equals(!=). They return null for false. 
-The 'true' value varies, and is usually a meaningfull value, always not null, sometimes empty.
+The 'true' value varies, and is usually a meaningfull value, always not null, sometimes empty. The & and | are lazily evaluated.
 
 The **dereferencing** operator (@) fetches the text or attribute value of a dom web element.
 If provided a single stringval argument, it interprets the argument as the xpath (prefer relative xpath !) 
@@ -132,5 +161,55 @@ The & and | operators are lazily evaluated and are suited to be combined with th
 
 ````
 ( uservariable == 'expected value') | continue ; // will continue if not the expected value
+````
+##  Demos
+
+The **demos** folder contains a few example of using the various features of the langage. They can be tested/run using the provided test suite and the **runAllDemos** test. Database or Web-based ddemos will only run if a mongo server, resp. a selenium grid server, are available in the configured locations.
+
+## Command line parameters
+
+Command line parameters acan be listed with :
+
+````
+$ ./ss.sh -h 
+
+[ ... a few log messages ... ]
+
+Selescript - (c) Xavier Gandillot 2018
+See https://xavier268.github.io/selescript/
+Selescript version : 1.2.2
+Java version : 10.0.2+13
+Using : firefox
+Grid url : http://localhost:4444/wd/hub
+Mongo url : mongodb://localhost:27017
+Mongo db : ssdb
+Mongo col : sscol
+Script file : no file script was set
+Input file : null
+Debug mode : false
+
+
+Recognized command lines options :
+
+-s FILE            : specify the FILE to run
+
+-i FILE            : requested input will be read from FILE
+
+ -d
+--debug            : set the debug mode (more verbose)
+
+--firefox          : use firefox (default)
+--chrome           : use chrome
+
+--grid URL         : set the Grid Url to use.
+
+--mongo    URL     : set the mongo connexion string to URL
+--db       DB      : set the mongo database to DB
+--col      COL     : set the mongo collection to COL
+
+ -h
+--help             : print these messages
+
+
 ````
 
