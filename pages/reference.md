@@ -146,14 +146,40 @@ All tags and arguments are optionnal. Default is no text, plain text, on current
 **submit** and **click** will submit or click on a webelemnt, specified by its xpath. 
 Use the w: tag to force to wait until the elemnt becomes stale before continuing.
 
+
+## Flow control
+
 **go** is the main flow control statement. All arguments are optionnal.
-Tags can specify max number of loops (c:), 
-max time in different units(sec: ms: hours: ...) and how we want to select the webelemnts
-( x: or xpath:, linktext:, name:, id:, plinktext:, ...).
+Tags can specify various parameters and how we want to select the webelemnts
+
+| Tag |  Meaning |
+| ---- | ------------|
+| c: or count: | max number of iterations |
+| ms: | timeout in milliseconds - timeouts add up, if multiple tags |
+| sec: | timeout in seconds - timeouts add up, if multiple tags |
+| min: | timeout in minutes - timeouts add up, if multiple tags |
+| hour: | timeout in hours - timeouts add up, if multiple tags |
+| day: | timeout in days - timeouts add up, if multiple tags |
+|||
+| x: or xpath: | search by xpath |
+| id: | search by id |
+| class: | search by class name |
+| linktext: | search by full link text |
+| plinktext: | search by partial link text |
+| name: | search by name |
+|tag: | search by tag name |
+
 **go** loops can be nested. 
 The depth of nesting is $depth. The loop index is $count.
 
-A statement that contains a single string val is evaluated as a test. 
+The **go** loops are specially design to loop through all the WebElements that match the requested xpath. 
+All elements could not be available immediately (some site refresh the bottom of the list asynchroneously as we read it) and **go** will get them at some point.
+
+Special care is also taken to ensure that the **same** web element is never read twice by the same loop. 
+
+If during a loop, we try to use a stale element, it breaks out of the loop. This happens typically after a successfull page change.
+
+A statement that contains a single stringval is evaluated as a **test**. 
 If the stringval is null, **break** is called. 
 
 Loop can be interrupted by evaluating the special builtins : $break, $continue and $abort.
