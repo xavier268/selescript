@@ -19,7 +19,8 @@ mongo database records.
 ## To learn more
 
 * [Selescript langage reference](https://xavier268.github.io/selescript/pages/reference.html)
-* [This project API](https://xavier268.github.io/selescript/target/site/apidocs/index.html)
+* [This project API](https://xavier268.github.io/selescript/target/site/apidocs/index.html?overview-summary.html)
+* [Source code](https://github.com/xavier268/selescript)
 * Selescript [reference grammar](https://xavier268.github.io/selescript/src/main/antlr4/auto/Selescript.g4)
 * [Selenium project](https://www.seleniumhq.org/)
 * [Xpath reference](https://developer.mozilla.org/en-US/docs/Web/XPath)
