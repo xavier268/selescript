@@ -48,7 +48,8 @@ Here you go !
 ## To learn more
 
 * [Selescript reference](reference.md)
-* [This project API](../target/site/apidocs/)
+* [This project API](../target/site/apidocs/index.html?overview-summary.html)
+* [SOurce code](https://github.com/xavier268/selescript)
 * [Selenium project](https://www.seleniumhq.org/)
 * [Xpath reference](https://developer.mozilla.org/en-US/docs/Web/XPath)
 * [Xpath tutorial](https://www.w3schools.com/xml/xpath_intro.asp)
