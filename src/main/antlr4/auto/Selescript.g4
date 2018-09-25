@@ -19,10 +19,7 @@ statement
     |   'click' param ? ';'                     # stclick   // on the specified xpath
     |   'type'  param ? ( ',' param ) ';'       # sttype    // type text into element
     |   'submit' param ? ';'                    # stsubmit  // submit enclosing form
-    |   'abort' ';'                             # stabort
-    |   'break' ';'                             # stbreak
-    |   'continue' ';'                          # stcontinue
-    |    stringval ';'                          # stcheck   // continue on null value
+    |    stringval ';'                          # stcheck   // break on null value
     ;
 
 param

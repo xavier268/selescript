@@ -67,6 +67,15 @@ public class SSBuiltins {
                 return "\t";
             case "$depth":
                 return rtc.getDepth();
+            case "$break":
+                rtc.requestStopLocal();
+                return "Breaking ...";
+            case "$continue":
+                rtc.requestStopContinue();
+                return "Continuing ...";
+            case "$abort":
+                rtc.requestStopGlobal();
+                return "Aborting ...";
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be read from : " + biid);
 

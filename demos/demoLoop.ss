@@ -24,7 +24,7 @@ go c:4 {
     go c:3 {
         print "  inside loop : " + $count ;  
         print "  Preparing to break in inner loop ...";
-        break;    
+        print $break;    
         print "This should never display";
         }    
    
@@ -56,7 +56,7 @@ go c:4 {
     go c:3 {
         print "  inside loop : " + $count ;  
         print "  Preparing to 'continue' inner loop ...";
-        continue;    
+        print $continue;    
         print "This should never display";
         }    
    
@@ -72,7 +72,7 @@ go c:4 {
     go c:3 {
         print "  inside loop : " + $count ;  
         print "  Preparing to abort inner loop ...";
-        abort;    
+        print $abort;    
         print "This should never display";
         }    
    
