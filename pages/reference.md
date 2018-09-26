@@ -48,7 +48,7 @@ They can be read, and sometimes written to.
 | $read | read a single, non-comment, non empty line from the parameter file | set/reset file input value. If null, use config (idem $input) |
 | $source | the source file for the running script |
 | $input | the file parameters are read from | set/reset the file name, if null, use config |
-| $output | the file print sends data to | set/reset the file name, if null, use stdout |
+| $output | the currently opended file print sends data to |  |
 | $nl | the system line separator |
 | $tab | a tab character |
 | $break | break, exit current loop or stop if no loop |
@@ -124,7 +124,8 @@ print "http://www.google.com/?q=" , u: "hello world" ;  // Combining both with a
 | ---- | ------------|
 | t:  | Text is printed as is. This is the default. |
 | u:   | Url encode this text fragment|
-| f: or file:  | What file to write. Default to stdout. |
+| f: or file:  | What file to write (append). Default to stdout. |
+| nf: or nfile: | Like f:, but overwrite existing data |
 
 
 **db** will send a mongo document to the specified database. Tags are mandatory.
@@ -169,6 +170,11 @@ Default is to capture the full page, if no xpath provided.
 
 | | |
 | x: or xpath: | search by xpath. This is the default tag.|
+
+**Caution for mem: and html:** : When capturing in memory or using inline base64 html fragments, 
+beware the the size can be rapidly significant. Also, when typing the 
+memory variable name to use, don't forget to quote the name. 
+Otherwise, it will be evaluated to try to find the name of variable to use.
 
 ## Flow control
 

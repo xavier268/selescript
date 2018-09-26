@@ -22,7 +22,9 @@ import org.junit.runners.Suite;
      CommandLineT.class,
      InputDemo.class,
      LoopDemo.class,
+     OutputDemo.class,
    //  DbDemo.class,
+   //  SnapshotDemo.class,
    //  RunAllDemos.class,
 })
 public class SuiteForDemosTest {   

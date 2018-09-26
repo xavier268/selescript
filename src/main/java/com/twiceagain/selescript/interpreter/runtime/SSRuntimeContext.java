@@ -148,7 +148,7 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
      */
     public boolean loopWhile() {
 
-        // reset the continue flag
+        // reopen the continue flag
         if (!frames.isEmpty()) {
             frames.getLast().resetStopContinue();
         }
@@ -281,24 +281,26 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
     }
 
     /**
-     * Reset output file to something else. Setting to null will set to stdout.
+     * Reset output file to something else.Setting to null will set to stdout.
      *
      * @param outFileName
+     * @param append - true to request append, false to force file reset
      */
-    public void resetOutput(String outFileName) {
-        output.reset(outFileName);
+    public void reopen(String outFileName, boolean append) {
+        output.reopen(outFileName, append);
     }
 
     /**
-     * Print to the file name specified. Does not reset filename if already the
-     * same. Do not use to print to stdout. Newlines are generated.
+     * Print to the file name specified.Does not reset filename if already the
+ same. Do not use to print to stdout. Newlines are generated.
      *
      * @param fileName - not nul, file name.
+     * @param append - true for append mode or false to re-create existing files ?
      * @param text - content
      */
-    public void println(String fileName, CharSequence text) {
+    public void println(String fileName, boolean append, CharSequence text) {
         if (! fileName.equals(config.getOutputFileName())) {
-            resetOutput(fileName);
+            reopen(fileName, append);
         }
         output.printf("%s%n", text);
     }

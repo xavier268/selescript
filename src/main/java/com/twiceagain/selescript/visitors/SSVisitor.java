@@ -379,6 +379,7 @@ public class SSVisitor extends SSVisitorAbstract {
 
         StringBuilder sb = new StringBuilder();
         String outf = null;
+        boolean append = true;
 
         for (ParamContext p : ctx.param()) {
             if ((p.TAG() == null) || trim1(p.TAG().getText()).isEmpty()) {
@@ -405,6 +406,14 @@ public class SSVisitor extends SSVisitorAbstract {
                     case "file":
                         if (p.stringval() != null) {
                             outf = (String) visit(p.stringval());
+                            append =true;
+                        }
+                        break;
+                    case "nf":
+                    case "nfile":
+                        if (p.stringval() != null) {
+                            outf = (String) visit(p.stringval());
+                            append =false;
                         }
                         break;
                     default:
@@ -416,7 +425,12 @@ public class SSVisitor extends SSVisitorAbstract {
         if (outf == null) {
             System.out.println(s);
         } else {
-            rtc.println(outf, sb);
+            if (!append || !outf.equals(rtc.getConfig().getOutputFileName())) {
+                // file changed or new file explicitely requested.
+                rtc.reopen(outf, append);
+            }
+            rtc.println(outf,append, sb);
+
         }
         return null;
     }
@@ -512,7 +526,6 @@ public class SSVisitor extends SSVisitorAbstract {
      * @return
      */
     @Override
-    @Deprecated
     public String visitStshot(StshotContext ctx) {
 
         String xpath = null;
@@ -544,11 +557,21 @@ public class SSVisitor extends SSVisitorAbstract {
                 case "mem:":
                     if (p.stringval() != null) {
                         mem = (String) visit(p.stringval());
+                        if(mem == null) {
+                            throw new SSSyntaxException(
+                                    "You are trying to set a variable called null in "
+                            + p.getText() + "\n Did you forget the quotes ?" );
+                        }
                     }
                     break;
                 case "html:":
                     if (p.stringval() != null) {
                         html = (String) visit(p.stringval());
+                        if(html == null) {
+                            throw new SSSyntaxException(
+                                    "You are trying to set a variable called null in "
+                            + p.getText() + "\n Did you forget the quotes ?" );
+                        }
                     }
                     break;
                 default:

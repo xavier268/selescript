@@ -60,7 +60,7 @@ public class SSBuiltins {
             case "$input":
                 return rtc.getConfig().getInputFileName();
             case "$output":            
-                return rtc.getConfig().getInputFileName();
+                return rtc.getConfig().getOutputFileName();
             case "$nl":
                 return System.lineSeparator();
             case "$tab":
@@ -97,8 +97,6 @@ public class SSBuiltins {
             case "$input":
                 rtc.resetInput(value);
                 break;
-            case "$output":
-                rtc.resetOutput(value);
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be written to : " + biid);
 

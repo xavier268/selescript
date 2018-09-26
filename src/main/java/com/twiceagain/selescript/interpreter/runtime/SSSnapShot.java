@@ -104,7 +104,7 @@ public abstract class SSSnapShot {
      * @return 
      */
     public static String base64toHtmlFragment(String b64img) {
-        return "<img src='data:image/png;base64,"+b64img + ">";
+        return "<img src='data:image/png;base64,"+b64img + "'>";
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class SSSnapShot {
             if (fi == null) {
                 return;
             }
-            target.toFile().mkdirs();
+            target.toAbsolutePath().getParent().toFile().mkdirs();
             Files.move(fi.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             try {
@@ -191,7 +191,7 @@ public abstract class SSSnapShot {
     public void screenshot2Path(Path target) {
 
         try {
-            target.toFile().mkdirs();
+            target.toAbsolutePath().getParent().toFile().mkdirs();
             Files.move(screenshot2TempFile().toPath(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             try {

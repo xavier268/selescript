@@ -24,7 +24,7 @@ statement
     ;
 
 param
-    :   ( TAG ) ? stringval 
+    :    TAG  ? stringval 
     ;
 
 stringval 

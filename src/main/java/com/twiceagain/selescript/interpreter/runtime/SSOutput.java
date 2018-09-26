@@ -8,10 +8,11 @@ package com.twiceagain.selescript.interpreter.runtime;
 import com.twiceagain.selescript.SSConfig;
 import com.twiceagain.selescript.exceptions.SSException;
 import java.io.Closeable;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 
 /**
  * Manages writing to text, csv or html files.
@@ -26,7 +27,7 @@ public class SSOutput implements Closeable {
     public SSOutput(SSConfig config) {
         this.config = config;
         this.out = System.out;
-        reset(config.getOutputFileName());
+        reopen(config.getOutputFileName(), true);
     }
 
     @Override
@@ -37,29 +38,33 @@ public class SSOutput implements Closeable {
         }
     }
 
-    final void reset(String outFileName) {
-
+    /**
+     * Reopen of output file, even if already open and no filename change. This
+     * will append to an existing file. It is up to the caller to avoid calling
+     * reopen on an open file for obvious performance reasons..
+     *
+     * @param outFileName
+     */
+    final void reopen(String outFileName, boolean append) {
+        config.setOutputFileName(outFileName);
         close();
         if (outFileName == null) {
             out = System.out;
             return;
         }
 
-        new File(outFileName).mkdirs();
+        Paths.get(outFileName).toAbsolutePath().getParent().toFile().mkdirs();
         try {
-            out = new PrintStream(outFileName, StandardCharsets.UTF_8);            
+            // Opening for APPENDING
+            out = new PrintStream(new FileOutputStream(outFileName, append));
         } catch (IOException ex) {
             throw new SSException("Cannot write to file : " + outFileName, ex);
         }
 
     }
-    
-    public void printf(String format, Object ... args) {
+
+    public void printf(String format, Object... args) {
         out.printf(format, args);
     }
-    
-    
-    
-    
 
 }
