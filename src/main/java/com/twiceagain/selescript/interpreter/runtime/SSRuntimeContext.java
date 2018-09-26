@@ -41,11 +41,13 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
     private final SSMongo mongo;
     private final long start = System.currentTimeMillis();
     private final SSInput input;
+    private final SSOutput output;
 
     public SSRuntimeContext(final SSConfig config) {
         this.config = config;
         this.mongo = new SSMongo(config);
         this.input = new SSInput(config);
+        this.output = new SSOutput(config);
 
     }
 
@@ -77,6 +79,7 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
      *
      * @return
      */
+    @Override
     public WebDriver getWd() {
         if (wd != null) {
             return wd;
@@ -104,14 +107,19 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
     }
 
     /**
-     * Cleanup before exit.
+     * Cleanup before exit, releasing ressources.
      *
      */
     @Override
     public void close() {
+
+        output.close();
+        input.close();
+
         if (wd != null) {
             wd.quit();
         }
+
     }
 
     /**
@@ -270,5 +278,28 @@ public class SSRuntimeContext extends SSSnapShot implements Closeable {
 
     public String getDepth() {
         return "" + frames.size();
+    }
+
+    /**
+     * Reset output file to something else. Setting to null will set to stdout.
+     *
+     * @param outFileName
+     */
+    public void resetOutput(String outFileName) {
+        output.reset(outFileName);
+    }
+
+    /**
+     * Print to the file name specified. Does not reset filename if already the
+     * same. Do not use to print to stdout. Newlines are generated.
+     *
+     * @param fileName - not nul, file name.
+     * @param text - content
+     */
+    public void println(String fileName, CharSequence text) {
+        if (! fileName.equals(config.getOutputFileName())) {
+            resetOutput(fileName);
+        }
+        output.printf("%s%n", text);
     }
 }

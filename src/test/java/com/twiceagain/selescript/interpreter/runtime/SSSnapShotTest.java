@@ -6,6 +6,7 @@
 package com.twiceagain.selescript.interpreter.runtime;
 
 import com.twiceagain.selescript.SSConfig;
+import static com.twiceagain.selescript.interpreter.runtime.SSSnapShot.base64toHtmlFragment;
 import java.nio.file.Paths;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -53,6 +54,20 @@ public class SSSnapShotTest {
             WebElement img = rtc.getWd().findElement(By.tagName("img"));
             // Should never appear, since too small.
             rtc.screenshot2Path(img, Paths.get("target/testimages/shouldNotAppear.png"));
+            rtc.close();
+
+        }
+
+    }
+    
+    @Test
+    public void test4() {
+
+        try (SSRuntimeContext rtc = new SSRuntimeContext(new SSConfig())) {
+            rtc.putBiid("$url", "https://www.google.com");
+            
+            WebElement img = rtc.getWd().findElement(By.id("hplogo"));
+            System.out.println(base64toHtmlFragment(rtc.screenshot2B64(img)));
             rtc.close();
 
         }

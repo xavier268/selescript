@@ -7,13 +7,19 @@ package com.twiceagain.selescript.interpreter.runtime;
 
 import com.twiceagain.selescript.exceptions.SSException;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -32,12 +38,73 @@ public abstract class SSSnapShot {
     public abstract WebDriver getWd();
 
     /**
-     * Takes a (full view) Base64 screenshoot from the provided webdriver.
+     * Takes a (full view) Base64 screenshoot.
      *
      * @return Base64 string. You can use it directly to display inline images.
      */
     public String screenshot2B64() {
         return ((TakesScreenshot) getWd()).getScreenshotAs(OutputType.BASE64);
+    }
+
+    /**
+     * Take a screenshot of a webelement. Return a Base 64 png image as a
+     * String.
+     *
+     * @param ele
+     * @return - image in Base 64 format.
+     */
+    public String screenshot2B64(WebElement ele) {
+
+        if (ele == null) {
+            return null;
+        }
+
+        // Get width and height of the element
+        int eleWidth = ele.getSize().getWidth();
+        int eleHeight = ele.getSize().getHeight();
+
+        // Get the location of element on the page
+        Point point = ele.getLocation();
+
+        if (eleWidth * eleHeight == 0) {
+            return null;
+        }
+
+        // Process ...
+        scrollElementIntoView(ele);
+
+        BufferedImage img;
+
+        try {
+            img = ImageIO.read(new ByteArrayInputStream(
+                    ((TakesScreenshot) getWd()).getScreenshotAs(OutputType.BYTES)));
+        } catch (IOException ex) {
+            throw new SSException("Error trying to shoot an element in Bytes", ex);
+        }
+
+        // Crop the entire page screenshot to get only element screenshot
+        BufferedImage eleScreenshot = img.getSubimage(point.getX(), point.getY(),
+                eleWidth, eleHeight);
+        String result = null;
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            ImageIO.write(eleScreenshot, "png", bos);
+            result = new String(Base64.getEncoder().encode(bos.toByteArray()),
+                    StandardCharsets.ISO_8859_1);
+        } catch (IOException ex) {
+            throw new SSException(
+                    "Error while trying to take a snaphot of a webelement into memory",
+                    ex);
+        }
+        return result;
+    }
+    
+    /**
+     * Creates an html fragment that will display the base64 png image provided.
+     * @param b64img
+     * @return 
+     */
+    public static String base64toHtmlFragment(String b64img) {
+        return "<img src='data:image/png;base64,"+b64img + ">";
     }
 
     /**
@@ -92,7 +159,7 @@ public abstract class SSSnapShot {
                 return;
             }
             target.toFile().mkdirs();
-            Files.move(fi.toPath(), target, StandardCopyOption.REPLACE_EXISTING );
+            Files.move(fi.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             try {
                 throw new SSException("Cannot create a snapshot in "

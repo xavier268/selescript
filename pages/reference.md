@@ -47,7 +47,8 @@ They can be read, and sometimes written to.
 | $elapsed | total elapsed time running |
 | $read | read a single, non-comment, non empty line from the parameter file | set/reset file input value. If null, use config (idem $input) |
 | $source | the source file for the running script |
-| $input | the file parameters are read from | set/reset the file name, if null, use config (idem $read) |
+| $input | the file parameters are read from | set/reset the file name, if null, use config |
+| $output | the file print sends data to | set/reset the file name, if null, use stdout |
 | $nl | the system line separator |
 | $tab | a tab character |
 | $break | break, exit current loop or stop if no loop |
@@ -108,7 +109,7 @@ $url = 'https://www.google.com' ;   // assign to a builtin variable
 ````
 
 **print** will output the provided stringval. Using tags allow to url-encode the text, 
-or use different filters/formats.
+or use different filters/formats. Multiple text fragments can be printed at once.
 
 ````
 print "Hello World" ;       // Plain text
@@ -117,6 +118,14 @@ print u: "This string will be url-encoded" ;            // Url encoded with u:
 print "http://www.google.com/?q=" , u: "hello world" ;  // Combining both with a comma
 
 ````
+
+**print** can also be asked to print to a text or html file.
+| Tag |  Meaning |
+| ---- | ------------|
+| t:  | Text is printed as is. This is the default. |
+| u:   | Url encode this text fragment|
+| f: or file:  | What file to write. Default to stdout. |
+
 
 **db** will send a mongo document to the specified database. Tags are mandatory.
 They specify the field name. 
@@ -147,19 +156,19 @@ All tags and arguments are optionnal. Default is no text, plain text, on current
 Use the w: tag to force to wait until the elemnt becomes stale before continuing.
 
 
-**shot** will take a screenshot. 
+**shot** will take a screenshot. Parameters and tags will specify what to 
+capture and where to store it. Shooting an element that is not visible does nothing.
+
+Default is to capture the full page, if no xpath provided.
 
 | Tag |  Meaning |
 | ---- | ------------|
 | file:  | file name to save to. Directories are created as needed |
-| full:  |   Take a picture of the full page |
-| x: or xpath: | search by xpath|
-| id: | search by id |
-| class: | search by class name |
-| linktext: | search by full link text |
-| plinktext: | search by partial link text |
-| name: | search by name |
-|tag: | search by tag name |
+| mem:  | shoot to a memory variable, as in : *shot mem: var ; print var ;* |
+| html:  | shoot to a memory variable, as an html inline fragment. |
+
+| | |
+| x: or xpath: | search by xpath. This is the default tag.|
 
 ## Flow control
 
@@ -234,6 +243,7 @@ Recognized command lines options :
 -s FILE            : specify the FILE to run
 
 -i FILE            : requested input will be read from FILE
+-o FILE            : requested output will be sent to FILE
 
  -d
 --debug            : set the debug mode (more verbose)

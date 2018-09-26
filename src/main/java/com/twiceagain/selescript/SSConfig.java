@@ -27,6 +27,7 @@ public class SSConfig {
 
     private String scriptFileName = null;
     private String inputFileName = null;
+    private String outputFileName = null;
     private boolean debug = false;
 
     // Read only
@@ -138,6 +139,7 @@ public class SSConfig {
                 .append("Mongo col : ").append(getMongoCollection()).append(NL)
                 .append("Script file : ").append(getAbsoluteScriptFileName()).append(NL)
                 .append("Input file : ").append(getInputFileName()).append(NL)
+                .append("Output file : ").append(getOutputFileName()).append(NL)
                 .append("Debug mode : ").append(isDebug()).append(NL)
                 .append(NL).toString();
 
@@ -193,7 +195,11 @@ public class SSConfig {
                 case "-i":
                     i++;
                     config.setInputFileName(args[i]);
-                    break;
+                    break;                    
+               case "-o":
+                    i++;
+                    config.setOutputFileName(args[i]);
+                    break;                    
                 case "-h":
                 case "--help":
                     config.printHelp();
@@ -224,6 +230,8 @@ public class SSConfig {
             "",
             "-i FILE            : requested input will be read from FILE",
             "",
+            "-o FILE            : requested output (with $write) will be sent to FILE",
+            "",
             " -d",
             "--debug            : set the debug mode (more verbose)",
             "",
@@ -240,6 +248,14 @@ public class SSConfig {
             "--help             : print these messages and exit",
             ""}));
 
+    }
+
+    public String getOutputFileName() {
+        return outputFileName;
+    }
+
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
     }
 
 }

@@ -11,6 +11,7 @@ import com.twiceagain.selescript.exceptions.SSSyntaxException;
 import com.twiceagain.selescript.interpreter.runtime.SSRuntimeContext;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -377,6 +378,7 @@ public class SSVisitor extends SSVisitorAbstract {
     public String visitStprint(StprintContext ctx) {
 
         StringBuilder sb = new StringBuilder();
+        String outf = null;
 
         for (ParamContext p : ctx.param()) {
             if ((p.TAG() == null) || trim1(p.TAG().getText()).isEmpty()) {
@@ -399,14 +401,24 @@ public class SSVisitor extends SSVisitorAbstract {
                             }
                         }
                         break;
+                    case "f":
+                    case "file":
+                        if (p.stringval() != null) {
+                            outf = (String) visit(p.stringval());
+                        }
+                        break;
                     default:
                         throw new SSSyntaxException("Unknown tag in print " + p.TAG().getText() + ":");
                 }
             }
         }
         String s = sb.toString();
-        System.out.println(s);
-        return s;
+        if (outf == null) {
+            System.out.println(s);
+        } else {
+            rtc.println(outf, sb);
+        }
+        return null;
     }
 
     @Override
@@ -493,10 +505,8 @@ public class SSVisitor extends SSVisitorAbstract {
     }
 
     /**
-     * Specify file target with file: .
-     * Specify xpath with x: tag: id: ...
-     * Selecting null xpath implies full page.
-     * page,
+     * Specify what to shoot and where to put it. See reference documentation
+     * page or source code.
      *
      * @param ctx
      * @return
@@ -505,8 +515,78 @@ public class SSVisitor extends SSVisitorAbstract {
     @Deprecated
     public String visitStshot(StshotContext ctx) {
 
-       //TODO
-       return null ;
+        String xpath = null;
+        String file = null;
+        String mem = null;
+        String html = null;
+
+        for (ParamContext p : ctx.param()) {
+
+            String k = "x:";
+
+            if (p.TAG() != null) {
+                k = p.TAG().getText();
+            }
+
+            switch (k) {
+                case "x:":
+                case "xpath:":
+                    if (p.stringval() != null) {
+                        xpath = (String) visit(p.stringval());
+                    }
+                    break;
+                case "f:":
+                case "file:":
+                    if (p.stringval() != null) {
+                        file = (String) visit(p.stringval());
+                    }
+                    break;
+                case "mem:":
+                    if (p.stringval() != null) {
+                        mem = (String) visit(p.stringval());
+                    }
+                    break;
+                case "html:":
+                    if (p.stringval() != null) {
+                        html = (String) visit(p.stringval());
+                    }
+                    break;
+                default:
+                    throw new SSSyntaxException("Invalid syntax calling shot : " + p.getText());
+            }
+
+        }
+
+        // Process
+        if (xpath == null) {
+            if (file != null) {
+                rtc.screenshot2Path(Paths.get(file));
+            }
+            if (mem != null) {
+                rtc.putId(mem, rtc.screenshot2B64());
+            }
+            if (html != null) {
+                rtc.putId(html, SSRuntimeContext.base64toHtmlFragment(rtc.screenshot2B64()));
+            }
+        } else {
+            List<WebElement> lwe = rtc.getSc().findElements(By.xpath(xpath));
+            if (lwe.isEmpty()) {
+                return null;
+            }
+            WebElement w = lwe.get(0);
+            if (file != null) {
+                rtc.screenshot2Path(w, Paths.get(file));
+            }
+            if (mem != null) {
+                rtc.putId(mem, rtc.screenshot2B64(w));
+            }
+            if (html != null) {
+                rtc.putId(html, SSRuntimeContext.base64toHtmlFragment(rtc.screenshot2B64(w)));
+            }
+
+        }
+
+        return null;
     }
 
     @Override

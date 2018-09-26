@@ -6,6 +6,7 @@
 package com.twiceagain.selescript.interpreter.runtime;
 
 import com.twiceagain.selescript.SSConfig;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,12 +19,10 @@ import java.util.Scanner;
  *
  * @author xavier
  */
-public class SSInput {
+public class SSInput implements Closeable {
 
     private Scanner inputScanner = null;
     private final SSConfig config;
-    
-    
 
     public SSInput(SSConfig config) {
 
@@ -32,7 +31,6 @@ public class SSInput {
 
     }
 
-    
     public final void reset(String fileName) {
         if (fileName != null) {
             try {
@@ -53,9 +51,11 @@ public class SSInput {
             }
         } else {
             // Use config, if not null.
-            if(config.getInputFileName() == null ) return ;
+            if (config.getInputFileName() == null) {
+                return;
+            }
             try {
-                inputScanner = new Scanner(new File(config.getInputFileName()), "UTF-8");                
+                inputScanner = new Scanner(new File(config.getInputFileName()), "UTF-8");
             } catch (FileNotFoundException ex) {
                 try {
                     throw new RuntimeException(
@@ -69,7 +69,7 @@ public class SSInput {
                             ex1);
                 }
             }
-            
+
         }
 
     }
@@ -90,5 +90,10 @@ public class SSInput {
 
         return null; // if no scanner set or eof
 
+    }
+
+    @Override
+    public void close()  {
+        // nothing to do
     }
 }

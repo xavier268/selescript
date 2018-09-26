@@ -15,7 +15,7 @@ statement
     |    ID   '=' stringval ';'                 # stassigni
     |    BIID '=' stringval ';'                 # stassignb
     |   'db' param ? ( ',' param )* ';'         # stdb      // send to mongodb
-    |   'print' param ? ( ',' param )* ';'      # stprint   //plain text
+    |   'print' param ? ( ',' param )* ';'      # stprint   //plain text, possibly to file
     |   'click' param ? ';'                     # stclick   // on the specified xpath
     |   'type'  param ? ( ',' param )* ';'      # sttype    // type text into element
     |   'submit' param ? ';'                    # stsubmit  // submit enclosing form
