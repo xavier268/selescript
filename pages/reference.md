@@ -169,7 +169,6 @@ Default is to capture the full page, if no xpath provided.
 | file:  | file name to save to. Directories are created as needed |
 | mem:  | shoot to a memory variable, as in : *shot mem: var ; print var ;* |
 | html:  | shoot to a memory variable, as an html inline fragment. |
-|   |    |
 | x: or xpath: | search by xpath. This is the default tag.|
 
 **Caution for mem: and html:** : When capturing in memory or using inline base64 html fragments, 
