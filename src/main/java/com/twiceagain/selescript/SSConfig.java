@@ -37,6 +37,9 @@ public class SSConfig {
     private final String selescriptVersion = "1.2.2";
     private final String javaVersion = Runtime.version().toString();
     private final Long startMillis = System.currentTimeMillis();
+    
+    // Uiuqe ids.
+    private static long uid = 0;
 
     public String getGridUrl() {
         return gridUrl;
@@ -256,6 +259,11 @@ public class SSConfig {
 
     public void setOutputFileName(String outputFileName) {
         this.outputFileName = outputFileName;
+    }
+
+    public String getUid() {
+    uid++;
+    return "" + uid;
     }
 
 }

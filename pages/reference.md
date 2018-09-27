@@ -34,6 +34,8 @@ They can be read, and sometimes written to.
 | $os | the os name |
 | $java | the java version |
 | $selescript | the selescript version |
+| $startmillis | the start time in milliseconds |
+| $uid | A unique sequence number, incremented upon each read |
 | $grid | the url to communicate with the selenium grid server | 
 | $mongo | the mongo server URI | 
 | $mongodb | the mongo database name | 

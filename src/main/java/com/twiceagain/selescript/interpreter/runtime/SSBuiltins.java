@@ -77,6 +77,10 @@ public class SSBuiltins {
             case "$quit":
                 rtc.requestStopGlobal();
                 return "Aborting ...";
+            case "$uid":
+                return rtc.getConfig().getUid(); 
+            case "$startmillis":
+                return rtc.getConfig().getStartMillis().toString();
             default:
                 throw new SSSyntaxException("Builtin-Id cannot be read from : " + biid);
 
