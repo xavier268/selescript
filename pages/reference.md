@@ -74,8 +74,8 @@ See [grammar reference](https://xavier268.github.io/selescript/src/main/antlr4/a
 
 **IMPORTANT** : addition is ++, concatenation is +. Please note the difference !
 
-**Comparison** operators are and(&), or(|), not(!), equals(==) and not equals(!=). They return null for false. 
-The 'true' value varies, and is usually a meaningfull value, always not null, sometimes empty. The & and | are lazily evaluated.
+**Comparison** operators are and(&), or(\|), not(!), equals(==) and not equals(!=). They return null for false. 
+The 'true' value varies, and is usually a meaningfull value, always not null, sometimes empty. The & and \| are lazily evaluated.
 
 The **dereferencing** operator (@) fetches the text or attribute value of a dom web element.
 If provided a single stringval argument, it interprets the argument as the xpath (prefer relative xpath !) 
@@ -169,8 +169,7 @@ Default is to capture the full page, if no xpath provided.
 | file:  | file name to save to. Directories are created as needed |
 | mem:  | shoot to a memory variable, as in : *shot mem: var ; print var ;* |
 | html:  | shoot to a memory variable, as an html inline fragment. |
-
-| | |
+|   |    |
 | x: or xpath: | search by xpath. This is the default tag.|
 
 **Caution for mem: and html:** : When capturing in memory or using inline base64 html fragments, 
