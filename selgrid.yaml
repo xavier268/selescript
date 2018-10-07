@@ -6,7 +6,7 @@ version: '3'
 # REMINDER : BEWARE of <tab>, they are not accepted !!
 # connect to 127.0.0.1:4444 to test operation
 # see dockerfile for hub or nodebase for env variables available
-# Remote host with full url is needed for swarm to work !
+# Remote host with full url is needed for swarm to work correctly - therefore only one replica since name is needed !
 # default overlay network is created, with name resolution available.
 
 # run with: docker stack deploy --compose-file selgrid.yaml selstack
@@ -23,8 +23,11 @@ services:
     environment:
       HUB_HOST: hub
       REMOTE_HOST: "http://firefox:5555"
-      NODE_MAX_INSTANCES: 2
-      NODE_MAX_SESSION: 2
+      NODE_MAX_INSTANCES: 6
+      NODE_MAX_SESSION: 6
+    deploy: 
+      mode: replicated
+      replicas: 1
 
   chrome:
     image: selenium/node-chrome:3.14
@@ -35,15 +38,21 @@ services:
     environment:
       HUB_HOST: hub
       REMOTE_HOST: "http://chrome:5555"
-      NODE_MAX_INSTANCES: 2
-      NODE_MAX_SESSION: 2
+      NODE_MAX_INSTANCES: 4
+      NODE_MAX_SESSION: 4
+    deploy:
+      mode: replicated
+      replicas: 1
 
   hub:
     image: selenium/hub:3.14
     ports:
       - "4444:4444"
     environment:
-      GRID_MAX_SESSION: 4
+      GRID_MAX_SESSION: 10
+    deploy:
+      mode: replicated
+      replicas: 1
       
   mongo:
     image: library/mongo:3.6
@@ -51,6 +60,12 @@ services:
       - "27017:27017"
     volumes:
       - "mongodata:/data/db"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+         constraints:
+            - node.role == manager
      
      
 volumes:
