@@ -2,7 +2,7 @@
 # This is Paris, zone a
 REGION=eu-west-3
 ZONE=a
-SG=docker-machine
+SG=sssg
 echo "Creating an aws cluster in ${REGION}$ZONE  with security group $SG"
 docker-machine version  || { echo "Could not start docker-machine" ; exit 1 ; } 
 
@@ -14,6 +14,7 @@ docker-machine version  || { echo "Could not start docker-machine" ; exit 1 ; }
 #          This port is used for communication between the nodes of a Docker Swarm or cluster. 
 #          It only needs to be opened on manager nodes.
 # TCP and UDP port 7946 for communication among nodes (container network discovery).
+#	   Can be restricted to internal scope.
 # UDP port 4789 for overlay network traffic (container ingress networking). 
 #	   Can be restricted to internal scope.
 
@@ -21,7 +22,7 @@ docker-machine version  || { echo "Could not start docker-machine" ; exit 1 ; }
 
 # The docker-machine security group should pre-exist with adequate configuration.
 
-echo "Expecting existing and configured security group named docker-machine"
+echo "Expecting existing and configured security group named : $SG "
 # Here, we assume that a docker-machine security group was created with the default VPC
 docker-machine create --driver amazonec2 --amazonec2-region $REGION --amazonec2-zone $ZONE \
 	--amazonec2-security-group $SG  \
@@ -39,7 +40,6 @@ docker swarm init
 WTOKEN=$( docker swarm join-token -q worker )
 MTOKEN=$( docker swarm join-token -q manager )
 MASTERADDR=$( docker node inspect --format '{{.ManagerStatus.Addr}}' self )
-echo "Debug : $WTOKEN ---- $MASTERADDR "
 
 # Starting worker(s)
 eval $( docker-machine env testWorker )
